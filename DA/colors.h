@@ -3,8 +3,16 @@
 
 enum mau
 {
-	MAU = COLOR(94,169,24),
-	XANH = COLOR(79,170,160),
-	CAM = COLOR(251,106,106),
-	XANH2 = COLOR(27,131,86),
+	B01 = COLOR (136,235,217),  // brightest
+	B02 = COLOR (23, 99, 113),
+	B03 = COLOR ( 18, 63, 62),
+	B04 = COLOR (14, 28, 52),
+	
+	Y01 = COLOR (243, 207,139),
+	Y02 = COLOR (216, 239, 143),
+	Y03 = COLOR (159, 151, 51),
+	
+	XANH = 4,
+	CAM = 5,
+	
 };
