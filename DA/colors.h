@@ -8,9 +8,16 @@ enum mau
 	B03 = COLOR ( 18, 63, 62),
 	B04 = COLOR (14, 28, 52),
 	
+	Y00 = COLOR (295, 230, 220),
 	Y01 = COLOR (243, 207,139),
 	Y02 = COLOR (216, 239, 143),
 	Y03 = COLOR (159, 151, 51),
+	Y04 = COLOR (100, 123, 3),
+	
+	L01 = COLOR (52, 222, 231), // blue line
+	L02 = COLOR (241, 153, 9), // yelow line
+	L03 = COLOR (240, 0, 216),  // purple line
+	L04 = COLOR (50, 251, 0), // green line
 	
 	XANH = 4,
 	CAM = 5,

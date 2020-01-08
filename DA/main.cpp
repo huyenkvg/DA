@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <fstream>
 #include "colors.h"
 #include <cmath>
 #include <stdio.h>
@@ -10,58 +10,48 @@ using namespace std;
 typedef unsigned long long ull;
 typedef long long ll;
 typedef double db;
-
+ofstream logs;
 
 
 //=================================================================================================================================
 //=================================================================================================================================
 
 class REC{
-	protected:
-		mau textColor;
-		mau recColor;
-		char *text;
-		ll x1, x2, y1, y2;
-	public:
-		
-		REC ()
+	public:	
+		mau lineColor;
+		mau bkColor;
+		ll x1, x2, y1, y2;	
+		REC()
 		{
-			textColor = Y02;
-			recColor = B02;
-			memset(text, '\0', sizeof(text));
+			lineColor = L02;
 			x1 = 0;
-			x2 = 0;
 			y1 = 0;
+			x2 = 0;
 			y2 = 0;
-		} 
-		REC (mau text_color, mau rec_color, char textOnScreen[], ll a1, ll b1, ll a2, ll b2) 
+		}
+		REC (mau bkC, mau lineC, ll a1, ll b1, ll a2, ll b2) 
 		{
-			textColor = text_color;
-			recColor  =  rec_color;
-			text = textOnScreen;
+			lineColor = lineC;
+			bkColor = bkC;
 			x1 = a1, y1 = b1;
 			x2 = a2, y2 = b2;
 		}
-		void solidDraw()
+		virtual void solidDraw()
 		{
-			setfillstyle(1, recColor);
-			setusercharsize(1, 2, 1, 2);
-			settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
-			setbkcolor( recColor);
-			bar (x1, y1, x2, y2);
-			setcolor( textColor);
-			outtextxy (x1+(x2-x1-textwidth(text))/2, y1 + (y2-y1-textheight(text))/2 , text);
+			setfillstyle (1, bkColor);
+			bar (x1, y1, x2, y2);			
 		}
-		void emptyDraw()
+	
+		virtual void emptyDraw()
 		{
-//			setfillstyle(2, Y03);
-			setlinestyle(5, 4, 1);
-			setusercharsize(1, 2, 1, 2);
-			settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
-//			setbkcolor( recColor);
+			setlinestyle (5, 4, 1);
+			setcolor (lineColor);
 			rectangle (x1, y1, x2, y2);
-			setcolor( textColor);
-//			outtextxy (x1+(x2-x1-textwidth(text))/2, y1 + (y2-y1-textheight(text))/2 , text);	
+		}
+		virtual void solidDrawWithLine()
+		{
+			solidDraw();
+			emptyDraw();
 		}
 		void eraseDraw()
 		{
@@ -69,26 +59,221 @@ class REC{
 			bar (x1-1, y1, x2+1, y2+1);
 		}
 		
+};
 
+
+class BUTTON : public REC
+{
+	protected:
+		mau textColor;
+		char *text;	
+	public:	
+		BUTON()
+		{
+			textColor = Y02;
+			bkColor = B02;
+			memset(text, '\0', sizeof(text));
+			x1 = 0;
+			x2 = 0;
+			y1 = 0;
+			y2 = 0;
+		} 
+		BUTTON (mau text_color, mau bk_color, mau line_Color, char textOnScreen[], ll a1, ll b1, ll a2, ll b2) 
+		{
+			textColor = text_color;
+			bkColor  =  bk_color;
+			lineColor = line_Color;
+			text = textOnScreen;
+			x1 = a1, y1 = b1;
+			x2 = a2, y2 = b2;
+		}
+		virtual void solidDraw()
+		{
+			setfillstyle(1, bkColor);
+			setusercharsize(1, 2, 1, 2);
+			settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+			setbkcolor (bkColor);
+			bar (x1, y1, x2, y2);
+			setcolor (textColor);
+			outtextxy (x1+(x2-x1-textwidth(text))/2, y1 + (y2-y1-textheight(text))/2 , text);
+		}
+		virtual void emptyDraw()
+		{
+			setfillstyle(2, B02);
+			setlinestyle(5, 4, 1);
+			setusercharsize(1, 2, 1, 2);
+			settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+			setcolor(lineColor);
+			rectangle (x1, y1, x2, y2);
+		}
+		virtual void solidDrawWithLine()
+		{
+			solidDraw();
+			emptyDraw();
+		}
+};
+
+
+class TABLE: public REC
+{
+	protected:
+		ll num;
+		ll dis;
+		ll hei;
+		ll wid;
+		mau textColor;
+		char *name;
+		char **text;
+		ll pos[100];
+	public:
+		ll z1;
+		ll z2;	
+	
+		TABLE (char Name[], char **Text, mau tcolor, ll distance, ll width) 
+		{
+			textColor = tcolor;
+			lineColor = L04;
+			bkColor = Y03;
+			dis = distance;
+			wid = width;
+			num = sizeof(Text);
+			text = Text;
+			name = Name;
+			hei = (num+2)*dis;
+			z1 = (1080-wid)/2+wid/8;
+			z2 = 900;
+			x1 = (1080-wid)/2;
+			x2 = 900+ wid/2;
+			y1 = (700-hei)/2;
+			y2 = 350 + hei/2;
+			for (ll i = 0; i < num; i++)
+			{
+				pos[i] = (700-hei)/2 + (i+1)*dis - 30/2;
+			}
+		}	
+		
+		void drawTable()
+		{
+			solidDraw();
+			for (ll i = 0; i < num; i++)
+			{
+				setusercharsize(1, 2, 1, 2);
+				settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+				setbkcolor (bkColor);
+				setcolor (textColor);
+				outtextxy(z1, pos[i] + (30-textheight(text[i]))/2, text[i]); 
+				setcolor(lineColor);
+				rectangle (z2, pos[i], z2+ wid/2-z2-x1, pos[i]+30);
+			}
+		}
 };
 //================================================================================================================================
+
+void Add_Material()
+{
+	char text[][20] = {"ID:", "NAME:", "DONVI:", "SO LUONG TON:"};
+	REC *Add;
+	Add = new TABLE("ADD MATERIAL", text, B02, 70ll, 400ll);
+	Add->drawTable();
+	return;
+}
+void Del_Material()
+{
+	return;
+}
+void Chg_Material()
+{
+	return;
+}
+void Mat_Info()
+{
+	return;
+}
+//========================
+void Add_Employee()
+{
+	return;
+}
+void Show_Employee()
+{
+	return;
+}
+//========================
+void Show_Bill()
+{
+	return;
+}
+//========================
+void Sat_Bill()
+{
+	return;
+}
+void Top10()
+{
+	return;
+}
+//================================================================================================================================
 //================================================================================================================================
 //================================================================================================================================
 
-
-void menu_Bar()
+//================================================================================================================================
+void Choose(ll i, ll j)
+{
+	if (j == 0)
+	{
+		switch (i)
+		{
+			case 1:
+				Add_Material();		break;
+			case 2:
+				Del_Material();		break;
+			case 3:
+				Chg_Material();		break;
+			case 4:
+				Mat_Info();			break;
+		}
+	}
+	if (j == 1)
+	{
+		switch (i)
+		{
+			case 1:
+				Add_Employee();		break;
+			case 2:
+				Show_Employee();	break;
+		}
+	}
+	if (j == 2 && i == 1)
+	{
+		Show_Bill();
+	}
+	if (j == 3)
+	{
+		switch (i)
+		{
+			case 1:
+				Sat_Bill();		break;
+			case 2:
+				Top10();		break;
+		}		
+	}
+	
+	return;
+}
+//================================================================================================================================
+void Menu_Bar()
 {
 	ll disy = 25, disx = 200;
 	ll posX[] = 	{ 0, disx, disx*2, disx*3, disx*4, disx*5};
 	ll posY[] = 	{ 0, disy, disy*2, disy*3, disy*4, disy*5};
 
 	char text[5][4][30] = { "Materials", 		"Employees", 		"Bills", 		"Statistics",
-							"Add Materials", 	"Add Employees",	"Show Bill",	"Satistic Bills",
-							"Delete Materials", "Show Employees",	"_",			"Top 10 revenue",		
-							"Change Materials",	"_",				"_",			"_",
+							"Add Material", 	"Add Employee",		"Show Bill",	"Satistic Bills",
+							"Delete Material", 	"Show Employee",	"_",			"Top 10 revenue",		
+							"Change Material",	"_",				"_",			"_",
 							"Material's info",	"_",				"_",			"_"};
 							
-	REC *Bar[5][10];
+	BUTTON *Bar[5][10];
 	ll arr[10] = {0};
 	arr[5] = -1;
 	for (ll i = 0; i < 5; i++)
@@ -97,19 +282,18 @@ void menu_Bar()
 		{
 			if (text[i][j][0] != '_')
 			{
-				Bar[i][j] = new REC(B04, Y02, text[i][j], posX[j], posY[i], posX[j+1], posY[i+1]);
+				Bar[i][j] = new BUTTON(B04, Y02, L02, text[i][j], posX[j], posY[i], posX[j+1], posY[i+1]);
 				arr[j] ++;
 		
 				if (i == 0)
 				{
-					Bar[i][j]->solidDraw();
-					Bar[i][j]->emptyDraw();
+					Bar[i][j]->solidDrawWithLine();
 				}	
 			}
 		}
 	}
-//++++++++++++++++++++++
-	ll inow = 5, jnow = 5, ipas = 0, jpas = 0;
+//-----------------------------------------------
+	ll inow = -1, jnow = -1, ipas = 0, jpas = 0;
 	int x = 0, y = 0;
 	bool ex = 0;
 	while (true)
@@ -131,16 +315,17 @@ void menu_Bar()
 							inow--;
 						break;
 						case KEY_LEFT:
-							inow = 4, jnow--;
+							inow = 0, jnow--;
 						break;
 						case KEY_RIGHT:
 							inow = 0, jnow++;
 							
 				}
-				inow = (inow+arr[jnow])%arr[jnow];
 				jnow = (jnow + 4)%4;
+				inow = (inow+arr[jnow])%arr[jnow];
 				
-				if( /*inow != ipas ||*/ jnow != jpas  )
+				
+				if (jnow != jpas && jpas > -1)
 				for (ll i = 1; i < arr[jpas]; i++)
 				{
 					Bar[i][jpas]->eraseDraw();
@@ -151,63 +336,13 @@ void menu_Bar()
 				}
 				
 				Bar[inow][jnow]->emptyDraw();
-//				Bar[ipas][jpas]->solidDraw();
-				
-				if (ismouseclick(WM_LBUTTONDOWN))
-				{
-						ipas = inow;
-						jpas = jnow;
-						ex = 0;
-						getmouseclick(WM_LBUTTONDOWN, x, y);
-						if (x <= disx*4)
-						{
-							jnow = x/disx;
-							if (y <= disy || inow < arr[jnow] && jnow == jpas && y <= arr[jnow] * disy)
-							{
-								ex = true;
-							}
-							inow = y/disy;
-							if (jnow == jpas  && y <= arr[jnow]*disy)
-							{
-								
-								inow = y/disy;
-								if (inow == ipas)
-								{
-									return ;
-								}
-							}
-							if (ipas == 0)
- 								ex = true;
-						}
 						
-						
-						if(jnow != jpas || x >  disx*4 || y > arr[jnow]*disy)
-							for (ll i = 1; i < arr[jpas]; i++)
-							{
-								Bar[i][jpas]->eraseDraw();
-							}
-						if (ex)
-						{
-							for (ll i = 1; i < arr[jnow]; i++)
-							{
-								Bar[i][jnow]->solidDraw();
-							}
-							if (jnow == jpas)
-								Bar[inow][jnow]->emptyDraw();
-						}
-							
-						
-				}
-					
 			}
-			else
-			{
-				if (key == '\r')
-				{
+			else if (key == '\r')
+			{ 
+					Choose(inow, jnow);
 					return;
-				}
 			} 
-		
 		}
 			if (ismouseclick(WM_LBUTTONDOWN))
 			{
@@ -218,23 +353,18 @@ void menu_Bar()
 				if (x <= disx*4)
 				{
 					jnow = x/disx;
-					if (y <= disy || inow < arr[jnow] && jnow == jpas && y <= arr[jnow] * disy)
+					inow = y/disy;
+					if (y <= disy || inow< arr[jnow] && jnow == jpas && ipas < 12)
 					{
 						ex = true;
 					}
-					inow = y/disy;
-					if (jnow == jpas && y <= arr[jnow]*disy)
+					if (jnow == jpas && inow == ipas)
 					{
-						
-					
-						if (inow == ipas)
-						{
+							Choose(inow, jnow);
 							return ;
-						}
-					}
-					
+					}					
 				}
-				if(jnow != jpas || x >  disx*4 || y > arr[jnow]*disy)
+				if ((jnow != jpas || x >  disx*4 || y > arr[jnow]*disy) && jpas > -1)
 					for (ll i = 1; i < arr[jpas]; i++)
 					{
 						Bar[i][jpas]->eraseDraw();
@@ -248,24 +378,22 @@ void menu_Bar()
 					if (jnow == jpas)
 						Bar[inow][jnow]->emptyDraw();
 				}
+				else
+				{
+						inow += 12;
+				}
 				
-				
-			}
-	
-		
-	}
-//++++++++++++++++++++++++	
-	
-	
-					
+			}		
+	}					
 }
-
+//=================================================================================================================================
 int main()
 {
+	logs.open ("logs.txt", ios :: out);
 	initwindow(1080, 700);
 	setfillstyle(1, Y02);
 	bar(0, 0, 1080, 25);
-	menu_Bar();
+	Menu_Bar();
 
 	
 	return 0;
