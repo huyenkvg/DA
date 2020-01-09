@@ -151,15 +151,15 @@ class TABLE: public REC
 				but[i][j] = buttonText[i][j];
 			
 			hei = (num1+2)*dis;
-			z1 = (1080-wid)/2+wid/9;
-			z2 = 540;
+			z1 = (1080-wid)/2+wid/15;
+			z2 = 460;
 			x1 = (1080-wid)/2;
 			x2 = 540+ wid/2;
 			y1 = (700-hei)/2;
 			y2 = 350 + hei/2;
 			for (ll i = 0; i <= num1; i++)
 			{
-				pos[i] = (700-hei)/2 + (i+1)*dis - 30/2;
+				pos[i] = (700-hei)/2 + (i+1)*dis - 23/2;
 			}
 		}	
 		
@@ -174,20 +174,20 @@ class TABLE: public REC
 				settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
 				setbkcolor (bkColor);
 				setcolor (textColor);
-				outtextxy(z1, pos[i] + (30-textheight(text[i]))/2, text[i]);
-				setfillstyle(1, B04); 
-				bar(z2, pos[i], z2+ wid/2 - wid/9, pos[i]+30);
+				outtextxy(z1, pos[i] + (23-textheight(text[i]))/2, text[i]);
+				setfillstyle(1, B06); 
+				bar(z2, pos[i], z2+ wid/2 - wid/15 + 80, pos[i]+23);
 				setcolor(L05);
-				rectangle (z2, pos[i], z2+ wid/2 - wid/9, pos[i]+30);
+				rectangle (z2, pos[i], z2+ wid/2 + 80  - wid/15, pos[i]+23);
 				logs << text[i] << endl; 
 			}
 			
-			BUTTON B(Y02, B02, L01, name, x1, y1-25, x2, y1);
+			BUTTON B(Y02, B02, L01, name, x1, y1-24, x2, y1);
 			B.solidDrawWithLine();
 			BUTTON *C[num2];
 			for (ll i = 0; i < num2; i++)
 			{
-				C[i] = new BUTTON(Y02, B02, L01, but[i], x1+(i*wid/num2), y2-25, x1+((i+1)*wid/num2), y2);
+				C[i] = new BUTTON(Y02, B02, L01, but[i], x1+(i*wid/num2), y2-24, x1+((i+1)*wid/num2), y2);
 				C[i]->solidDrawWithLine();
 				
 			}
@@ -199,7 +199,7 @@ void Add_Material()
 {
 	char text[][30] = {"ID:", "NAME:", "DONVI:", "SO LUONG TON:"};
 	char button[][30] = {"Add", "Exit"};
-	TABLE Add("ADD MATERIAL", text, 4, button, 2, Y02, 50ll, 720ll);
+	TABLE Add("ADD MATERIAL", text, 4, button, 2, Y02, 37ll, 700ll);
 	Add.drawTable();
 	
 	
@@ -218,7 +218,7 @@ void Del_Material()
 {
 	char text[][30] = {"ID:",};
 	char button[][30] = {"Delete", "Exit"};
-	TABLE Add("DELETE MATERIAL", text, 1, button, 2, Y02, 50ll, 720ll);
+	TABLE Add("DELETE MATERIAL", text, 1, button, 2, Y02, 37ll, 700ll);
 	Add.drawTable();
 	
 	
@@ -235,7 +235,7 @@ void Chg_Material()
 {
 	char text[][30] = {"ID:"};
 	char button[][30] = {"Change", "Exit"};
-	TABLE Add("CHANGE MATERIAL", text, 1, button, 2, Y02, 50ll, 720ll);
+	TABLE Add("CHANGE MATERIAL", text, 1, button, 2, Y02, 37ll, 700ll);
 	Add.drawTable();
 	
 	
