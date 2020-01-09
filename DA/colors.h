@@ -18,7 +18,7 @@ enum mau
 	L02 = COLOR (241, 153, 9), // yelow line
 	L03 = COLOR (240, 0, 216),  // purple line
 	L04 = COLOR (50, 251, 0), // green line
-	
+	L05 = COLOR (49, 53, 28), // 
 	XANH = 4,
 	CAM = 5,
 	

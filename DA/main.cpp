@@ -117,36 +117,47 @@ class BUTTON : public REC
 class TABLE: public REC
 {
 	protected:
-		ll num;
+		ll num1;
+		ll num2;
 		ll dis;
 		ll hei;
 		ll wid;
 		mau textColor;
 		char *name;
-		char **text;
+		char text[][30];
+		char but[][30];
 		ll pos[100];
 	public:
 		ll z1;
 		ll z2;	
 	
-		TABLE (char Name[], char **Text, mau tcolor, ll distance, ll width) 
+		TABLE (char *Name, char Text[][30], ll numtext, char buttonText[][30], ll numbut,  mau tcolor, ll distance, ll width) 
 		{
 			textColor = tcolor;
-			lineColor = L04;
-			bkColor = Y03;
+			lineColor = L01; // mau gi do chim chim thoi
+			bkColor = B03;
 			dis = distance;
 			wid = width;
-			num = sizeof(Text);
-			text = Text;
+			num1 = numtext;
+			num2 = numbut;
 			name = Name;
-			hei = (num+2)*dis;
-			z1 = (1080-wid)/2+wid/8;
-			z2 = 900;
+			
+			for (ll i = 0; i < num1; i++)
+				for (ll j = 0; j < strlen(Text[i]); j++)
+				text[i][j] = Text[i][j];
+			
+			for (ll i = 0; i < num2; i++)
+				for (ll j = 0; j < strlen(buttonText[i]); j++)
+				but[i][j] = buttonText[i][j];
+			
+			hei = (num1+2)*dis;
+			z1 = (1080-wid)/2+wid/9;
+			z2 = 540;
 			x1 = (1080-wid)/2;
-			x2 = 900+ wid/2;
+			x2 = 540+ wid/2;
 			y1 = (700-hei)/2;
 			y2 = 350 + hei/2;
-			for (ll i = 0; i < num; i++)
+			for (ll i = 0; i <= num1; i++)
 			{
 				pos[i] = (700-hei)/2 + (i+1)*dis - 30/2;
 			}
@@ -155,15 +166,30 @@ class TABLE: public REC
 		void drawTable()
 		{
 			solidDraw();
-			for (ll i = 0; i < num; i++)
+			emptyDraw();
+			
+			for (ll i = 0; i < num1; i++)
 			{
 				setusercharsize(1, 2, 1, 2);
 				settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
 				setbkcolor (bkColor);
 				setcolor (textColor);
-				outtextxy(z1, pos[i] + (30-textheight(text[i]))/2, text[i]); 
-				setcolor(lineColor);
-				rectangle (z2, pos[i], z2+ wid/2-z2-x1, pos[i]+30);
+				outtextxy(z1, pos[i] + (30-textheight(text[i]))/2, text[i]);
+				setfillstyle(1, B04); 
+				bar(z2, pos[i], z2+ wid/2 - wid/9, pos[i]+30);
+				setcolor(L05);
+				rectangle (z2, pos[i], z2+ wid/2 - wid/9, pos[i]+30);
+				logs << text[i] << endl; 
+			}
+			
+			BUTTON B(Y02, B02, L01, name, x1, y1-25, x2, y1);
+			B.solidDrawWithLine();
+			BUTTON *C[num2];
+			for (ll i = 0; i < num2; i++)
+			{
+				C[i] = new BUTTON(Y02, B02, L01, but[i], x1+(i*wid/num2), y2-25, x1+((i+1)*wid/num2), y2);
+				C[i]->solidDrawWithLine();
+				
 			}
 		}
 };
@@ -171,18 +197,56 @@ class TABLE: public REC
 
 void Add_Material()
 {
-	char text[][20] = {"ID:", "NAME:", "DONVI:", "SO LUONG TON:"};
-	REC *Add;
-	Add = new TABLE("ADD MATERIAL", text, B02, 70ll, 400ll);
-	Add->drawTable();
-	return;
+	char text[][30] = {"ID:", "NAME:", "DONVI:", "SO LUONG TON:"};
+	char button[][30] = {"Add", "Exit"};
+	TABLE Add("ADD MATERIAL", text, 4, button, 2, Y02, 50ll, 720ll);
+	Add.drawTable();
+	
+	
+	while (1)
+	{
+		if (kbhit())
+		{
+			
+		}
+	}
+	
+	
+	//return;
 }
 void Del_Material()
 {
+	char text[][30] = {"ID:",};
+	char button[][30] = {"Delete", "Exit"};
+	TABLE Add("DELETE MATERIAL", text, 1, button, 2, Y02, 50ll, 720ll);
+	Add.drawTable();
+	
+	
+	while (1)
+	{
+		if (kbhit())
+		{
+			
+		}
+	}
 	return;
 }
 void Chg_Material()
 {
+	char text[][30] = {"ID:"};
+	char button[][30] = {"Change", "Exit"};
+	TABLE Add("CHANGE MATERIAL", text, 1, button, 2, Y02, 50ll, 720ll);
+	Add.drawTable();
+	
+	
+	while (1)
+	{
+		if (kbhit())
+		{
+			
+		}
+	}
+	
 	return;
 }
 void Mat_Info()
