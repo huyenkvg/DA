@@ -4,7 +4,7 @@
 enum mau
 {
 	B01 = COLOR (136,235,217),  // brightest
-	B02 = COLOR (23, 99, 113),
+	B02 = COLOR (23, 99, 113), // textbox background
 	B03 = COLOR ( 18, 63, 62),
 	B04 = COLOR (14, 28, 52),
 	B06 = COLOR (54, 82, 74),
@@ -20,6 +20,8 @@ enum mau
 	L03 = COLOR (240, 0, 216),  // purple line
 	L04 = COLOR (50, 251, 0), // green line
 	L05 = COLOR (49, 53, 28), // 
+	
+	redLine = COLOR (230, 0, 6), // 
 	XANH = 4,
 	CAM = 5,
 	

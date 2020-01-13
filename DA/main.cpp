@@ -14,6 +14,21 @@ ofstream logs;
 
 
 //=================================================================================================================================
+bool wrongText(char a[])
+{
+	bool k = true;
+	int n = sizeof(a);
+	for (int i = 0; i < n; i++)
+	{
+		if (a[i] != ' ' && a[i] != '\0')
+			return false;
+		if (a[i] == '\0')
+			break;
+	}
+	return k;
+}
+
+
 //=================================================================================================================================
 
 class REC{
@@ -21,6 +36,7 @@ class REC{
 		mau lineColor;
 		mau bkColor;
 		ll x1, x2, y1, y2;	
+		char text[70];
 		REC()
 		{
 			lineColor = L02;
@@ -35,6 +51,7 @@ class REC{
 			bkColor = bkC;
 			x1 = a1, y1 = b1;
 			x2 = a2, y2 = b2;
+			memset(text, '\0', sizeof(text));
 		}
 		virtual void solidDraw()
 		{
@@ -57,6 +74,52 @@ class REC{
 		{
 			setfillstyle(1, 0);
 			bar (x1-1, y1, x2+1, y2+1);
+		}
+		bool beClick(ll x, ll y)
+		{
+			return x >= x1 &&  x <= x2 && y >= y1 && y <= y2; 
+		}
+		void beingTyped( char c)
+		{
+			memset(text, '\0', sizeof(text));
+			text[0] = c;
+			int id = 1;
+				while (1)
+				{
+					if (kbhit())
+					{	
+						char key = getch();
+						if (key == '\r' )
+						{ 
+								if ( sizeof(text) > 50)
+									return;
+								if (wrongText(text))
+								{
+									setcolor(redLine);
+									rectangle (x1, y1, x2, y2);
+									beingTyped('\0');
+								}
+								else
+								{
+									setcolor(B06);
+									rectangle (x1, y1, x2, y2);	
+								}	
+								return;
+						} 
+						else
+						{
+							
+							text[id] = key;
+							id++;
+							
+							setbkcolor (B06);
+							settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+
+							outtextxy (x1+25, y1 + (y2-y1-textheight(text))/2 , text);
+							
+						}
+					}
+				}
 		}
 		
 };
@@ -124,31 +187,21 @@ class TABLE: public REC
 		ll wid;
 		mau textColor;
 		char *name;
-		char text[][30];
-		char but[][30];
 		ll pos[100];
 	public:
 		ll z1;
 		ll z2;	
 	
-		TABLE (char *Name, char Text[][30], ll numtext, char buttonText[][30], ll numbut,  mau tcolor, ll distance, ll width) 
+		TABLE (char *Name, ll numtext, ll numbut,  mau tcolor, ll distance, ll width) 
 		{
 			textColor = tcolor;
-			lineColor = L01; // mau gi do chim chim thoi
+			lineColor = L02; // mau gi do chim chim thoi
 			bkColor = B03;
 			dis = distance;
 			wid = width;
 			num1 = numtext;
 			num2 = numbut;
 			name = Name;
-			
-			for (ll i = 0; i < num1; i++)
-				for (ll j = 0; j < strlen(Text[i]); j++)
-				text[i][j] = Text[i][j];
-			
-			for (ll i = 0; i < num2; i++)
-				for (ll j = 0; j < strlen(buttonText[i]); j++)
-				but[i][j] = buttonText[i][j];
 			
 			hei = (num1+2)*dis;
 			z1 = (1080-wid)/2+wid/15;
@@ -163,11 +216,9 @@ class TABLE: public REC
 			}
 		}	
 		
-		void drawTable()
+		void drawTable(char text[][30], char but[][30])
 		{
-			solidDraw();
-			emptyDraw();
-			
+			solidDraw();			
 			for (ll i = 0; i < num1; i++)
 			{
 				setusercharsize(1, 2, 1, 2);
@@ -179,74 +230,172 @@ class TABLE: public REC
 				bar(z2, pos[i], z2+ wid/2 - wid/15 + 80, pos[i]+23);
 				setcolor(L05);
 				rectangle (z2, pos[i], z2+ wid/2 + 80  - wid/15, pos[i]+23);
-				logs << text[i] << endl; 
+			//	logs << text[i] << endl; 
 			}
 			
 			BUTTON B(Y02, B02, L01, name, x1, y1-24, x2, y1);
-			B.solidDrawWithLine();
+			B.solidDraw();
 			BUTTON *C[num2];
 			for (ll i = 0; i < num2; i++)
 			{
 				C[i] = new BUTTON(Y02, B02, L01, but[i], x1+(i*wid/num2), y2-24, x1+((i+1)*wid/num2), y2);
-				C[i]->solidDrawWithLine();
+				C[i]->solidDraw();
 				
+			}
+		}
+		virtual void eraseDraw()
+		{
+			REC eraser(L01,L01,x1-1, y1-25, x2+1, y2+1);
+			eraser.eraseDraw();
+		}
+		void getAllPosition(REC *Bar[10][10], ll arr[10])  // lay toa do cua cac textbox bo vao mang Bar
+		{
+			for (ll j = 0; j < num1; j++)
+			{	
+				arr[j] = 1;
+				Bar[0][j] = new REC(B06, L02, z2, pos[j], z2+ wid/2 - wid/15 + 80, pos[j]+23);
+			}
+			for (ll i = 0; i < num2; i++)
+			{
+				arr[num1]++;
+				Bar[i][num1] = new REC(B06, L02, x1+(i*wid/num2), y2-24, x1+((i+1)*wid/num2), y2);
 			}
 		}
 };
 //================================================================================================================================
-
-void Add_Material()
+void boxMove( REC *Bar[10][10], ll arr[10], ll numOfTextBox)
 {
-	char text[][30] = {"ID:", "NAME:", "DONVI:", "SO LUONG TON:"};
-	char button[][30] = {"Add", "Exit"};
-	TABLE Add("ADD MATERIAL", text, 4, button, 2, Y02, 37ll, 700ll);
-	Add.drawTable();
-	
+	ll inow = -1, jnow = -1, ipas = 0, jpas = 0, n = numOfTextBox;
+	int x = 0, y = 0;
+	bool ex = 0;
 	
 	while (1)
 	{
 		if (kbhit())
-		{
+		{	
+			char key = getch();
+			
+			if (key == '\r')
+			{  
+					return;
+			} 
+			else //if (key == 0)
+			{	
+				ipas = inow;
+				jpas = jnow;
+				char keyNext = getch();
+				switch (keyNext)
+				{
+						case KEY_DOWN:
+							jnow++;		
+						break;
+						case KEY_UP:
+							jnow--;
+						break;
+						case KEY_LEFT:
+							inow--;
+						break;
+						case KEY_RIGHT:
+							inow++;
+						default:
+							if (jnow < n && jnow >= 0)
+							{
+								Bar[inow][jnow] -> solidDrawWithLine();
+								Bar[inow][jnow] -> beingTyped(keyNext);
+								jnow++;
+							}
+							
+							
+				}
+				jnow = (jnow + n)%n;
+				inow = (inow+arr[jnow])%arr[jnow];
+				
+				if (jpas != -1)
+				{
+					setcolor(L05);
+					rectangle (Bar[ipas][jpas]->x1, Bar[ipas][jpas]->y1, Bar[ipas][jpas]->x2, Bar[ipas][jpas]->y2);
+				}
+				
+				Bar[inow][jnow]->emptyDraw();
+				
+				
+				// ve cai vien o dang chon
+						
+			}
+			
 			
 		}
+			if (ismouseclick(WM_LBUTTONDOWN))
+			{
+				ipas = inow;
+				jpas = jnow;
+				getmouseclick(WM_LBUTTONDOWN, x, y);
+				
+				for (ll j = 0; j < n; j++)
+				{
+					for(ll i = 0; i < arr[j]; i++)
+					{
+						if (Bar[i][j]->beClick(x,y))
+						{
+								jnow = j;
+								inow = i;
+								if (jpas != -1 && ipas != -1)
+								{
+									setcolor(L05);
+									rectangle (Bar[ipas][jpas]->x1, Bar[ipas][jpas]->y1, Bar[ipas][jpas]->x2, Bar[ipas][jpas]->y2);
+								}
+								
+								Bar[inow][jnow]->emptyDraw();
+						}
+					}
+				}
+				
+			}		
+	
 	}
+}
+//================================================================================================================================
+//================================================================================================================================
+//================================================================================================================================
+
+void Add_Material()
+{
+	char text[][30] = {"ID:", "NAME:", "UNIT:", "AVAILABLE:"};
+	char button[][30] = {"ADD", "EXIT"};
+	TABLE Add("ADD MATERIAL", 4, 2, Y02, 37ll, 700ll);
+	Add.drawTable(text, button);
 	
-	
-	//return;
+	REC *Bar[10][10];  // chua toa do cac textbox va button cua table Add
+	ll arr[10]; 		// chua xem hang j co bao nhieu cot :3
+	Add.getAllPosition(Bar, arr);
+	boxMove(Bar, arr, 5);
+	return;
 }
 void Del_Material()
 {
 	char text[][30] = {"ID:",};
-	char button[][30] = {"Delete", "Exit"};
-	TABLE Add("DELETE MATERIAL", text, 1, button, 2, Y02, 37ll, 700ll);
-	Add.drawTable();
+	char button[][30] = {"DELETE", "EXIT"};
+	TABLE Add("DELETE MATERIAL", 1, 2, Y02, 37ll, 700ll);
+	Add.drawTable(text, button);
 	
-	
-	while (1)
-	{
-		if (kbhit())
-		{
-			
-		}
-	}
+	REC *Bar[10][10];  // chua toa do cac textbox va button cua table Add
+	ll arr[10]; 		// chua xem hang j co bao nhieu cot :3
+	Add.getAllPosition(Bar, arr);
+	boxMove(Bar, arr, 2);
 	return;
 }
 void Chg_Material()
 {
 	char text[][30] = {"ID:"};
-	char button[][30] = {"Change", "Exit"};
-	TABLE Add("CHANGE MATERIAL", text, 1, button, 2, Y02, 37ll, 700ll);
-	Add.drawTable();
+	char button[][30] = {"CHANGE", "EXIT"};
+	TABLE Add("CHANGE MATERIAL",  1, 2, Y02, 37ll, 700ll);
+	Add.drawTable(text, button);
 	
 	
-	while (1)
-	{
-		if (kbhit())
-		{
-			
-		}
-	}
-	
+	REC *Bar[10][10];  // chua toa do cac textbox va button cua table Add
+	ll arr[10]; 		// chua xem hang j co bao nhieu cot :3
+	Add.getAllPosition(Bar, arr);
+	boxMove(Bar, arr, 2);
 	return;
 }
 void Mat_Info()
