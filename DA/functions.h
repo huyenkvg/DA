@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include "colors.h"
 #include <cmath>
 #include <stdio.h>
-#include <cstring>
+#include <string.h>
+using namespace std;
 bool wrongText(char a[]);
