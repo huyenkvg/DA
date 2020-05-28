@@ -1,6 +1,5 @@
 #include "graphics.h"
 #define COLOR(r,g,b) (0x04000000 | RGB(r,g,b))
-
 enum mau
 {
 	B01 = COLOR (136,235,217),  // brightest
