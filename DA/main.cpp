@@ -15,6 +15,10 @@ BUTTON *NutThemVT[10][10];
 BUTTON *NutXoaVT[10][10];
 BUTTON *NutSuaVT[10][10];
 BUTTON *NutThemNV[10][10];
+
+BUTTON *NutXoaNV[10][10];
+BUTTON *NutSuaNV[10][10];
+BUTTON *NutLapHD[10][10];
 //=================================================================================================================================
 //=================================================================================================================================
 //=================================================================================================================================
@@ -25,11 +29,13 @@ int main()
 {
 	initwindow(1080, 700);
 	VeMenu();
-	TaoBangThemVattu(NutThemVT);
+//	TaoBangThemVattu(NutThemVT);
 //	TaoBangXoaVattu(NutXoaVT);
 //	TaoBangSuaVattu(NutSuaVT);
-//	TaoBangThemNV(NutThemNV);
-	boxMove(NutThemVT);
+	TaoBangThemNV(NutThemNV);
+//	TaoBangThemNV(NutXoaNV);
+//	TaoBangThemNV(NutSuaNV);
+	boxMove(NutThemNV);
 	system("pause");
 	return 0;
 }

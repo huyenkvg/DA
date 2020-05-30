@@ -2,7 +2,7 @@
 #include <fstream>
 #include <cmath>
 #include <stdio.h>
-#include <cstring>
+#include <string.h>
 #include "Dohoa.h"
 #include "functions.h"
 
@@ -21,37 +21,53 @@ char MenuTable[MAX_SE][MAX_MENU][MAXTEXT] = { 	"Materials", 		"Employees", 		"Bi
 													"Material's info",	"_",				"_",			"_",				"_"};
 //==========================
 char BangThemVT[][MAXTEXT] = {	"ID:", "Name:", "Unit:", "Quantity:", "Cancel", "Add", "ADD MATERIALS"}; // tieu de textbox
-int MatranThemVT[10][10] = { 	{1, 0, 0},
-								{1, 0, 0},
-								{1, 0, 0},
-								{1, 0, 0},
+int MatranThemVT[10][10] = { 	{TEXBOXCONST, 0, 0},
+								{TEXBOXCONST, 0, 0},
+								{TEXBOXCONST, 0, 0},
+								{TEXBOXCONST, 0, 0},
 								{0, 0, 0},
 							};				 // Bo tri textbox 
 //==========================
 char BangXoaVT[][MAXTEXT] = {	"ID:", "Cancel", "Delete", "DELETE MATERIALS"}; // tieu de textbox
-int MatranXoaVT[10][10] =  { 	{1, 0, 0},
-								{0, 0, 0},
+int MatranXoaVT[10][10] =  { 	{TEXBOXCONST,	0, 0},
+								{0,			 0, 0},
 							};	
 
 //==========================
 char BangSuaVT[][MAXTEXT] = {	"ID:", "Name:", "Unit:", "Cancel", "Adjust", "ADJUST MATERIALS"}; // tieu de textbox
-int MatranSuaVT[10][10] =  { 	{1, 0, 0},
-								{1, 0, 0},
-								{1, 0, 0},
+int MatranSuaVT[10][10] =  { 	{TEXBOXCONST, 	0, 0},
+								{TEXBOXCONST, 	0, 0},
+								{TEXBOXCONST, 	0, 0},
+								{0,  			0, 0},
 							};	
 //==========================
-char BangThemNV[][MAXTEXT] = {	"ID:", "Name:", "Cancel", "ADD", "ADD EMPLOYEEs"}; // tieu de textbox
-int MatranThemNV[10][10] =  { 	{1, 0, 0},
-								{1, 0, 0},
+char BangThemNV[][MAXTEXT] = {	"ID:", "First Name:", "Last Name:", "Male", "Female", "Cancel", "Add", "ADD EMPLOYEES"}; // tieu de textbox
+int MatranThemNV[10][10] =  { 	{TEXBOXCONST, 		0, 0},
+								{TEXBOXCONST, 		0, 0},
+								{TEXBOXCONST,	 	0, 0},
+								{TICKCONST, TICKCONST, 0},
+								{0,					0, 0}
 							};	
-				
+char BangXoaNV[][MAXTEXT] = {	"ID:", "Name:", "Cancel", "Delete", "DELETE EMPLOYEES"}; // tieu de textbox
+int MatranXoaNV[10][10] =  { 	{TEXBOXCONST, 	0, 0},
+								{TEXBOXCONST, 	0, 0},
+								{0,				0, 0}
+							};	
+char BangSuaNV[][MAXTEXT] = {	"ID:", "First Name:", "Last Name:",  "Male", "Female", "Cancel", "Adjust", "ADJUST EMPLOYEES"}; // tieu de textbox
+int MatranSuaNV[10][10] =  { 	{TEXBOXCONST, 		0, 0},
+								{TEXBOXCONST, 		0, 0},
+								{TEXBOXCONST,	 	0, 0},
+								{TICKCONST, TICKCONST, 0},
+								{0,					0, 0}
+							};					
 
 //=======================================================CAC HAM VE HINH CHU NHAT===============================================================
 REC::REC()
 {
 	lineColor = VANG;
 	value = 0;
-	text_tp[0] = '\0'; 
+	text_tp[0] = '\0';
+	CoBiChonKhong = false; 
 	x1 = 0;
 	y1 = 0;
 	x2 = 0;
@@ -61,6 +77,7 @@ REC::REC(mau bkC, mau lineC, ll a1, ll b1, ll a2, ll b2)
 {
 	lineColor = lineC;
 	bkColor = bkC;
+	CoBiChonKhong = false;
 	value = 0;
 	text_tp[0] = '\0'; 
 	x1 = a1, y1 = b1;
@@ -85,10 +102,11 @@ void REC::eraseDraw()
 }
 void REC:: beTicked()
 {
-	if (CoBiChonKhong == true)
+	if (CoBiChonKhong)
 	{
-		setfillstyle(1, XANHLA);
-		circle((x1+x2)/2, (y1+y2)/2, (x2-x1)/2-1);
+		setfillstyle(1, TRANG);
+		setcolor(VANG);
+		fillellipse((x1+x2)/2, (y1+y2)/2, MENU_DY*2/5,MENU_DY*2/5);
 	}
 	else
 	{
@@ -108,14 +126,14 @@ void REC:: beingTyped(char c)
 		emptyDraw(XANHLA);
 		memset(text_tp, '\0', sizeof(text_tp));
 	}
-			text_tp[0] = c;
-			if (!wrongText(text_tp))
-			{
-				setbkcolor (bkColor);
-				settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
-				setcolor (textColor);
-				outtextxy (x1+25, y1 + (y2-y1-textheight(text_tp))/2 , text_tp);
-			}
+	text_tp[0] = c;
+	if (!wrongText(text_tp))
+	{
+		setbkcolor (bkColor);
+		settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+		setcolor (textColor);
+		outtextxy (x1+25, y1 + (y2-y1-textheight(text_tp))/2 , text_tp);
+	}
 		while (1)
 		{
 			retype:;
@@ -156,7 +174,16 @@ void REC:: beingTyped(char c)
 				{
 					if ( id > MAXTEXT)
 							continue;
-					
+					if (strcmp(text, "DAY:") == 0 || strcmp(text, "MONTH:") == 0)
+					{
+						if (id > 1)
+							continue;
+					}
+					else if (strcmp(text, "YEAR:") == 0)
+					{
+						if (id > 3)
+							continue;
+					}
 					text_tp[id] = key;
 					id++;
 					text_tp[id] ='\0';
@@ -177,6 +204,7 @@ BUTTON::BUTON()
 	bkColor = NUT;
 	memset(text, '\0', sizeof(text));	
 	value = 0;
+	CoBiChonKhong = false;
 	x1 = 0;
 	x2 = 0;
 	y1 = 0;
@@ -188,6 +216,7 @@ BUTTON::BUTTON (mau text_color, mau bk_color, mau line_Color, char textOnScreen[
 	bkColor  =  bk_color;
 	lineColor = line_Color;
 	text = textOnScreen;
+	CoBiChonKhong = false;
 	text_tp[0] = '\0'; 
 	value = 0;
 	x1 = a1, y1 = b1;
@@ -372,7 +401,18 @@ void VeBang(BUTTON *Table[10][10])
 				settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
 				setbkcolor (DENXAM);
 				setcolor (TRANG);
-				outtextxy (Table[i][j]->x1-BOX_LEN+130, Table[i][j]->y1 + (Table[i][j]->y2-Table[i][j]->y1-textheight(Table[i][j]->text))/2, Table[i][j]->text);
+				char *res;
+				res = Table[i][j]->text;
+				if (Table[i][j+1]->value > 0)
+					res[strlen(res)] = '/';
+				outtextxy (Table[i][j]->x1-BOX_LEN+130, Table[i][j]->y1 + (Table[i][j]->y2-Table[i][j]->y1-textheight(Table[i][j]->text))/3, res);
+				if (Table[i][j+1]->value > 0)
+					res[strlen(res)-1] = '\0';
+				if (Table[i][j]->value == TICKCONST)
+				{
+					setusercharsize(1, 3, 1, 3);
+					outtextxy (Table[i][j]->x1, Table[i][j]->y2 + MENU_DY/2, Table[i][j]->text);
+				}
 				Table[i][j]->RecDraw();
 				Table[i][j]->emptyDraw(Table[i][j]->lineColor);
 				j++;
@@ -417,9 +457,12 @@ void boxMove(BUTTON *Bar[10][10])
 						if(Bar[inow][jnow]->value == TICKCONST)
 						{
 							Bar[inow][jnow]->CoBiChonKhong = true;
-							Bar[inow][(jnow+1)%arr[inow]]->CoBiChonKhong = false;
 							Bar[inow][jnow]->beTicked();
-							Bar[inow][(jnow+1)%arr[inow]]->beTicked();
+							if (arr[inow] > 1)
+							{									
+								Bar[inow][(jnow+1)%arr[inow]]->CoBiChonKhong = false;
+								Bar[inow][(jnow+1)%arr[inow]]->beTicked();
+							}
 							continue;
 						}
 						return;
@@ -484,6 +527,20 @@ void boxMove(BUTTON *Bar[10][10])
 								Bar[inow][jnow] -> beingTyped(key);
 								inow = (inow + 1)%n;
 								Bar[inow][jnow]->emptyDraw(XANHLA);
+					}
+					if (Bar[inow][0]->value == DAYCONST)
+					{
+						int id = 0;
+						while (CheckDay(Bar[inow][0]->text_tp, Bar[inow][1]->text_tp, Bar[inow][2]->text_tp) == false) // Ngay bi sai
+						{
+							Bar[inow][0]->emptyDraw(DO);
+							Bar[inow][1]->emptyDraw(DO);
+							Bar[inow][2]->emptyDraw(DO);
+							Bar[inow][id] -> emptyDraw(XANHLA);
+							Bar[inow][id]->beingTyped('\0');
+							id = (id+1)%3;
+							
+						}
 					}
 				}
 		}

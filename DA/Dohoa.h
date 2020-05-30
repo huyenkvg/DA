@@ -14,7 +14,9 @@ typedef double db;
 #define LE_GIUA 450
 #define BOX_LEN 400
 #define NUTCONST 5
-#define TICKCONST 11
+#define TICKCONST 1
+#define TEXBOXCONST 11
+#define DAYCONST  2
 
 //========================================================HinhChuNhat=========================================================================
 
@@ -25,7 +27,7 @@ class REC{
 		ll x1, x2, y1, y2;
 		int value;	
 		bool CoBiChonKhong;
-		char *text;
+		char text[MAXTEXT];
 		mau textColor;
 		char text_tp[MAXTEXT];
 		REC();
