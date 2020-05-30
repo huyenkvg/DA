@@ -14,24 +14,23 @@ typedef double db;
 BUTTON *NutThemVT[10][10];
 BUTTON *NutXoaVT[10][10];
 BUTTON *NutSuaVT[10][10];
+BUTTON *NutThemNV[10][10];
 //=================================================================================================================================
+//=================================================================================================================================
+//=================================================================================================================================
+
+
+
 int main()
 {
 	initwindow(1080, 700);
 	VeMenu();
-//	TaoBangThemVattu(NutThemVT);
+	TaoBangThemVattu(NutThemVT);
 //	TaoBangXoaVattu(NutXoaVT);
-	TaoBangSuaVattu(NutSuaVT);
-//	while(true)
-//	{
-//		if (kbhit()){
-//				
-//			char key = getch();
-//			if (key== '\r')
-//				return 0;
-			NutSuaVT[1][0]->beingTyped('n');
-//		}
-//	}
+//	TaoBangSuaVattu(NutSuaVT);
+//	TaoBangThemNV(NutThemNV);
+	boxMove(NutThemVT);
+	system("pause");
 	return 0;
 }
 //=================================================================================================================================

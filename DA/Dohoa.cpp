@@ -39,7 +39,12 @@ int MatranSuaVT[10][10] =  { 	{1, 0, 0},
 								{1, 0, 0},
 								{1, 0, 0},
 							};	
-		
+//==========================
+char BangThemNV[][MAXTEXT] = {	"ID:", "Name:", "Cancel", "ADD", "ADD EMPLOYEEs"}; // tieu de textbox
+int MatranThemNV[10][10] =  { 	{1, 0, 0},
+								{1, 0, 0},
+							};	
+				
 
 //=======================================================CAC HAM VE HINH CHU NHAT===============================================================
 REC::REC()
@@ -67,10 +72,10 @@ void REC::RecDraw()
 	bar (x1, y1, x2, y2);			
 }
 
-void REC::emptyDraw()
+void REC::emptyDraw(mau Vien)
 {
 	setlinestyle (5, 4, 1);
-	setcolor (lineColor);
+	setcolor (Vien);
 	rectangle (x1+0.5, y1+0.5, x2-0.5, y2-0.5);
 }
 void REC::eraseDraw()
@@ -78,43 +83,87 @@ void REC::eraseDraw()
 	setfillstyle(1, 0);
 	bar (x1, y1, x2, y2);
 }
+void REC:: beTicked()
+{
+	if (CoBiChonKhong == true)
+	{
+		setfillstyle(1, XANHLA);
+		circle((x1+x2)/2, (y1+y2)/2, (x2-x1)/2-1);
+	}
+	else
+	{
+		RecDraw();
+	}
+		
+}
 
 void REC:: beingTyped(char c)
 {
 	
-	text_tp[0] = c;
+	char key, keyNext;
 	int id = 1;
+	if (text_tp[0] != '\0')
+	{
+		RecDraw();
+		emptyDraw(XANHLA);
+		memset(text_tp, '\0', sizeof(text_tp));
+	}
+			text_tp[0] = c;
+			if (!wrongText(text_tp))
+			{
+				setbkcolor (bkColor);
+				settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+				setcolor (textColor);
+				outtextxy (x1+25, y1 + (y2-y1-textheight(text_tp))/2 , text_tp);
+			}
 		while (1)
 		{
+			retype:;
 			if (kbhit())
 			{	
-				char key = getch();
+				key = getch();
 				if (key == '\r' )
 				{ 
-						if ( sizeof(text_tp) > MAXTEXT)
-							return;
+						
 						if (wrongText(text_tp))
 						{
 							setcolor(DO);
-							rectangle (x1, y1, x2, y2);
-							beingTyped('\0');
+							rectangle (x1+0.5, y1+0.5, x2-0.5, y2-0.5);
+							goto retype;
 						}
 						else
 						{
-							setcolor(VANG);
-							rectangle (x1, y1, x2, y2);	
+							setcolor(lineColor);
+							rectangle (x1+0.5, y1+0.5, x2-0.5, y2-0.5);	
 						}	
 						return;
-				} 
-				
+				}
+					
+				else if ( key == VK_BACK )
 				{
+					if (id > 0)
+					{
+						text_tp[id-1] = ' ';
+						id--;
+					}
+					setbkcolor (bkColor);
+					settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+					setcolor (textColor);
+					outtextxy (x1+25, y1 + (y2-y1-textheight(text_tp))/2 , text_tp);
+					text_tp[id] = '\0';
+				}
+				else if (key != 0)
+				{
+					if ( id > MAXTEXT)
+							continue;
 					
 					text_tp[id] = key;
 					id++;
+					text_tp[id] ='\0';
 					
 					setbkcolor (bkColor);
 					settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
-
+					setcolor (textColor);
 					outtextxy (x1+25, y1 + (y2-y1-textheight(text_tp))/2 , text_tp);
 					
 				}
@@ -139,6 +188,7 @@ BUTTON::BUTTON (mau text_color, mau bk_color, mau line_Color, char textOnScreen[
 	bkColor  =  bk_color;
 	lineColor = line_Color;
 	text = textOnScreen;
+	text_tp[0] = '\0'; 
 	value = 0;
 	x1 = a1, y1 = b1;
 	x2 = a2, y2 = b2;
@@ -259,12 +309,10 @@ void GetButton(char bangNoiDung[][MAXTEXT], int MatranBoTri[10][10], BUTTON *Tab
 	int DiemBatDauY = (700 - soLuongTextBox*2*MENU_DY*2)/2;
 	for (int i = 0; i < soLuongTextBox; i++)
 	{
-		if (MatranBoTri[i][0])
-		{
 			int j = 0;
 			while (MatranBoTri[i][j])
 			{
-				if (j > 0 || MatranBoTri[i][j+1])
+				if (j > 0 || MatranBoTri[i][j+1]>0)
 				{
 					int disx = BOX_LEN/4;
 					int disy = MENU_DY*MatranBoTri[i][j];
@@ -283,22 +331,21 @@ void GetButton(char bangNoiDung[][MAXTEXT], int MatranBoTri[10][10], BUTTON *Tab
 			if (!MatranBoTri[i][j])
 			{
 				Table[i][j]= new BUTTON(TRANG, MAUBOX, VIENBOX, bangNoiDung[dem], LE_GIUA, DiemBatDauY + i*MENU_DY + i*MENU_DY, LE_GIUA+ BOX_LEN, DiemBatDauY + i*MENU_DY+ i*MENU_DY+MENU_DY);	
+				Table[i][j]->value = 0;
 			}
-		}
-		else
-		{
-			Table[i][0] = new BUTTON(TRANG, MAUBOX, VIENBOX, bangNoiDung[dem], LE_GIUA, DiemBatDauY + i*MENU_DY + i*MENU_DY, LE_GIUA+ BOX_LEN, DiemBatDauY + i*MENU_DY+ i*MENU_DY+MENU_DY);	
-		}
 	}
 	
-	for (int j = 0; j < 2; j++)
+	for (int j = 0; j <= 2; j++)
 	{	
 		Table[soLuongTextBox][j] = new BUTTON(TRANG, MAUBOX, VIENBOX, bangNoiDung[dem], LE_GIUA-300+j*((-LE_GIUA+300 + LE_GIUA+ BOX_LEN+20)/2), DiemBatDauY + (soLuongTextBox+1)*2*MENU_DY, LE_GIUA-300+j*((-LE_GIUA+300 + LE_GIUA+ BOX_LEN+20)/2) +(-LE_GIUA+300 + LE_GIUA+ BOX_LEN+20)/2, DiemBatDauY +(soLuongTextBox+1)*2*MENU_DY+MENU_DY);
-		Table[soLuongTextBox][j]->value = MatranBoTri[soLuongTextBox][j];
-		dem++;
+		if (j < 2)
+		{
+			Table[soLuongTextBox][j]->value = NUTCONST;
+			dem++;
+		}
 	}
 	Table[soLuongTextBox+1][0] = new BUTTON(TRANG, MAUBOX, VIENBOX, bangNoiDung[dem], LE_GIUA-300, DiemBatDauY-2*MENU_DY, LE_GIUA + BOX_LEN+20, DiemBatDauY-MENU_DY);
-	Table[soLuongTextBox+1][0]->value = MatranBoTri[soLuongTextBox+1][0];
+	Table[soLuongTextBox+1][0]->value = 0;
 	return;
 }
 //==============================================================Tao BAng Add VT=================================================================
@@ -306,7 +353,7 @@ void VeBang(BUTTON *Table[10][10])
 {
 	int id = 0;
 	int soLuongTextBox = 0;
-	while (Table[soLuongTextBox][0]->value)
+	while (Table[soLuongTextBox][0]->value >0 && Table[soLuongTextBox][0]-> value != NUTCONST)
 	{
 			soLuongTextBox++;
 	}
@@ -315,7 +362,7 @@ void VeBang(BUTTON *Table[10][10])
 	bar(Table[soLuongTextBox+1][0]->x1, Table[soLuongTextBox+1][0]->y1, Table[soLuongTextBox][1]->x2, Table[soLuongTextBox][1]->y2);
 	for (int i = 0; i < soLuongTextBox; i++)
 	{
-		if (Table[i][0]->value>0)
+		if (Table[i][0]->value)
 		{
 			int j = 0;
 			while (Table[i][j]->value >0)
@@ -325,9 +372,9 @@ void VeBang(BUTTON *Table[10][10])
 				settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
 				setbkcolor (DENXAM);
 				setcolor (TRANG);
-				outtextxy (Table[i][j]->x1-BOX_LEN+30, Table[i][j]->y1 + (Table[i][j]->y2-Table[i][j]->y1-textheight(Table[i][j]->text))/2, Table[i][j]->text);
+				outtextxy (Table[i][j]->x1-BOX_LEN+130, Table[i][j]->y1 + (Table[i][j]->y2-Table[i][j]->y1-textheight(Table[i][j]->text))/2, Table[i][j]->text);
 				Table[i][j]->RecDraw();
-				Table[i][j]->emptyDraw();
+				Table[i][j]->emptyDraw(Table[i][j]->lineColor);
 				j++;
 			}
 		}
@@ -340,6 +387,111 @@ void VeBang(BUTTON *Table[10][10])
 	Table[soLuongTextBox+1][0]->solidDraw();
 	return;
 }
+
+//==================================[DI CHUYEN]=================================================================================================================================
+void boxMove(BUTTON *Bar[10][10])
+{
+
+	ll inow = -1, jnow = 1, ipas = 0, jpas = 0;
+	int arr[10] = {1};
+	int x = 0, y = 0;
+	int n = 0; // so luong text box va nut
+	while (Bar[n][0]->value > 0)
+	{
+			int j = 0;
+			while (Bar[n][j]->value > 0)
+			{
+				j++;
+			}
+			arr[n] = j;
+			n++;
+	}
+	while (1)
+	{
+		if (kbhit())
+		{
+				char key, keyNext;
+				key = getch();
+				if (key == '\r')
+				{  
+						if(Bar[inow][jnow]->value == TICKCONST)
+						{
+							Bar[inow][jnow]->CoBiChonKhong = true;
+							Bar[inow][(jnow+1)%arr[inow]]->CoBiChonKhong = false;
+							Bar[inow][jnow]->beTicked();
+							Bar[inow][(jnow+1)%arr[inow]]->beTicked();
+							continue;
+						}
+						return;
+				} 
+				else if (key == 0)
+				{	
+					ipas = inow;
+					jpas = jnow;
+					keyNext = getch();
+					switch (keyNext)
+					{
+							case KEY_DOWN:
+								inow++, jnow = 0;		
+							break;
+							case KEY_UP:
+								inow--, jnow = 0;
+							break;
+							case KEY_LEFT:
+								jnow--;
+							break;
+							case KEY_RIGHT:
+								jnow++;
+							break;
+							default:;
+	
+					}
+					inow = (inow + n)%n;
+					jnow = (jnow+arr[inow])%arr[inow];
+	
+					if (jpas >= 0  && ipas >=0 )
+					{
+						if (Bar[ipas][jpas]->value != NUTCONST)
+						{
+							Bar[ipas][jpas]->RecDraw();
+							if (Bar[ipas][jpas]->value == TICKCONST)
+							{
+								Bar[ipas][jpas]->beTicked();
+							}
+							else
+							{
+								setbkcolor (Bar[ipas][jpas]->bkColor);
+								settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+								setcolor (Bar[ipas][jpas]->textColor);
+								outtextxy (Bar[ipas][jpas]->x1+25, Bar[ipas][jpas]->y1 + (Bar[ipas][jpas]->y2-Bar[ipas][jpas]->y1-textheight(Bar[ipas][jpas]->text_tp))/2 , Bar[ipas][jpas]->text_tp);
+							}
+							
+						}
+						else
+							Bar[ipas][jpas]->solidDraw();
+					}
+	
+					Bar[inow][jnow]->emptyDraw(XANHLA);
+					
+					
+	
+				}
+				else if (inow < n && inow >= 0 && jnow < arr[inow] && jnow >=0)
+				{
+					Bar[inow][jnow] -> emptyDraw(XANHLA);
+					if (Bar[inow][jnow]->value != NUTCONST && Bar[inow][jnow]->value != TICKCONST)
+					{
+								Bar[inow][jnow] -> beingTyped(key);
+								inow = (inow + 1)%n;
+								Bar[inow][jnow]->emptyDraw(XANHLA);
+					}
+				}
+		}
+
+	}
+}
+//===================================================================================================================================================================
+//===================================================================================================================================================================
 void TaoBangThemVattu(BUTTON *NutThemVT[10][10])
 {
 	GetButton(BangThemVT, MatranThemVT, NutThemVT);
@@ -356,6 +508,12 @@ void TaoBangSuaVattu(BUTTON *NutSuaVT[10][10])
 {
 	GetButton(BangSuaVT, MatranSuaVT, NutSuaVT);
 	VeBang(NutSuaVT);
+	return;
+}
+void TaoBangThemNV(BUTTON *NutThemNV[10][10])
+{
+	GetButton(BangThemNV, MatranThemNV, NutThemNV);
+	VeBang(NutThemNV);
 	return;
 }
 
