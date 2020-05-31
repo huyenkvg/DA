@@ -14,5 +14,5 @@ bool wrongText(char a[])
 }
 bool CheckDay(char *ngay, char *thang, char *nam)
 {
-	return 1;
+	return 0;
 }

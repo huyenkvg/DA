@@ -188,9 +188,6 @@ int REC:: beingTyped(char c)
 				{
 					if ( id > MAXTEXT)
 							continue;
-					ofstream logs;
-					logs.open ("logs.txt", ios :: out);		
-					logs << "text:" << text;
 					if (strcmp(text, "Day") == 0 || strcmp(text, "Month") == 0)
 					{
 						if (strlen(text_tp)> 1)
@@ -232,13 +229,8 @@ BUTTON::BUTTON (mau text_color, mau bk_color, mau line_Color, char textOnScreen[
 	textColor = text_color;
 	bkColor  =  bk_color;
 	lineColor = line_Color;	
-//	char huyen[22];
 	strcpy(text , textOnScreen);
-	
-								ofstream log2;
-								log2.open ("log2.txt", ios :: out);		
-								log2 << text;
-//	text= textOnScreen;
+
 	
 							
 	CoBiChonKhong = false;
@@ -371,7 +363,8 @@ void GetButton(char bangNoiDung[][MAXTEXT], int MatranBoTri[10][10], BUTTON *Tab
 					int disx = BOX_LEN/3;
 					int disy = MENU_DY*MatranBoTri[i][j];
 					 
-					Table[i][j] = new BUTTON(TRANG, MAUBOX, VIENBOX, bangNoiDung[dem], LE_GIUA+j*disx, DiemBatDauY + i*MENU_DY + i*MENU_DY, LE_GIUA+ j*disx+disy, DiemBatDauY + i*MENU_DY+ i*MENU_DY+MENU_DY);
+					Table[i][j] = new BUTTON(TRANG, MAUBOX, VIENBOX, bangNoiDung[dem], LE_GIUA+j*disx, DiemBatDauY + i*MENU_DY + i*MENU_DY, LE_GIUA+ j*disx+disy
+					, DiemBatDauY + i*MENU_DY+ i*MENU_DY+MENU_DY);
 					Table[i][j]->value = MatranBoTri[i][j];
 				}
 				else
@@ -492,6 +485,41 @@ void boxMove(BUTTON *Bar[10][10])
 							}
 							continue;
 						}
+						if (Bar[inow][0]->value == DAYCONST)
+						{
+							int id = 0;
+							while (CheckDay(Bar[inow][0]->text_tp, Bar[inow][1]->text_tp, Bar[inow][2]->text_tp) == false) // Ngay bi sai
+							{
+								
+								Bar[inow][0]->emptyDraw(DO);
+								Bar[inow][1]->emptyDraw(DO);
+								Bar[inow][2]->emptyDraw(DO);
+								if (kbhit)
+								{
+									Bar[inow][id]->RecDraw();
+									Bar[inow][id] -> emptyDraw(XANHLA);
+									key = getch();
+									if(key == 0)
+									{
+										key= getch();
+										continue;
+									}
+									else if (key == '\r')
+									{
+										continue;
+									}
+									id = (id+Bar[inow][id]->beingTyped(key)+3)%3;
+									Bar[inow][0]-> emptyDraw(Bar[inow][0]->lineColor);
+									Bar[inow][1]-> emptyDraw(Bar[inow][1]->lineColor);
+									Bar[inow][2]-> emptyDraw(Bar[inow][2]->lineColor);
+									
+									Bar[inow][id] -> emptyDraw(XANHLA);
+									
+								}
+								
+							}
+							continue;
+						}
 						return;
 				} 
 				else if (key == 0)
@@ -563,21 +591,6 @@ void boxMove(BUTTON *Bar[10][10])
 									jnow = 0;
 								}
 								Bar[inow][jnow]->emptyDraw(XANHLA);
-					}
-					if (Bar[inow][0]->value == DAYCONST)
-					{
-						int id = 0;
-						while (CheckDay(Bar[inow][0]->text_tp, Bar[inow][1]->text_tp, Bar[inow][2]->text_tp) == false) // Ngay bi sai
-						{
-							
-							Bar[inow][0]->emptyDraw(DO);
-							Bar[inow][1]->emptyDraw(DO);
-							Bar[inow][2]->emptyDraw(DO);
-							Bar[inow][id] -> emptyDraw(XANHLA);
-							Bar[inow][id]->beingTyped('\0');
-							id = (id+1)%3;
-							
-						}
 					}
 				}
 		}

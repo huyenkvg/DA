@@ -33,13 +33,13 @@ int main()
 //	TaoBangThemVattu(NutThemVT);
 //	TaoBangXoaVattu(NutXoaVT);
 //	TaoBangSuaVattu(NutSuaVT);
-	TaoBangThemNV(NutThemNV);
+//	TaoBangThemNV(NutThemNV);
 //	TaoBangXoaNV(NutXoaNV);
 //	TaoBangSuaNV(NutSuaNV);
-//	TaoBangLapHD(NutLapHD);
+	TaoBangLapHD(NutLapHD);
 
-//	boxMove(NutLapHD);
-	boxMove(NutThemNV);
+	boxMove(NutLapHD);
+//	boxMove(NutThemNV);
 	system("pause");
 	return 0;
 }

@@ -17,7 +17,7 @@ typedef double db;
 #define NUTCONST 5
 #define TICKCONST 1
 #define TEXBOXCONST 11
-#define DAYCONST  2
+#define DAYCONST  3
 
 
 //========================================================HinhChuNhat=========================================================================
