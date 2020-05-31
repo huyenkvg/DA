@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include "colors.h"
 using namespace std; 
 typedef long long ll;
@@ -17,6 +18,7 @@ typedef double db;
 #define TICKCONST 1
 #define TEXBOXCONST 11
 #define DAYCONST  2
+
 
 //========================================================HinhChuNhat=========================================================================
 
@@ -36,7 +38,7 @@ class REC{
 		virtual void emptyDraw(mau Vien);
 		void eraseDraw();
 		void beTicked();
-		virtual void beingTyped( char c);
+		virtual int beingTyped( char c);
 };
 
 
@@ -44,7 +46,6 @@ class BUTTON : public REC
 {
 	protected:
 	public:	
-		char *text;	
 		BUTON();
 		BUTTON (mau text_color, mau bk_color, mau line_Color, char textOnScreen[], ll a1, ll b1, ll a2, ll b2);
 		virtual void solidDraw();
@@ -58,3 +59,6 @@ void TaoBangThemVattu(BUTTON *NutThemVT[10][10]);
 void TaoBangXoaVattu(BUTTON *NutXoaVT[10][10]);
 void TaoBangSuaVattu(BUTTON *NutXoaVT[10][10]);
 void TaoBangThemNV(BUTTON *NutThemNV[10][10]);
+void TaoBangXoaNV(BUTTON *NutXoaNV[10][10]);
+void TaoBangSuaNV(BUTTON *NutSuaNV[10][10]);
+void TaoBangLapHD(BUTTON *NutLapHD[10][10]);

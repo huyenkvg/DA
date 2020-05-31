@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <cmath>
 #include <stdio.h>
 #include <cstring>
@@ -27,14 +26,19 @@ BUTTON *NutLapHD[10][10];
 
 int main()
 {
+	
+	
 	initwindow(1080, 700);
 	VeMenu();
 //	TaoBangThemVattu(NutThemVT);
 //	TaoBangXoaVattu(NutXoaVT);
 //	TaoBangSuaVattu(NutSuaVT);
 	TaoBangThemNV(NutThemNV);
-//	TaoBangThemNV(NutXoaNV);
-//	TaoBangThemNV(NutSuaNV);
+//	TaoBangXoaNV(NutXoaNV);
+//	TaoBangSuaNV(NutSuaNV);
+//	TaoBangLapHD(NutLapHD);
+
+//	boxMove(NutLapHD);
 	boxMove(NutThemNV);
 	system("pause");
 	return 0;

@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <cmath>
 #include <stdio.h>
 #include <string.h>
@@ -14,9 +13,9 @@ typedef long long ll;
 typedef double db;
 
 //====================================================BANG MENU CHINH============================================================================
-char MenuTable[MAX_SE][MAX_MENU][MAXTEXT] = { 	"Materials", 		"Employees", 		"Bills", 		"Statistics", 		"Help",
-													"Add Material", 	"Add Employee",		"Show Bill",	"Satistic Bills",	"_",
-													"Delete Material", 	"Show Employee",	"_",			"Top 10 revenue",	"_",
+char MenuTable[MAX_SE][MAX_MENU][MAXTEXT] = 	{ 	"Materials", 		"Employees", 		"Bills", 		"Statistics", 		"Help",
+													"Add Material", 	"Add Employee",		"Create Bill",	"Satistic Bills",	"_",
+													"Delete Material", 	"Show Employee",	"Show Bills",			"Top 10 revenue",	"_",
 													"Change Material",	"_",				"_",			"_",				"_",
 													"Material's info",	"_",				"_",			"_",				"_"};
 //==========================
@@ -59,7 +58,12 @@ int MatranSuaNV[10][10] =  { 	{TEXBOXCONST, 		0, 0},
 								{TEXBOXCONST,	 	0, 0},
 								{TICKCONST, TICKCONST, 0},
 								{0,					0, 0}
-							};					
+							};		
+char BangLapHD[][MAXTEXT] = {	"ID:", "Day", "Month",  "Year", "Cancel", "Create", "CREATE BILL"}; // tieu de textbox
+int MatranLapHD[10][10] =  { 	{TEXBOXCONST, 			0, 0, 0},
+								{DAYCONST, DAYCONST, DAYCONST ,0},
+								{0,						0, 0, 0}
+							};			
 
 //=======================================================CAC HAM VE HINH CHU NHAT===============================================================
 REC::REC()
@@ -83,18 +87,19 @@ REC::REC(mau bkC, mau lineC, ll a1, ll b1, ll a2, ll b2)
 	x1 = a1, y1 = b1;
 	x2 = a2, y2 = b2;
 }
-void REC::RecDraw()
-{
-	setfillstyle (1, bkColor);
-	bar (x1, y1, x2, y2);			
-}
-
 void REC::emptyDraw(mau Vien)
 {
 	setlinestyle (5, 4, 1);
 	setcolor (Vien);
 	rectangle (x1+0.5, y1+0.5, x2-0.5, y2-0.5);
 }
+void REC::RecDraw()
+{
+	setfillstyle (1, bkColor);
+	bar (x1, y1, x2, y2);	
+	emptyDraw(lineColor);		
+}
+
 void REC::eraseDraw()
 {
 	setfillstyle(1, 0);
@@ -115,7 +120,7 @@ void REC:: beTicked()
 		
 }
 
-void REC:: beingTyped(char c)
+int REC:: beingTyped(char c)
 {
 	
 	char key, keyNext;
@@ -126,35 +131,44 @@ void REC:: beingTyped(char c)
 		emptyDraw(XANHLA);
 		memset(text_tp, '\0', sizeof(text_tp));
 	}
-	text_tp[0] = c;
+	if (c != VK_BACK)
+		text_tp[0] = c;
+	else
+		id = 0;
 	if (!wrongText(text_tp))
 	{
 		setbkcolor (bkColor);
 		settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
 		setcolor (textColor);
-		outtextxy (x1+25, y1 + (y2-y1-textheight(text_tp))/2 , text_tp);
+		outtextxy (x1+10, y1 + (y2-y1-textheight(text_tp))/2 , text_tp);
 	}
 		while (1)
 		{
-			retype:;
 			if (kbhit())
 			{	
 				key = getch();
-				if (key == '\r' )
+				if (key == '\r' || key == 0 )
 				{ 
 						
 						if (wrongText(text_tp))
 						{
-							setcolor(DO);
-							rectangle (x1+0.5, y1+0.5, x2-0.5, y2-0.5);
-							goto retype;
+							emptyDraw(DO);
+							continue;
 						}
-						else
+						else if (key == 0)
 						{
-							setcolor(lineColor);
-							rectangle (x1+0.5, y1+0.5, x2-0.5, y2-0.5);	
-						}	
-						return;
+							keyNext = getch();
+							if (keyNext == KEY_RIGHT || keyNext == KEY_LEFT)
+								continue;
+							emptyDraw(lineColor);
+							if (keyNext == KEY_DOWN)
+								return 1;	
+							if (keyNext == KEY_UP)
+								return -1;
+						}
+						
+						emptyDraw(lineColor);
+						return 1;
 				}
 					
 				else if ( key == VK_BACK )
@@ -167,21 +181,24 @@ void REC:: beingTyped(char c)
 					setbkcolor (bkColor);
 					settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
 					setcolor (textColor);
-					outtextxy (x1+25, y1 + (y2-y1-textheight(text_tp))/2 , text_tp);
+					outtextxy (x1+10, y1 + (y2-y1-textheight(text_tp))/2 , text_tp);
 					text_tp[id] = '\0';
 				}
 				else if (key != 0)
 				{
 					if ( id > MAXTEXT)
 							continue;
-					if (strcmp(text, "DAY:") == 0 || strcmp(text, "MONTH:") == 0)
+					ofstream logs;
+					logs.open ("logs.txt", ios :: out);		
+					logs << "text:" << text;
+					if (strcmp(text, "Day") == 0 || strcmp(text, "Month") == 0)
 					{
-						if (id > 1)
+						if (strlen(text_tp)> 1)
 							continue;
 					}
-					else if (strcmp(text, "YEAR:") == 0)
+					else if (strcmp(text, "Year") == 0)
 					{
-						if (id > 3)
+						if (strlen(text_tp) > 3)
 							continue;
 					}
 					text_tp[id] = key;
@@ -191,7 +208,7 @@ void REC:: beingTyped(char c)
 					setbkcolor (bkColor);
 					settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
 					setcolor (textColor);
-					outtextxy (x1+25, y1 + (y2-y1-textheight(text_tp))/2 , text_tp);
+					outtextxy (x1+10, y1 + (y2-y1-textheight(text_tp))/2 , text_tp);
 					
 				}
 			}
@@ -214,8 +231,16 @@ BUTTON::BUTTON (mau text_color, mau bk_color, mau line_Color, char textOnScreen[
 {
 	textColor = text_color;
 	bkColor  =  bk_color;
-	lineColor = line_Color;
-	text = textOnScreen;
+	lineColor = line_Color;	
+//	char huyen[22];
+	strcpy(text , textOnScreen);
+	
+								ofstream log2;
+								log2.open ("log2.txt", ios :: out);		
+								log2 << text;
+//	text= textOnScreen;
+	
+							
 	CoBiChonKhong = false;
 	text_tp[0] = '\0'; 
 	value = 0;
@@ -343,7 +368,7 @@ void GetButton(char bangNoiDung[][MAXTEXT], int MatranBoTri[10][10], BUTTON *Tab
 			{
 				if (j > 0 || MatranBoTri[i][j+1]>0)
 				{
-					int disx = BOX_LEN/4;
+					int disx = BOX_LEN/3;
 					int disy = MENU_DY*MatranBoTri[i][j];
 					 
 					Table[i][j] = new BUTTON(TRANG, MAUBOX, VIENBOX, bangNoiDung[dem], LE_GIUA+j*disx, DiemBatDauY + i*MENU_DY + i*MENU_DY, LE_GIUA+ j*disx+disy, DiemBatDauY + i*MENU_DY+ i*MENU_DY+MENU_DY);
@@ -377,7 +402,7 @@ void GetButton(char bangNoiDung[][MAXTEXT], int MatranBoTri[10][10], BUTTON *Tab
 	Table[soLuongTextBox+1][0]->value = 0;
 	return;
 }
-//==============================================================Tao BAng Add VT=================================================================
+//==============================================================VeBang=================================================================
 void VeBang(BUTTON *Table[10][10])
 {
 	int id = 0;
@@ -401,20 +426,22 @@ void VeBang(BUTTON *Table[10][10])
 				settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
 				setbkcolor (DENXAM);
 				setcolor (TRANG);
-				char *res;
-				res = Table[i][j]->text;
+				
+				char res[MAXTEXT];
+				strcpy(res, Table[i][j]->text);
 				if (Table[i][j+1]->value > 0)
-					res[strlen(res)] = '/';
-				outtextxy (Table[i][j]->x1-BOX_LEN+130, Table[i][j]->y1 + (Table[i][j]->y2-Table[i][j]->y1-textheight(Table[i][j]->text))/3, res);
-				if (Table[i][j+1]->value > 0)
-					res[strlen(res)-1] = '\0';
+					strcat(res, " /");
+					
+				outtextxy (Table[i][j]->x1-BOX_LEN+130 - j*MENU_DY*2, Table[i][j]->y1 + (Table[i][j]->y2-Table[i][j]->y1-textheight(Table[i][j]->text))/3, res);
+				
+				
 				if (Table[i][j]->value == TICKCONST)
 				{
 					setusercharsize(1, 3, 1, 3);
 					outtextxy (Table[i][j]->x1, Table[i][j]->y2 + MENU_DY/2, Table[i][j]->text);
 				}
 				Table[i][j]->RecDraw();
-				Table[i][j]->emptyDraw(Table[i][j]->lineColor);
+//				Table[i][j]->emptyDraw(Table[i][j]->lineColor);
 				j++;
 			}
 		}
@@ -506,7 +533,7 @@ void boxMove(BUTTON *Bar[10][10])
 								setbkcolor (Bar[ipas][jpas]->bkColor);
 								settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
 								setcolor (Bar[ipas][jpas]->textColor);
-								outtextxy (Bar[ipas][jpas]->x1+25, Bar[ipas][jpas]->y1 + (Bar[ipas][jpas]->y2-Bar[ipas][jpas]->y1-textheight(Bar[ipas][jpas]->text_tp))/2 , Bar[ipas][jpas]->text_tp);
+								outtextxy (Bar[ipas][jpas]->x1+10, Bar[ipas][jpas]->y1 + (Bar[ipas][jpas]->y2-Bar[ipas][jpas]->y1-textheight(Bar[ipas][jpas]->text_tp))/2 , Bar[ipas][jpas]->text_tp);
 							}
 							
 						}
@@ -524,8 +551,17 @@ void boxMove(BUTTON *Bar[10][10])
 					Bar[inow][jnow] -> emptyDraw(XANHLA);
 					if (Bar[inow][jnow]->value != NUTCONST && Bar[inow][jnow]->value != TICKCONST)
 					{
-								Bar[inow][jnow] -> beingTyped(key);
-								inow = (inow + 1)%n;
+								int tmp = Bar[inow][jnow] -> beingTyped(key);
+								
+								if (Bar[inow][0]->value == DAYCONST)
+								{
+									jnow = (jnow + 1 +arr[inow])%arr[inow]; 
+								}
+								else
+								{
+									inow = (inow + tmp +n)%n;
+									jnow = 0;
+								}
 								Bar[inow][jnow]->emptyDraw(XANHLA);
 					}
 					if (Bar[inow][0]->value == DAYCONST)
@@ -533,6 +569,7 @@ void boxMove(BUTTON *Bar[10][10])
 						int id = 0;
 						while (CheckDay(Bar[inow][0]->text_tp, Bar[inow][1]->text_tp, Bar[inow][2]->text_tp) == false) // Ngay bi sai
 						{
+							
 							Bar[inow][0]->emptyDraw(DO);
 							Bar[inow][1]->emptyDraw(DO);
 							Bar[inow][2]->emptyDraw(DO);
@@ -571,6 +608,24 @@ void TaoBangThemNV(BUTTON *NutThemNV[10][10])
 {
 	GetButton(BangThemNV, MatranThemNV, NutThemNV);
 	VeBang(NutThemNV);
+	return;
+}
+void TaoBangXoaNV(BUTTON *NutXoaNV[10][10])
+{
+	GetButton(BangXoaNV, MatranXoaNV, NutXoaNV);
+	VeBang(NutXoaNV);
+	return;
+}
+void TaoBangSuaNV(BUTTON *NutSuaNV[10][10])
+{
+	GetButton(BangSuaNV, MatranSuaNV, NutSuaNV);
+	VeBang(NutSuaNV);
+	return;
+}
+void TaoBangLapHD(BUTTON *NutLapHD[10][10])
+{
+	GetButton(BangLapHD, MatranLapHD, NutLapHD);
+	VeBang(NutLapHD);
 	return;
 }
 
