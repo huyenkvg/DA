@@ -1,5 +1,7 @@
 #include <iostream>
-#define max 500
+#define Max 500
+#define MaxVT
+#include "Dohoa.h"
 using namespace std;
 
 // Khai bao cau truc ngay thang nam
@@ -92,13 +94,23 @@ typedef struct nhanvien
 typedef struct list_nhanvien
 {
 	int n=0;
-	NHANVIEN *NV[max];
+	NHANVIEN *NV[Max];
 } LIST_NHANVIEN;
+//================================FUNTION of GET=================================
+//=============================== MAIN FUNCTION =================================
 
-//=============================== FUNCTION =================================
+NODE_VATTU *Create_NodeVT(VATTU vt);
+NODE_HOADON *Create_NodeHD(HOADON hd);
+NODE_DETAIL_HOADON *Create_NodeDHD(DETAIL_HOADON dhd);
+NHANVIEN *Search_NV(LIST_NHANVIEN l_nv, string manv);
+NODE_VATTU *Search_VT(TREE_VATTU &t, string mavt);
+int Search_MaVT(LIST_NHANVIEN &l_nv, string mavt);
+NODE_HOADON *Search_HD(LIST_NHANVIEN &l_nv,string sohd);
+
+void Create_ListVT(TREE_VATTU &t);
 
 void Input_VT(VATTU &vt);
-void Add_VT(TREE_VATTU &t, VATTU vt);
+void Add_VT(TREE_VATTU &t, NODE_VATTU *p);
 void Erase_VT(TREE_VATTU &t, string mavt);
 void Modify_VT(TREE_VATTU &t, VATTU &vt);
 void Print_VT(TREE_VATTU &t);
@@ -126,6 +138,8 @@ void Statistic_Revenue();
 void Write_FileRevenue();
 
 
+void GetInfo_AddMatTab(VATTU &vt, BUTTON *Table[10][10]);
+string Get_ID(VATTU &vt, BUTTON *Table[10][10]);
 
 
 

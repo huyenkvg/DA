@@ -15,4 +15,5 @@ enum mau
 	BICHON = COLOR (112, 103, 135),
 	TIEUDE = COLOR (217, 142, 255),
 	TRANG = COLOR (244, 255, 187),
+	DOTUOI = COLOR (255, 0, 0),
 };

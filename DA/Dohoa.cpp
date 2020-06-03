@@ -3,11 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "Dohoa.h"
-#include "functions.h"
 
 using namespace std;
-#define MENU_DX 150
-#define MENU_DY 20
 typedef unsigned long long ull;
 typedef long long ll;
 typedef double db;
@@ -15,7 +12,7 @@ typedef double db;
 //====================================================BANG MENU CHINH============================================================================
 char MenuTable[MAX_SE][MAX_MENU][MAXTEXT] = 	{ 	"Materials", 		"Employees", 		"Bills", 		"Statistics", 		"Help",
 													"Add Material", 	"Add Employee",		"Create Bill",	"Satistic Bills",	"_",
-													"Delete Material", 	"Show Employee",	"Show Bills",			"Top 10 revenue",	"_",
+													"Delete Material", 	"Show Employee",	"Show Bills",	"Top 10 revenue",	"_",
 													"Change Material",	"_",				"_",			"_",				"_",
 													"Material's info",	"_",				"_",			"_",				"_"};
 //==========================
@@ -59,9 +56,10 @@ int MatranSuaNV[10][10] =  { 	{TEXBOXCONST, 		0, 0},
 								{TICKCONST, TICKCONST, 0},
 								{0,					0, 0}
 							};		
-char BangLapHD[][MAXTEXT] = {	"ID:", "Day", "Month",  "Year", "Cancel", "Create", "CREATE BILL"}; // tieu de textbox
+char BangLapHD[][MAXTEXT] = {	"ID:", "Day", "Month",  "Year", "Nhap", "Xuat:", "Cancel", "Create", "CREATE BILL"}; // tieu de textbox
 int MatranLapHD[10][10] =  { 	{TEXBOXCONST, 			0, 0, 0},
 								{DAYCONST, DAYCONST, DAYCONST ,0},
+								{TICKCONST,		TICKCONST, 0, 0},
 								{0,						0, 0, 0}
 							};			
 
@@ -190,12 +188,12 @@ int REC:: beingTyped(char c)
 							continue;
 					if (strcmp(text, "Day") == 0 || strcmp(text, "Month") == 0)
 					{
-						if (strlen(text_tp)> 1)
+						if (strlen(text_tp)> 1 || isNumber(key) == false)
 							continue;
 					}
 					else if (strcmp(text, "Year") == 0)
 					{
-						if (strlen(text_tp) > 3)
+						if (strlen(text_tp) > 3 || isNumber(key) == false)
 							continue;
 					}
 					text_tp[id] = key;
@@ -210,6 +208,19 @@ int REC:: beingTyped(char c)
 				}
 			}
 		}
+}
+void REC :: EraseInfo()
+{
+	memset(text_tp, '\0', sizeof(text_tp));
+	CoBiChonKhong = 0;
+	return;
+}
+void REC :: EraseDraw()
+{
+	setfillstyle(1, 0);
+	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+	setbkcolor (0);
+	bar (x1, y1, x2, y2);
 }
 //=======================================================CAC HAM VE NUT===============================================================
 BUTTON::BUTON()
@@ -261,7 +272,7 @@ void BUTTON::beChoose()
 }
 
 //=====================================================VE MENU=================================================================
-void VeMenu()
+void VeMenu(int &row, int &col)
 {
 							
 	BUTTON *Bar[MAX_SE+1][MAX_MENU+1];
@@ -334,6 +345,7 @@ void VeMenu()
 			}
 			else if (key == '\r')
 			{ 
+					row = inow, col = jnow;
 					return;
 			} 
 		}
@@ -449,7 +461,7 @@ void VeBang(BUTTON *Table[10][10])
 }
 
 //==================================[DI CHUYEN]=================================================================================================================================
-void boxMove(BUTTON *Bar[10][10])
+bool boxMove(BUTTON *Bar[10][10])
 {
 
 	ll inow = -1, jnow = 1, ipas = 0, jpas = 0;
@@ -491,36 +503,63 @@ void boxMove(BUTTON *Bar[10][10])
 							while (CheckDay(Bar[inow][0]->text_tp, Bar[inow][1]->text_tp, Bar[inow][2]->text_tp) == false) // Ngay bi sai
 							{
 								
+								setfillstyle(1, DOTUOI);
+								setusercharsize(1, 3, 1, 3);
+								settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+								setcolor(DOTUOI);
+								setbkcolor (DENXAM);
+								outtextxy(Bar[inow][0]-> x1, Bar[inow][2]->y2 + MENU_DY*3/4- textheight("-> NGAY / THANG / NAM  SAI!"), "-> NGAY / THANG / NAM  SAI!" );
+								setusercharsize(1, 2, 1, 2);
 								Bar[inow][0]->emptyDraw(DO);
 								Bar[inow][1]->emptyDraw(DO);
 								Bar[inow][2]->emptyDraw(DO);
+									Bar[inow][id] -> emptyDraw(DOTUOI);
 								if (kbhit)
 								{
 									Bar[inow][id]->RecDraw();
-									Bar[inow][id] -> emptyDraw(XANHLA);
+									Bar[inow][id] -> emptyDraw(DOTUOI);
 									key = getch();
 									if(key == 0)
 									{
 										key= getch();
+										if (key == KEY_LEFT)
+										{
+											id = (id+arr[inow]-1)%arr[inow];
+										}
+										else if (key == KEY_RIGHT)
+										{
+											id = (id+arr[inow]+1)%arr[inow];
+										}
 										continue;
 									}
 									else if (key == '\r')
 									{
 										continue;
 									}
-									id = (id+Bar[inow][id]->beingTyped(key)+3)%3;
+									id = (id+Bar[inow][id]->beingTyped(key)+arr[inow])%arr[inow];
 									Bar[inow][0]-> emptyDraw(Bar[inow][0]->lineColor);
 									Bar[inow][1]-> emptyDraw(Bar[inow][1]->lineColor);
 									Bar[inow][2]-> emptyDraw(Bar[inow][2]->lineColor);
 									
-									Bar[inow][id] -> emptyDraw(XANHLA);
 									
 								}
 								
 							}
+							
+							setbkcolor (DENXAM);
+							setusercharsize(1, 3, 1, 3);
+							outtextxy(Bar[inow][0]-> x1, Bar[inow][2]->y2 + MENU_DY*3/4- textheight("H"), "                             " );
+							setusercharsize(1, 2, 1, 2);
+							Bar[inow][0]-> emptyDraw(Bar[inow][0]->lineColor);
+							Bar[inow][1]-> emptyDraw(Bar[inow][1]->lineColor);
+							Bar[inow][2]-> emptyDraw(Bar[inow][2]->lineColor);
+									
+							inow = (inow+1)%n;
+							jnow = 0;
+							Bar[inow][jnow] -> emptyDraw(XANHLA);
 							continue;
 						}
-						return;
+						return 1;
 				} 
 				else if (key == 0)
 				{	
@@ -598,47 +637,115 @@ void boxMove(BUTTON *Bar[10][10])
 	}
 }
 //===================================================================================================================================================================
+void XoaBang(BUTTON *Table[10][10])
+{
+	int i = 0, j = 0;
+	while (Table[i][j]-> value > 0)
+	{
+		while (Table[i][j]-> value > 0)
+		{
+			Table[i][j]->EraseInfo();
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+	
+	setfillstyle(1, 0);
+	setbkcolor (0);
+	setcolor(0);
+	bar(Table[i][0]->x1, Table[i][0]->y1, Table[i-1][1]->x2, Table[i-1][1]-> y2);
+}
 //===================================================================================================================================================================
 void TaoBangThemVattu(BUTTON *NutThemVT[10][10])
 {
 	GetButton(BangThemVT, MatranThemVT, NutThemVT);
-	VeBang(NutThemVT);
+//	VeBang(NutThemVT);
 	return;
 }
 void TaoBangXoaVattu(BUTTON *NutXoaVT[10][10])
 {
 	GetButton(BangXoaVT, MatranXoaVT, NutXoaVT);
-	VeBang(NutXoaVT);
+//	VeBang(NutXoaVT);
 	return;
 }
 void TaoBangSuaVattu(BUTTON *NutSuaVT[10][10])
 {
 	GetButton(BangSuaVT, MatranSuaVT, NutSuaVT);
-	VeBang(NutSuaVT);
+//	VeBang(NutSuaVT);
 	return;
 }
 void TaoBangThemNV(BUTTON *NutThemNV[10][10])
 {
 	GetButton(BangThemNV, MatranThemNV, NutThemNV);
-	VeBang(NutThemNV);
+//	VeBang(NutThemNV);
 	return;
 }
 void TaoBangXoaNV(BUTTON *NutXoaNV[10][10])
 {
 	GetButton(BangXoaNV, MatranXoaNV, NutXoaNV);
-	VeBang(NutXoaNV);
+//	VeBang(NutXoaNV);
 	return;
 }
 void TaoBangSuaNV(BUTTON *NutSuaNV[10][10])
 {
 	GetButton(BangSuaNV, MatranSuaNV, NutSuaNV);
-	VeBang(NutSuaNV);
+//	VeBang(NutSuaNV);
 	return;
 }
 void TaoBangLapHD(BUTTON *NutLapHD[10][10])
 {
 	GetButton(BangLapHD, MatranLapHD, NutLapHD);
-	VeBang(NutLapHD);
+//	VeBang(NutLapHD);
 	return;
+}
+
+
+
+
+
+//================================================================== [NOTIFICATION]========================================
+void ThongBao(int mode)
+{
+	setfillstyle (1, 0);
+	int x1 = 360, x2 = 680, y1 = 300, y2 = 340;  
+	bar (x1, y1, x2, y2);
+	setcolor(DOTUOI);
+	rectangle(x1, y1, x2, y2);
+	setusercharsize(1, 2, 1, 2);
+	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+	setbkcolor (0);
+	setcolor (DO);
+	switch (mode)
+	{
+		case TRUNGID:
+			{
+					outtextxy (x1+(x2-x1-textwidth("MA BAN VUA NHAP BI TRUNG"))/2, y1 + (y2-y1-textheight("MA BAN VUA NHAP BI TRUNG"))/2 , "MA BAN VUA NHAP BI TRUNG");
+			}break;
+		case DAHET:
+			{
+					
+					outtextxy (x1+(x2-x1-textwidth("DA HET"))/2, y1 + (y2-y1-textheight("DA HET"))/2 , "DA HET");
+			}
+		
+	}
+	while (1)
+	{
+		if (kbhit)
+		{
+			char key = getch();
+			if (key == '\r')
+			{
+				bar (x1, y1, x2, y2);
+				return;
+			}
+			if (key == 0)
+			{
+				key = getch();
+				bar (x1, y1, x2, y2);
+				return;
+			}
+		}
+	}
 }
 

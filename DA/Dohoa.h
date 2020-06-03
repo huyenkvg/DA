@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "colors.h"
+#include "functions.h"
 using namespace std; 
 typedef long long ll;
 typedef double db;
@@ -18,6 +19,11 @@ typedef double db;
 #define TICKCONST 1
 #define TEXBOXCONST 11
 #define DAYCONST  3
+
+//==============
+#define TRUNGID 1
+#define DAHET 2
+#define KHONGDU 3
 
 
 //========================================================HinhChuNhat=========================================================================
@@ -39,6 +45,8 @@ class REC{
 		void eraseDraw();
 		void beTicked();
 		virtual int beingTyped( char c);
+		virtual void EraseInfo();
+		virtual void EraseDraw();
 };
 
 
@@ -51,10 +59,11 @@ class BUTTON : public REC
 		virtual void solidDraw();
 		void beChoose();
 };
-void VeMenu();
+void VeMenu(int &row, int &col);
 void GetButton(char bangNoiDung[][MAXTEXT], int bangBoTri[10][10], BUTTON *Table[10][10]);
 void VeBang(BUTTON *Table[10][10]);
-void boxMove(BUTTON *Bar[10][10]);
+bool boxMove(BUTTON *Bar[10][10]);
+void XoaBang(BUTTON *Table[10][10]);
 void TaoBangThemVattu(BUTTON *NutThemVT[10][10]);
 void TaoBangXoaVattu(BUTTON *NutXoaVT[10][10]);
 void TaoBangSuaVattu(BUTTON *NutXoaVT[10][10]);
@@ -62,3 +71,4 @@ void TaoBangThemNV(BUTTON *NutThemNV[10][10]);
 void TaoBangXoaNV(BUTTON *NutXoaNV[10][10]);
 void TaoBangSuaNV(BUTTON *NutSuaNV[10][10]);
 void TaoBangLapHD(BUTTON *NutLapHD[10][10]);
+void ThongBao(int mode);
