@@ -1,7 +1,7 @@
 #include <iostream>
-#define Max 500
 #define MaxVT
 #include "Dohoa.h"
+#include <string>
 using namespace std;
 
 // Khai bao cau truc ngay thang nam
@@ -19,7 +19,7 @@ typedef struct vattu
 	string MAVT;
 	string TENVT;
 	string DVT;
-	float SLTON;		
+	int SLTON;		
 } VATTU;
 
 // Khai bao node vattu
@@ -139,9 +139,9 @@ void Write_FileRevenue();
 
 
 void GetInfo_AddMatTab(VATTU &vt, BUTTON *Table[10][10]);
-int Get_ID(char text1[], char text2[], string id); // lay id cua o can tim kiem
+string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT]); // lay id cua o can tim kiem
 void Arr_VT(TREE_VATTU &t, VATTU VT[], int &n);
 
 //==================Ham Mo DanhSach ra man hinh===================================
 
-
+void XemVatTu(VATTU VT[], int n);

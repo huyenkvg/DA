@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <stdio.h>
-#include <string.h>
+
 #include "Dohoa.h"
 
 using namespace std;
@@ -675,43 +675,36 @@ void XoaBang(BUTTON *Table[10][10])
 void TaoBangThemVattu(BUTTON *NutThemVT[10][10])
 {
 	GetButton(BangThemVT, MatranThemVT, NutThemVT);
-//	VeBang(NutThemVT);
 	return;
 }
 void TaoBangXoaVattu(BUTTON *NutXoaVT[10][10])
 {
 	GetButton(BangXoaVT, MatranXoaVT, NutXoaVT);
-//	VeBang(NutXoaVT);
 	return;
 }
 void TaoBangSuaVattu(BUTTON *NutSuaVT[10][10])
 {
 	GetButton(BangSuaVT, MatranSuaVT, NutSuaVT);
-//	VeBang(NutSuaVT);
 	return;
 }
 void TaoBangThemNV(BUTTON *NutThemNV[10][10])
 {
 	GetButton(BangThemNV, MatranThemNV, NutThemNV);
-//	VeBang(NutThemNV);
 	return;
 }
 void TaoBangXoaNV(BUTTON *NutXoaNV[10][10])
 {
 	GetButton(BangXoaNV, MatranXoaNV, NutXoaNV);
-//	VeBang(NutXoaNV);
 	return;
 }
 void TaoBangSuaNV(BUTTON *NutSuaNV[10][10])
 {
 	GetButton(BangSuaNV, MatranSuaNV, NutSuaNV);
-//	VeBang(NutSuaNV);
 	return;
 }
 void TaoBangLapHD(BUTTON *NutLapHD[10][10])
 {
 	GetButton(BangLapHD, MatranLapHD, NutLapHD);
-//	VeBang(NutLapHD);
 	return;
 }
 
@@ -771,4 +764,52 @@ void ThongBao(int mode)
 		}
 	}
 }
-
+int InRaMH(BUTTON *Table[Max][Max], int start, int end, int soluongcot)
+{
+	for (int i = start; i < end; i++)
+	{
+		for(int j = 0; j < soluongcot; j++)
+		{
+			Table[i][j]->solidDraw();
+				Table[i][j]->emptyDraw(XANHLA);
+		}
+	}
+	int i = 0, j = 0;
+	while(true)
+	{
+		char key;
+		if (kbhit())
+		{
+			for(int j = 0; j < soluongcot; j++)
+				Table[i][j]->emptyDraw(XANHLA);
+			key = getch();
+			if(key == 0)
+			{
+				key = getch();
+				switch(key)
+				{
+					case KEY_DOWN:
+						{
+							i++;
+						}break;
+					case KEY_UP:
+						{
+							i--;
+						}break;
+					case KEY_RIGHT:
+						return 1;
+					case KEY_LEFT:
+						return -1;
+				}
+				j = (j+soluongcot)%soluongcot;
+				i = start + (i + end - start)%(end-start);
+			}
+			else if (key == '\r')
+				return 0;
+			for(int j = 0; j <= soluongcot; j++)
+				Table[i][j]->solidDraw();
+		}
+		
+	}
+	
+}

@@ -17,4 +17,5 @@ enum mau
 	TRANG = COLOR (244, 255, 187),
 	DOTUOI = COLOR (255, 0, 0),
 	DENTHUI = COLOR (0, 0, 0),
+	CAM = COLOR(255, 135, 15),
 };

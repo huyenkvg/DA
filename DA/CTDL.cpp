@@ -23,11 +23,10 @@ void GetInfo_AddMatTab(VATTU &vt, BUTTON *Table[10][10])
 		vt.SLTON 	= getNumber(Table[3][0]->text_tp);
 }
 // lay id
-int Get_ID(char text1[], char text2[], string id)
+string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 {
 	BUTTON *Table[3][3];
 	int x1 = 230, x2 = 770, y1 = 250, y2 = 350; 
-	
 	setcolor(DENXAM);
 	setfillstyle (1, 0);
 	bar (x1, y1, x2, y2);
@@ -58,6 +57,7 @@ int Get_ID(char text1[], char text2[], string id)
 			key = getch();
 			if (key == 0)
 			{
+				
 				keyNext = getch();
 				if (i == 1 || j == 1)
 				{
@@ -98,7 +98,9 @@ int Get_ID(char text1[], char text2[], string id)
 						setcolor(DENTHUI);
 						setfillstyle (1, 0);
 						bar (x1-1, y1-1, x2+1, y2+1);
-						return -1;
+						Table[i][j]->text_tp;
+						delete Table;
+						return "---";
 					}				
 				}
 				if (i == 1)
@@ -106,14 +108,19 @@ int Get_ID(char text1[], char text2[], string id)
 					setcolor(DENTHUI);
 					setfillstyle (1, 0);
 					bar (x1-1, y1-1, x2+1, y2+1);
-					return j;
+					string res = Table[i][j]->text_tp;
+					delete Table;
+					if (j==1)
+						return "+++";
+					return Table[0][0]->text_tp;
 				}
 			}
 			else if (i == 0 && j == 0)
 			{
 				
 				Table[i][j]->emptyDraw(XANHLA);		
-				Table[i][j]->beingTyped(key);
+				i = (i+Table[i][j]->beingTyped(key)+2)%2;
+				 
 			}
 			if (i==1 || j==1)
 				Table[i][j]->beChoose();
@@ -124,10 +131,43 @@ int Get_ID(char text1[], char text2[], string id)
 }
 //===========================================================================================================================
 //===========================================================================================================================
+//==========================================[HAM IN DANH SACH RA MAN HINH]===================================================
+void XemVatTu(VATTU VT[], int n)
+{
+	BUTTON *Table[Max][Max];
+	int start = 0, end = 20, ins = 0;
+	int x[] = {120, 160, 300, 700, 790, 960};
+	int y = 60;
+	trangketiep:;
+	start = max(0, start);
+	end = min(n, end);
+	for(int i = start; i < end; i++)
+	{
+		Table[i][0] = new BUTTON(CAM, DENXAM, VANG, "", x[0], y + i*25, x[1], y+(i+1)*25 );
+		Table[i][1] = new BUTTON(CAM, DENXAM, VANG, "", x[1], y + i*25, x[2], y+(i+1)*25 );
+		strcpy(Table[i][1]->text, VT[i].MAVT.c_str());
+
+		Table[i][2] = new BUTTON(CAM, DENXAM, VANG, "", x[2], y + i*25, x[3], y+(i+1)*25 );
+		strcpy(Table[i][2]->text, VT[i].TENVT.c_str());
+
+		Table[i][3] = new BUTTON(CAM, DENXAM, VANG, "", x[3], y + i*25, x[4], y+(i+1)*25 );
+
+		Table[i][4] = new BUTTON(CAM, DENXAM, VANG, "", x[4], y + i*25, x[5], y+(i+1)*25 );
+		strcpy(Table[i][4]->text, VT[i].DVT.c_str());
+
+	}
+	ins = InRaMH(Table, start, end, 5);
+	if (ins != 0)
+	{
+		start = start + ins*20;
+		end = end + ins*20;
+		goto trangketiep;
+	}
+	
+}
 
 
-
-//================================== Khoi tao NODE ================================================
+//====================================================== Khoi tao NODE ===========================================================
 
 NODE_VATTU *Create_NodeVT(VATTU vt)
 {
@@ -159,7 +199,7 @@ NODE_DETAIL_HOADON *Create_NodeDHD(DETAIL_HOADON dhd)
 	return p;
 }
 
-//================================== Khoi tao danh sach ==================================
+//============================================ Khoi tao danh sach =========================================================
 
 void Create_ListVT(TREE_VATTU &t)
 {
@@ -176,7 +216,7 @@ void Create_ListDHD(LIST_DETAIL_HOADON &l_dhd)
 	l_dhd.pHead=l_dhd.pTail=NULL;
 }
 
-//================================== Them =========================================================
+//==================================================== Them ====================================================================
 
 void Add_VT(TREE_VATTU &t, NODE_VATTU *p)
 {
@@ -227,7 +267,7 @@ void Add_DHD(LIST_DETAIL_HOADON &l_dhd, NODE_DETAIL_HOADON *p)
 	p=l_dhd.pTail;
 }
 
-//========================================= Tim kiem ==============================================
+//======================================================= Tim kiem ==============================================================
 
 NHANVIEN *Search_NV(LIST_NHANVIEN l_nv, string manv)
 {
@@ -297,7 +337,7 @@ NODE_HOADON *Search_HD(LIST_NHANVIEN &l_nv,string sohd)
 	return NULL;
 }
 
-//================================== Xoa ===========================================================
+//========================================================= Xoa =================================================================
 
 void Node_Temp(TREE_VATTU &t,NODE_VATTU *&x)
 {
@@ -315,12 +355,12 @@ void Node_Temp(TREE_VATTU &t,NODE_VATTU *&x)
 void Erase_VT(TREE_VATTU &t,string mavt)
 {
 	//dk nay dua ra ngoai function
-	LIST_NHANVIEN l_nv;
-	if(Search_MaVT(l_nv, mavt)==1)
-	{
-		//khong duoc phep xoa vat tu vi hoa don da ghi
-		return;
-	}
+//	LIST_NHANVIEN l_nv;
+//	if(Search_MaVT(l_nv, mavt)==1)
+//	{
+//		//khong duoc phep xoa vat tu vi hoa don da ghi
+//		return;
+//	}
 	if (t != NULL)
 	{
 		if (t->data.MAVT == mavt)

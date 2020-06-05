@@ -20,7 +20,7 @@ BUTTON *NutSuaNV[10][10];
 BUTTON *NutLapHD[10][10];
 TREE_VATTU tree_vt;
 //=================================================================================================================================
-ofstream logs;
+
 //=================================================================================================================================
 
 void ThemVatTu()
@@ -56,25 +56,25 @@ void ThemVatTu()
 void XoaVatTu()
 {
 		string tmp;
-		int ins = Get_ID("Xem danh sach", "ok", tmp);
-		while( ins == 0)
+		while(true)
 		{
-			if(Search_VT(tree_vt, tmp) == NULL)
+				tmp = Get_ID("Xem danh sach", "ok");
+			if (tmp == "---" || tmp == "")	break;
+			if( Search_VT(tree_vt, tmp) == NULL)
 			{
 				ThongBao(2);
 			}
-			else
+			else 
 			{
 				Erase_VT(tree_vt, tmp);
 			}
-			ins = Get_ID("Xem danh sach", "ok", tmp);
 		}
-		if (ins == -1)
+		if (tmp == "---")
 		{
 			VATTU VT[Max];
 			int n=0;
 			Arr_VT(tree_vt, VT, n);
-//			XemVatTu(Arr_VT);
+			XemVatTu(VT, n);
 		}
 		return;
 }
@@ -153,7 +153,6 @@ void MENU()
 
 int main()
 {
-	logs.open ("logs.txt", ios :: out);
 	
 	initwindow(1080, 700);
 	TaoBangThemVattu(NutThemVT);

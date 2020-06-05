@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cmath>
 #include <stdio.h>
-#include <string.h>
 //#define MAX 100
 using namespace std;
 bool wrongText(char a[200]);

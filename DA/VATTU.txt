@@ -1,3 +1,1 @@
-2
-huy,huy,huy,3
-kop,kop,kop,8
+0

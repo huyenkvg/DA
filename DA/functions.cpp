@@ -70,3 +70,4 @@ bool CheckDay(char day[3], char month[3], char year[5])
     }
 	return 1;
 }
+

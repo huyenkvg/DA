@@ -20,6 +20,7 @@ typedef double db;
 #define TEXBOXCONST 11
 #define DAYCONST  3
 
+#define Max 500
 //==============
 #define TRUNGID 1
 #define DAHET 2
@@ -72,3 +73,4 @@ void TaoBangXoaNV(BUTTON *NutXoaNV[10][10]);
 void TaoBangSuaNV(BUTTON *NutSuaNV[10][10]);
 void TaoBangLapHD(BUTTON *NutLapHD[10][10]);
 void ThongBao(int mode);
+int InRaMH(BUTTON *Table[Max][Max], int start, int end, int soluongcot);
