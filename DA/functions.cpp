@@ -1,5 +1,5 @@
 #include "functions.h"
-bool wrongText(char a[])
+bool wrongText(char a[200])
 {
 	bool k = true;
 	int n = sizeof(a);

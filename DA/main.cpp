@@ -22,48 +22,65 @@ TREE_VATTU tree_vt;
 //=================================================================================================================================
 ofstream logs;
 //=================================================================================================================================
+
 void ThemVatTu()
 {
-	VATTU vt;
-	AddvtAgain:;
-	NODE_VATTU *p;
-	VeBang(NutThemVT);
-	if (boxMove(NutThemVT))
-	{
-		GetInfo_AddMatTab(vt, NutThemVT); 
-		p = Search_VT(tree_vt, vt.MAVT);
-		if (tree_vt!=NULL && p != NULL)	// bao loi trung Ma vat tu
+	
+		VATTU vt;
+		AddvtAgain:;
+		NODE_VATTU *p;
+		VeBang(NutThemVT);
+		while (boxMove(NutThemVT))
 		{
-			ThongBao(TRUNGID); 
-			delete p;
-			goto AddvtAgain;
-		}
-		else 	// them vao cay
-		{
-			p = Create_NodeVT(vt);
-															
-															logs.open ("logs.txt", ios :: out);
-															logs << p->data.MAVT << endl;
-			Add_VT(tree_vt, p);	
-		}
-	}
-	XoaBang(NutThemVT);
-	delete p;
-	return;
-}
-void XoaVatTu()
-{
-		VeBang(NutXoaVT);
-		if (boxMove(NutXoaVT))
-		{	
-			VATTU vt;
-			// Continue...
+			
+			
+			GetInfo_AddMatTab(vt, NutThemVT);
+			
+			p = Search_VT(tree_vt, vt.MAVT);
+			if (p != NULL)	// bao loi trung Ma vat tu
+			{
+				ThongBao(TRUNGID); 
+				goto AddvtAgain;
+			}
+			else 	// them vao cay
+			{
+				p = Create_NodeVT(vt);
+				Add_VT(tree_vt, p);	
+			}
+			XoaBang(NutThemVT);
+			VeBang(NutThemVT);
 		}
 		XoaBang(NutThemVT);
+}
+
+void XoaVatTu()
+{
+		string tmp;
+		int ins = Get_ID("Xem danh sach", "ok", tmp);
+		while( ins == 0)
+		{
+			if(Search_VT(tree_vt, tmp) == NULL)
+			{
+				ThongBao(2);
+			}
+			else
+			{
+				Erase_VT(tree_vt, tmp);
+			}
+			ins = Get_ID("Xem danh sach", "ok", tmp);
+		}
+		if (ins == -1)
+		{
+			VATTU VT[Max];
+			int n=0;
+			Arr_VT(tree_vt, VT, n);
+//			XemVatTu(Arr_VT);
+		}
 		return;
 }
 void SuaVatTu()
 {
+	
 	return;	
 }
 //===========================================================================================================================
@@ -88,14 +105,18 @@ void MENU()
 				break;
 			case 3:
 				{
-					SuaVatTu();
+					
 				}
 				break;
 			case 4:
 				{
-					
+						VATTU VT[Max];
+						int n=0;
+						Arr_VT(tree_vt, VT, n);
+						Write_FileVT(VT,n);
+						break;
 				}
-//				Mat_Info();			break;
+				break;
 		}
 	}
 	if (j == 1)
@@ -132,7 +153,7 @@ void MENU()
 
 int main()
 {
-	
+	logs.open ("logs.txt", ios :: out);
 	
 	initwindow(1080, 700);
 	TaoBangThemVattu(NutThemVT);

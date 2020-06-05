@@ -16,4 +16,5 @@ enum mau
 	TIEUDE = COLOR (217, 142, 255),
 	TRANG = COLOR (244, 255, 187),
 	DOTUOI = COLOR (255, 0, 0),
+	DENTHUI = COLOR (0, 0, 0),
 };

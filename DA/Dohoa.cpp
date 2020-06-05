@@ -440,13 +440,20 @@ void VeBang(BUTTON *Table[10][10])
 				outtextxy (Table[i][j]->x1-BOX_LEN+130 - j*MENU_DY*2, Table[i][j]->y1 + (Table[i][j]->y2-Table[i][j]->y1-textheight(Table[i][j]->text))/3, res);
 				
 				
+				Table[i][j]->RecDraw();
 				if (Table[i][j]->value == TICKCONST)
 				{
 					setusercharsize(1, 3, 1, 3);
 					outtextxy (Table[i][j]->x1, Table[i][j]->y2 + MENU_DY/2, Table[i][j]->text);
 				}
-				Table[i][j]->RecDraw();
-//				Table[i][j]->emptyDraw(Table[i][j]->lineColor);
+				else 
+				{
+					setbkcolor (Table[i][j]->bkColor);
+					settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+					setcolor (Table[i][j]->textColor);					
+					setusercharsize(1, 2, 1, 2);
+					outtextxy (Table[i][j]->x1+10, Table[i][j]->y1 + (Table[i][j]->y2-Table[i][j]->y1-textheight(Table[i][j]->text_tp))/2 , Table[i][j]->text_tp);					
+				}
 				j++;
 			}
 		}
@@ -459,6 +466,8 @@ void VeBang(BUTTON *Table[10][10])
 	Table[soLuongTextBox+1][0]->solidDraw();
 	return;
 }
+//==============================================================================================================================================
+//==============================================================================================================================================
 
 //==================================[DI CHUYEN]=================================================================================================================================
 bool boxMove(BUTTON *Bar[10][10])
@@ -559,6 +568,10 @@ bool boxMove(BUTTON *Bar[10][10])
 							Bar[inow][jnow] -> emptyDraw(XANHLA);
 							continue;
 						}
+						if (Bar[inow][0]->value == NUTCONST)
+						{
+							return jnow;
+						}
 						return 1;
 				} 
 				else if (key == 0)
@@ -657,6 +670,8 @@ void XoaBang(BUTTON *Table[10][10])
 	bar(Table[i][0]->x1, Table[i][0]->y1, Table[i-1][1]->x2, Table[i-1][1]-> y2);
 }
 //===================================================================================================================================================================
+
+
 void TaoBangThemVattu(BUTTON *NutThemVT[10][10])
 {
 	GetButton(BangThemVT, MatranThemVT, NutThemVT);
@@ -708,10 +723,12 @@ void TaoBangLapHD(BUTTON *NutLapHD[10][10])
 void ThongBao(int mode)
 {
 	setfillstyle (1, 0);
-	int x1 = 360, x2 = 680, y1 = 300, y2 = 340;  
+	int x1 = 340, x2 = 680, y1 = 270, y2 = 320;  
 	bar (x1, y1, x2, y2);
+	bar (x1, y2, x2, y2+25);
 	setcolor(DOTUOI);
 	rectangle(x1, y1, x2, y2);
+	rectangle(x1, y2, x2, y2+25);
 	setusercharsize(1, 2, 1, 2);
 	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
 	setbkcolor (0);
@@ -720,15 +737,17 @@ void ThongBao(int mode)
 	{
 		case TRUNGID:
 			{
-					outtextxy (x1+(x2-x1-textwidth("MA BAN VUA NHAP BI TRUNG"))/2, y1 + (y2-y1-textheight("MA BAN VUA NHAP BI TRUNG"))/2 , "MA BAN VUA NHAP BI TRUNG");
+					outtextxy (x1+(x2-x1-textwidth("MA BAN VUA NHAP BI TRUNG!"))/2, y1 + (y2-y1-textheight("MA BAN VUA NHAP BI TRUNG"))/2 , "MA BAN VUA NHAP BI TRUNG!");
 			}break;
 		case DAHET:
 			{
 					
-					outtextxy (x1+(x2-x1-textwidth("DA HET"))/2, y1 + (y2-y1-textheight("DA HET"))/2 , "DA HET");
-			}
+					outtextxy (x1+(x2-x1-textwidth("KHONG TON TAI!"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "KHONG TON TAI!");
+			}break;
 		
 	}
+	setcolor (TRANG);
+	outtextxy (x1+(x2-x1-textwidth("OK"))/2, y2 + (25-textheight("OK"))/2 , "OK");
 	while (1)
 	{
 		if (kbhit)
@@ -737,12 +756,16 @@ void ThongBao(int mode)
 			if (key == '\r')
 			{
 				bar (x1, y1, x2, y2);
+				setfillstyle (1, 0);
+				bar (x1-1, y2-1, x2+2, y2+25+1);
 				return;
 			}
 			if (key == 0)
 			{
 				key = getch();
 				bar (x1, y1, x2, y2);
+				setfillstyle (1, 0);
+				bar (x1-1, y2-1, x2+2, y2+25+1);
 				return;
 			}
 		}

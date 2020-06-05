@@ -5,7 +5,7 @@
 #include <string.h>
 //#define MAX 100
 using namespace std;
-bool wrongText(char a[]);
+bool wrongText(char a[200]);
 bool isNumber(char c);
 int getNumber(char c[100]);
 bool CheckDay(char day[3], char month[3], char year[5]);

@@ -17,45 +17,109 @@ using namespace std;
 // lay thong tin tu table add vat tu
 void GetInfo_AddMatTab(VATTU &vt, BUTTON *Table[10][10])
 {
-	int i = 0, j = 0;
-	while (Table[i][j]-> value > 0)
-	{
-		while (Table[i][j]-> value > 0)
-		{
-			if (Table[i][j]-> value == TEXBOXCONST)
-			{
-				if (strcmp(Table[i][j]->text, "Quantity:") == 0)
-					vt.SLTON = getNumber(Table[i][j]->text_tp);
-				else if (strcmp(Table[i][j]->text, "ID:") == 0)
-					vt.MAVT = (Table[i][j]->text_tp);
-				else if (strcmp(Table[i][j]->text, "Unit:"))
-					vt.DVT = Table[i][j]->text_tp;
-				else if (strcmp(Table[i][j]->text, "Name:"))
-					vt.TENVT = Table[i][j]->text_tp;				
-			}
-			j++;
-		}
-		i++;
-		j = 0;
-	}
+		vt.MAVT 	= (Table[0][0]->text_tp);
+		vt.TENVT 	= Table[1][0]->text_tp;	
+		vt.DVT 		= Table[2][0]->text_tp;	
+		vt.SLTON 	= getNumber(Table[3][0]->text_tp);
 }
-// lay id;
-string Get_ID(VATTU &vt, BUTTON *Table[10][10])
+// lay id
+int Get_ID(char text1[], char text2[], string id)
 {
-	int i = 0, j = 0;
-	while (Table[i][j]-> value > 0)
+	BUTTON *Table[3][3];
+	int x1 = 230, x2 = 770, y1 = 250, y2 = 350; 
+	
+	setcolor(DENXAM);
+	setfillstyle (1, 0);
+	bar (x1, y1, x2, y2);
+	setcolor(VIENBOX);
+	rectangle(x1, y1, x2, y2);
+	Table[0][0] = new BUTTON(TRANG, DENTHUI, VIENBOX, "ID:", x1+MENU_DY*2, y1+MENU_DY/2, (x1+x2)/2-MENU_DY/4, y1+4*MENU_DY/2);
+	Table[0][1] = new BUTTON(TRANG, DENTHUI, VIENBOX, text1, (x1+x2)/2+MENU_DY/4, y1+MENU_DY/2, x2 - MENU_DY/2, y1+4*MENU_DY/2);
+	Table[1][0] = new BUTTON(TRANG, DENTHUI, VIENBOX, text2, x1, y1+4*MENU_DY/2+20, (x2+x1)/2,y2);
+	Table[1][1] = new BUTTON(TRANG, DENTHUI, VIENBOX, "Exist", (x2+x1)/2, y1+4*MENU_DY/2+20, x2, y2);
+	Table[0][0]->RecDraw();
+	Table[0][0]->emptyDraw(XANHLA);
+	Table[0][1]->solidDraw();
+	Table[1][0]->solidDraw();
+	Table[1][1]->solidDraw();
+	Table[0][1]->emptyDraw(VIENBOX);
+	Table[1][0]->emptyDraw(VIENBOX);
+	Table[1][1]->emptyDraw(VIENBOX);
+	setbkcolor (DENTHUI);
+	setcolor(TRANG);
+	setusercharsize(1, 2, 1, 2);
+	outtextxy(x1+5,y1+ MENU_DY/2 +(MENU_DY-textwidth("H"))/2, "ID:" );
+	int row = 2, col = 2, i = 0, j = 0;
+	while(true)
 	{
-		while (Table[i][j]-> value > 0)
+		char key, keyNext;
+		if (kbhit())
 		{
-			if (Table[i][j]-> value == TEXBOXCONST)
+			key = getch();
+			if (key == 0)
 			{
-				if (strcmp(Table[i][j]->text, "ID:") == 0)	
-				return Table[i][j]->text_tp;
+				keyNext = getch();
+				if (i == 1 || j == 1)
+				{
+					Table[i][j]->solidDraw();
+					Table[i][j]->emptyDraw(VIENBOX);
+				}
+				else
+					Table[i][j]->emptyDraw(VIENBOX);
+				switch(keyNext)
+				{
+							case KEY_DOWN:
+								i++, j = 0;		
+							break;
+							case KEY_UP:
+								i--, j = 0;
+							break;
+							case KEY_LEFT:
+								j--;
+							break;
+							case KEY_RIGHT:
+								j++;
+							break;
+							default:;
+				}
+				i = (i+2)%2;
+				j = (j+2)%2;
 			}
-			j++;
+			else if (key == '\r')
+			{
+				if (i == 0)
+				{
+					if (j == 0)
+					{
+						i = 1; continue;	
+					}	
+					else 
+					{
+						setcolor(DENTHUI);
+						setfillstyle (1, 0);
+						bar (x1-1, y1-1, x2+1, y2+1);
+						return -1;
+					}				
+				}
+				if (i == 1)
+				{
+					setcolor(DENTHUI);
+					setfillstyle (1, 0);
+					bar (x1-1, y1-1, x2+1, y2+1);
+					return j;
+				}
+			}
+			else if (i == 0 && j == 0)
+			{
+				
+				Table[i][j]->emptyDraw(XANHLA);		
+				Table[i][j]->beingTyped(key);
+			}
+			if (i==1 || j==1)
+				Table[i][j]->beChoose();
+			else
+				Table[i][j]->emptyDraw(XANHLA);	
 		}
-		i++;
-		j = 0;
 	}
 }
 //===========================================================================================================================
@@ -80,10 +144,7 @@ NODE_VATTU *Create_NodeVT(VATTU vt)
 NODE_HOADON *Create_NodeHD(HOADON hd)
 {
 	NODE_HOADON *p = new NODE_HOADON;
-	if(p==NULL)
-	{
-		return NULL;
-	}
+
 	p->data=hd;
 	p->pNext=NULL;
 	return p;
@@ -92,10 +153,7 @@ NODE_HOADON *Create_NodeHD(HOADON hd)
 NODE_DETAIL_HOADON *Create_NodeDHD(DETAIL_HOADON dhd)
 {
 	NODE_DETAIL_HOADON *p=new NODE_DETAIL_HOADON;
-	if(p==NULL)
-	{
-		return NULL;
-	}
+
 	p->data=dhd;
 	p->pNext=NULL;
 	return p;
@@ -197,11 +255,11 @@ NODE_VATTU *Search_VT(TREE_VATTU &t, string mavt)
 	{
 		if(t->data.MAVT<mavt)
 		{
-			Search_VT(t->pRight,mavt);
+			return Search_VT(t->pRight,mavt);
 		}
 		else
 		{
-			Search_VT(t->pLeft,mavt);
+			return Search_VT(t->pLeft,mavt);
 		}
 	}	
 }
@@ -396,11 +454,11 @@ bool operator<(NGAY d1, NGAY d2)
 
 void Arr_VT(TREE_VATTU &t, VATTU VT[], int &n)
 {
-	while(t!=NULL)
+	if(t!=NULL)
 	{
 		VT[n]=t->data;
 		n++;
-		Arr_VT(t->pLeft, VT, n);
+		Arr_VT(t->pRight, VT, n);
 		Arr_VT(t->pLeft, VT, n);
 	}
 }
