@@ -770,23 +770,24 @@ int InRaMH(BUTTON *Table[Max][Max], int start, int end, int soluongcot)
 	{
 		for(int j = 0; j < soluongcot; j++)
 		{
-			Table[i][j]->solidDraw();
-				Table[i][j]->emptyDraw(XANHLA);
+						Table[i][j]->solidDraw();
+						Table[i][j]->emptyDraw(VIENBOX);
 		}
 	}
 	int i = 0, j = 0;
+	char key, keyNext;
 	while(true)
 	{
-		char key;
+		
 		if (kbhit())
 		{
-			for(int j = 0; j < soluongcot; j++)
-				Table[i][j]->emptyDraw(XANHLA);
 			key = getch();
 			if(key == 0)
 			{
-				key = getch();
-				switch(key)
+				keyNext = getch();
+				for(int j = 0; j < soluongcot; j++)
+					Table[i][j]->emptyDraw(VIENBOX);
+				switch(keyNext)
 				{
 					case KEY_DOWN:
 						{
@@ -796,18 +797,18 @@ int InRaMH(BUTTON *Table[Max][Max], int start, int end, int soluongcot)
 						{
 							i--;
 						}break;
-					case KEY_RIGHT:
-						return 1;
-					case KEY_LEFT:
-						return -1;
+					case KEY_RIGHT:;
+//						return 1;
+					case KEY_LEFT:;
+//						return -1;
 				}
-				j = (j+soluongcot)%soluongcot;
+					
 				i = start + (i + end - start)%(end-start);
+				for(int j = 0; j < soluongcot; j++)
+						Table[i][j]->emptyDraw(TRANG);
 			}
 			else if (key == '\r')
 				return 0;
-			for(int j = 0; j <= soluongcot; j++)
-				Table[i][j]->solidDraw();
 		}
 		
 	}

@@ -143,16 +143,16 @@ void XemVatTu(VATTU VT[], int n)
 	end = min(n, end);
 	for(int i = start; i < end; i++)
 	{
-		Table[i][0] = new BUTTON(CAM, DENXAM, VANG, "", x[0], y + i*25, x[1], y+(i+1)*25 );
-		Table[i][1] = new BUTTON(CAM, DENXAM, VANG, "", x[1], y + i*25, x[2], y+(i+1)*25 );
+		Table[i][0] = new BUTTON(TRANG, DENXAM, VANG, "", x[0], y + i*25 + i*2, x[1], y+(i+1)*25+i*2 );
+		Table[i][1] = new BUTTON(TRANG, DENXAM, VANG, "", x[1], y + i*25+ i*2, x[2], y+(i+1)*25 +i*2);
 		strcpy(Table[i][1]->text, VT[i].MAVT.c_str());
 
-		Table[i][2] = new BUTTON(CAM, DENXAM, VANG, "", x[2], y + i*25, x[3], y+(i+1)*25 );
+		Table[i][2] = new BUTTON(TRANG, DENXAM, VANG, "", x[2], y + i*25+ i*2, x[3], y+(i+1)*25 +i*2);
 		strcpy(Table[i][2]->text, VT[i].TENVT.c_str());
 
-		Table[i][3] = new BUTTON(CAM, DENXAM, VANG, "", x[3], y + i*25, x[4], y+(i+1)*25 );
+		Table[i][3] = new BUTTON(TRANG, DENXAM, VANG, "", x[3], y + i*25+ i*2, x[4], y+(i+1)*25 +i*2);
 
-		Table[i][4] = new BUTTON(CAM, DENXAM, VANG, "", x[4], y + i*25, x[5], y+(i+1)*25 );
+		Table[i][4] = new BUTTON(TRANG, DENXAM, VANG, "", x[4], y + i*25+ i*2, x[5], y+(i+1)*25 +i*2);
 		strcpy(Table[i][4]->text, VT[i].DVT.c_str());
 
 	}
