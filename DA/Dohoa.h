@@ -65,6 +65,7 @@ void GetButton(char bangNoiDung[][MAXTEXT], int bangBoTri[10][10], BUTTON *Table
 void VeBang(BUTTON *Table[10][10]);
 bool boxMove(BUTTON *Bar[10][10]);
 void XoaBang(BUTTON *Table[10][10]);
+void XoaManHinh();
 void TaoBangThemVattu(BUTTON *NutThemVT[10][10]);
 void TaoBangXoaVattu(BUTTON *NutXoaVT[10][10]);
 void TaoBangSuaVattu(BUTTON *NutXoaVT[10][10]);
@@ -73,4 +74,4 @@ void TaoBangXoaNV(BUTTON *NutXoaNV[10][10]);
 void TaoBangSuaNV(BUTTON *NutSuaNV[10][10]);
 void TaoBangLapHD(BUTTON *NutLapHD[10][10]);
 void ThongBao(int mode);
-int InRaMH(BUTTON *Table[Max][Max], int start, int end, int soluongcot);
+int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot);

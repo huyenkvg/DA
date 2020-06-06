@@ -1,7 +1,6 @@
 #include <iostream>
 #define MaxVT
 #include "Dohoa.h"
-#include <string>
 using namespace std;
 
 // Khai bao cau truc ngay thang nam
@@ -144,4 +143,4 @@ void Arr_VT(TREE_VATTU &t, VATTU VT[], int &n);
 
 //==================Ham Mo DanhSach ra man hinh===================================
 
-void XemVatTu(VATTU VT[], int n);
+int XemVatTu(VATTU VT[], int n);

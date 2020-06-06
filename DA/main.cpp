@@ -71,11 +71,19 @@ void XoaVatTu()
 		}
 		if (tmp == "---")
 		{
-			VATTU VT[Max];
-			int n=0;
-			Arr_VT(tree_vt, VT, n);
-			XemVatTu(VT, n);
+			int ins = 0;
+			
+			while(ins != -1)
+			{
+				VATTU VT[Max];
+				int n = 0;
+				Arr_VT(tree_vt, VT, n);
+				ins = XemVatTu(VT, n);
+				if (ins!= -1)
+					Erase_VT(tree_vt, VT[ins].MAVT);
+			}
 		}
+		XoaManHinh();
 		return;
 }
 void SuaVatTu()
@@ -89,6 +97,7 @@ void MENU()
 {
 	int i = 0, j = 1;
 	VeMenu(i, j);
+	XoaManHinh();
 	if (j == 0)
 	{
 		switch (i)

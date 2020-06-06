@@ -70,4 +70,14 @@ bool CheckDay(char day[3], char month[3], char year[5])
     }
 	return 1;
 }
-
+string to_string(int num)
+{
+	string res = "";
+	while (num > 0)
+	{
+		char c = num%10 + '0';
+		res = c + res;
+		num/=10;
+	}
+	return res;
+}

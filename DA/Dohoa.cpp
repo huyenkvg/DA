@@ -764,9 +764,16 @@ void ThongBao(int mode)
 		}
 	}
 }
-int InRaMH(BUTTON *Table[Max][Max], int start, int end, int soluongcot)
+int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot)
 {
-	for (int i = start; i < end; i++)
+	setbkcolor (DENXAM);
+	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+	setcolor (TRANG);
+	setusercharsize(1,1,1,1);
+	outtextxy (60+ (40-textwidth("<"))/2, 320 + 20 - textheight("<")/2, "<");
+	outtextxy (980+ (40-textwidth(">"))/2, 320 + 20 - textheight(">")/2, ">");
+	
+	for (int i = (page-1)*20; i < page*20 ; i++)
 	{
 		for(int j = 0; j < soluongcot; j++)
 		{
@@ -774,19 +781,33 @@ int InRaMH(BUTTON *Table[Max][Max], int start, int end, int soluongcot)
 						Table[i][j]->emptyDraw(VIENBOX);
 		}
 	}
-	int i = 0, j = 0;
+	int i = 0;
+	for(int j = 0; j < soluongcot; j++)
+	{
+		Table[i][j]->beChoose();
+		Table[i][j]->emptyDraw(VANG);
+	}
 	char key, keyNext;
 	while(true)
 	{
 		
+		
 		if (kbhit())
 		{
+			for(int j = 0; j < soluongcot; j++)
+			{
+				Table[i][j]->beChoose();
+				Table[i][j]->emptyDraw(VANG);
+			}
 			key = getch();
 			if(key == 0)
 			{
 				keyNext = getch();
 				for(int j = 0; j < soluongcot; j++)
+				{
+					Table[i][j]->solidDraw();
 					Table[i][j]->emptyDraw(VIENBOX);
+				}
 				switch(keyNext)
 				{
 					case KEY_DOWN:
@@ -797,20 +818,37 @@ int InRaMH(BUTTON *Table[Max][Max], int start, int end, int soluongcot)
 						{
 							i--;
 						}break;
-					case KEY_RIGHT:;
-//						return 1;
-					case KEY_LEFT:;
-//						return -1;
+					case KEY_RIGHT:
+						{
+						    page++;
+							return -1;
+						}
+					case KEY_LEFT:
+						{
+						    page--;
+							return -1;
+						}
+					case KEY_DELETE:
+						return i;
 				}
 					
-				i = start + (i + end - start)%(end-start);
+				i = (i+20)%20+ (page-1)*20;
 				for(int j = 0; j < soluongcot; j++)
-						Table[i][j]->emptyDraw(TRANG);
+				{
+					Table[i][j]->beChoose();
+					Table[i][j]->emptyDraw(VANG);
+				}
+						
 			}
 			else if (key == '\r')
-				return 0;
+				return -2;
 		}
 		
 	}
 	
+}
+void XoaManHinh()
+{
+	setfillstyle (1, DENTHUI);
+	bar (0, 20, 1080, 700);
 }

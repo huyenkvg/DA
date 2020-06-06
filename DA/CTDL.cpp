@@ -132,37 +132,45 @@ string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 //===========================================================================================================================
 //===========================================================================================================================
 //==========================================[HAM IN DANH SACH RA MAN HINH]===================================================
-void XemVatTu(VATTU VT[], int n)
+int XemVatTu(VATTU VT[], int n)
 {
 	BUTTON *Table[Max][Max];
-	int start = 0, end = 20, ins = 0;
+	int page = 1, ins = 0;
 	int x[] = {120, 160, 300, 700, 790, 960};
 	int y = 60;
 	trangketiep:;
-	start = max(0, start);
-	end = min(n, end);
-	for(int i = start; i < end; i++)
+	page = max(page, 1);
+	page = min(page, 25);
+	for(int i = (page-1)*20; i < page*20; i++)
 	{
-		Table[i][0] = new BUTTON(TRANG, DENXAM, VANG, "", x[0], y + i*25 + i*2, x[1], y+(i+1)*25+i*2 );
-		Table[i][1] = new BUTTON(TRANG, DENXAM, VANG, "", x[1], y + i*25+ i*2, x[2], y+(i+1)*25 +i*2);
-		strcpy(Table[i][1]->text, VT[i].MAVT.c_str());
-
-		Table[i][2] = new BUTTON(TRANG, DENXAM, VANG, "", x[2], y + i*25+ i*2, x[3], y+(i+1)*25 +i*2);
-		strcpy(Table[i][2]->text, VT[i].TENVT.c_str());
-
-		Table[i][3] = new BUTTON(TRANG, DENXAM, VANG, "", x[3], y + i*25+ i*2, x[4], y+(i+1)*25 +i*2);
-
-		Table[i][4] = new BUTTON(TRANG, DENXAM, VANG, "", x[4], y + i*25+ i*2, x[5], y+(i+1)*25 +i*2);
-		strcpy(Table[i][4]->text, VT[i].DVT.c_str());
-
+		string res;
+		Table[i][0] = new BUTTON(TRANG, DENXAM, VANG, "", x[0], y + (i%20)*27, x[1], y+(i%20+1)*27 -2);
+		Table[i][1] = new BUTTON(TRANG, DENXAM, VANG, "", x[1], y + (i%20)*27, x[2], y+(i%20+1)*27 -2);
+		Table[i][2] = new BUTTON(TRANG, DENXAM, VANG, "", x[2], y + (i%20)*27, x[3], y+(i%20+1)*27 -2);
+		Table[i][3] = new BUTTON(TRANG, DENXAM, VANG, "", x[3], y + (i%20)*27, x[4], y+(i%20+1)*27 -2);
+		Table[i][4] = new BUTTON(TRANG, DENXAM, VANG, "", x[4], y + (i%20)*27, x[5], y+(i%20+1)*27 -2);
+		res = to_string(i+1);
+		strcpy(Table[i][0]->text, res.c_str());
+		if (i >= 0 && i < n)
+		{
+			strcpy(Table[i][1]->text, VT[i].MAVT.c_str());
+			strcpy(Table[i][2]->text, VT[i].TENVT.c_str());
+			res = to_string(VT[i].SLTON);
+			strcpy(Table[i][3]->text, res.c_str());
+			strcpy(Table[i][4]->text, VT[i].DVT.c_str());
+		}
 	}
-	ins = InRaMH(Table, start, end, 5);
-	if (ins != 0)
+	ins = InRaMH(Table, page, 5);
+	if (ins  == -1)
 	{
-		start = start + ins*20;
-		end = end + ins*20;
 		goto trangketiep;
 	}
+	else if (ins == -2)
+	{
+		return -1;
+	}
+	else if (ins >= 0)
+		return ins;
 	
 }
 
