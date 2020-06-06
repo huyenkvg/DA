@@ -14,14 +14,7 @@ using namespace std;
 
 //===========================================================================================================================
 //================================================CAC HAM LAY INFO TU NUT===========================================================================
-// lay thong tin tu table add vat tu
-void GetInfo_AddMatTab(VATTU &vt, BUTTON *Table[10][10])
-{
-		vt.MAVT 	= (Table[0][0]->text_tp);
-		vt.TENVT 	= Table[1][0]->text_tp;	
-		vt.DVT 		= Table[2][0]->text_tp;	
-		vt.SLTON 	= getNumber(Table[3][0]->text_tp);
-}
+
 // lay id
 string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 {
@@ -129,6 +122,21 @@ string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 		}
 	}
 }
+// Lay thong tin bang them VT
+void GetInfo_AdjustMatTab(VATTU &vt, BUTTON *Table[10][10])
+{
+		vt.MAVT 	= (Table[0][0]->text_tp);
+		vt.TENVT 	= Table[1][0]->text_tp;	
+		vt.DVT 		= Table[2][0]->text_tp;	
+}
+// lay thong tin tu table add vat tu
+void GetInfo_AddMatTab(VATTU &vt, BUTTON *Table[10][10])
+{
+		vt.MAVT 	= (Table[0][0]->text_tp);
+		vt.TENVT 	= Table[1][0]->text_tp;	
+		vt.DVT 		= Table[2][0]->text_tp;	
+		vt.SLTON 	= getNumber(Table[3][0]->text_tp);
+}
 //===========================================================================================================================
 //===========================================================================================================================
 //==========================================[HAM IN DANH SACH RA MAN HINH]===================================================
@@ -167,10 +175,10 @@ int XemVatTu(VATTU VT[], int n)
 	}
 	else if (ins == -2)
 	{
-		return -1;
+		return -1; // tro ve bth
 	}
 	else if (ins >= 0)
-		return ins;
+		return ins; // xoa;
 	
 }
 

@@ -111,7 +111,7 @@ void Create_ListVT(TREE_VATTU &t);
 void Input_VT(VATTU &vt);
 void Add_VT(TREE_VATTU &t, NODE_VATTU *p);
 void Erase_VT(TREE_VATTU &t, string mavt);
-void Modify_VT(TREE_VATTU &t, VATTU &vt);
+void Modify_VT(TREE_VATTU &t, string mavt, VATTU vt);
 void Print_VT(TREE_VATTU &t);
 void Write_FileVT(VATTU VT[], int n);
 void Print_Top10_VT(TREE_VATTU &t);
@@ -120,7 +120,7 @@ void Write_FileTopVT(TREE_VATTU &t, fstream &fileout);
 void Input_NV(NHANVIEN &nv);
 void Add_NV(LIST_NHANVIEN &l_nv, NHANVIEN nv);
 void Erase_NV(LIST_NHANVIEN &l_nv, string manv);
-void Modify_NV(LIST_NHANVIEN &l_nv, NHANVIEN nv);
+void Modify_NV(LIST_NHANVIEN &l_nv, string manv, NHANVIEN nv);
 void Print_NV(LIST_NHANVIEN &l_nv);
 void Write_FileNV(LIST_NHANVIEN &l_nv, fstream &fileout);
 
@@ -138,6 +138,7 @@ void Write_FileRevenue();
 
 
 void GetInfo_AddMatTab(VATTU &vt, BUTTON *Table[10][10]);
+void GetInfo_AdjustMatTab(VATTU &vt, BUTTON *Table[10][10]);
 string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT]); // lay id cua o can tim kiem
 void Arr_VT(TREE_VATTU &t, VATTU VT[], int &n);
 

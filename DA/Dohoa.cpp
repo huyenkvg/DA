@@ -30,7 +30,7 @@ int MatranXoaVT[10][10] =  { 	{TEXBOXCONST,	0, 0},
 							};	
 
 //==========================
-char BangSuaVT[][MAXTEXT] = {	"ID:", "Name:", "Unit:", "Cancel", "Adjust", "ADJUST MATERIALS"}; // tieu de textbox
+char BangSuaVT[][MAXTEXT] = {	"ID:", "Name:", "Unit:", "Cancel", "Adjust", "ADJUST THIS MATERIAL"}; // tieu de textbox
 int MatranSuaVT[10][10] =  { 	{TEXBOXCONST, 	0, 0},
 								{TEXBOXCONST, 	0, 0},
 								{TEXBOXCONST, 	0, 0},
@@ -49,7 +49,7 @@ int MatranXoaNV[10][10] =  { 	{TEXBOXCONST, 	0, 0},
 								{TEXBOXCONST, 	0, 0},
 								{0,				0, 0}
 							};	
-char BangSuaNV[][MAXTEXT] = {	"ID:", "First Name:", "Last Name:",  "Male", "Female", "Cancel", "Adjust", "ADJUST EMPLOYEES"}; // tieu de textbox
+char BangSuaNV[][MAXTEXT] = {	"ID:", "First Name:", "Last Name:",  "Male", "Female", "Cancel", "Adjust", "ADJUST THIS EMPLOYEE"}; // tieu de textbox
 int MatranSuaNV[10][10] =  { 	{TEXBOXCONST, 		0, 0},
 								{TEXBOXCONST, 		0, 0},
 								{TEXBOXCONST,	 	0, 0},
@@ -841,6 +841,8 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot)
 						
 			}
 			else if (key == '\r')
+				return i;
+			else if (key == VK_BACK || key == 27/* esc key  */)
 				return -2;
 		}
 		

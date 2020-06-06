@@ -58,7 +58,7 @@ void XoaVatTu()
 		string tmp;
 		while(true)
 		{
-				tmp = Get_ID("Xem danh sach", "ok");
+			tmp = Get_ID("Xem danh sach", "ok");
 			if (tmp == "---" || tmp == "")	break;
 			if( Search_VT(tree_vt, tmp) == NULL)
 			{
@@ -88,7 +88,49 @@ void XoaVatTu()
 }
 void SuaVatTu()
 {
-	
+		string tmp;
+		VATTU vt;
+		NODE_VATTU *p;
+		while(true)
+		{
+			tmp = Get_ID("Xem danh sach", "ok");
+			if (tmp == "---" || tmp == "")	break;
+			p =  Search_VT(tree_vt, tmp) ;
+			if(p == NULL)
+			{
+				ThongBao(2);
+			}
+			else 
+			{
+				VeBang(NutSuaVT);
+				if (boxMove(NutSuaVT))
+				{
+					GetInfo_AdjustMatTab(vt, NutSuaVT);
+					vt.SLTON = p->data.SLTON;
+					Modify_VT(tree_vt, tmp, vt);
+				}
+			}
+		}
+		if (tmp == "---")
+		{
+				int ins = 0;
+				VATTU VT[Max];
+				int n = 0;
+				Arr_VT(tree_vt, VT, n);
+				ins = XemVatTu(VT, n);
+//				XoaManHinh();
+				if (ins >= 0)
+				{
+					VeBang(NutSuaVT);
+					if (boxMove(NutSuaVT))
+					{
+						vt.SLTON = VT[ins].SLTON;
+						GetInfo_AdjustMatTab(vt, NutSuaVT);
+						Modify_VT(tree_vt, tmp, vt);
+					}
+				}
+		}
+			XoaManHinh();
 	return;	
 }
 //===========================================================================================================================
@@ -114,7 +156,7 @@ void MENU()
 				break;
 			case 3:
 				{
-					
+					SuaVatTu();
 				}
 				break;
 			case 4:
