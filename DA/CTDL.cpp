@@ -125,14 +125,14 @@ string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 // Lay thong tin bang them VT
 void GetInfo_AdjustMatTab(VATTU &vt, BUTTON *Table[10][10])
 {
-		vt.MAVT 	= (Table[0][0]->text_tp);
+		vt.MAVT		= Table[0][0]->text_tp;
 		vt.TENVT 	= Table[1][0]->text_tp;	
 		vt.DVT 		= Table[2][0]->text_tp;	
 }
 // lay thong tin tu table add vat tu
 void GetInfo_AddMatTab(VATTU &vt, BUTTON *Table[10][10])
 {
-		vt.MAVT 	= (Table[0][0]->text_tp);
+		vt.MAVT 	= Table[0][0]->text_tp;
 		vt.TENVT 	= Table[1][0]->text_tp;	
 		vt.DVT 		= Table[2][0]->text_tp;	
 		vt.SLTON 	= getNumber(Table[3][0]->text_tp);

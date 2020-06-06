@@ -781,7 +781,7 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot)
 						Table[i][j]->emptyDraw(VIENBOX);
 		}
 	}
-	int i = 0;
+	int i = (page-1)*20;
 	for(int j = 0; j < soluongcot; j++)
 	{
 		Table[i][j]->beChoose();

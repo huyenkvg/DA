@@ -107,8 +107,11 @@ void SuaVatTu()
 				{
 					GetInfo_AdjustMatTab(vt, NutSuaVT);
 					vt.SLTON = p->data.SLTON;
+														
 					Modify_VT(tree_vt, tmp, vt);
 				}
+				XoaBang(NutSuaVT);
+				
 			}
 		}
 		if (tmp == "---")
@@ -118,16 +121,20 @@ void SuaVatTu()
 				int n = 0;
 				Arr_VT(tree_vt, VT, n);
 				ins = XemVatTu(VT, n);
-//				XoaManHinh();
+				XoaManHinh();
 				if (ins >= 0)
 				{
 					VeBang(NutSuaVT);
 					if (boxMove(NutSuaVT))
 					{
 						vt.SLTON = VT[ins].SLTON;
+														ofstream logs;
+														logs.open ("logs.txt", ios :: out);
+														logs << vt.MAVT <<"  " << vt.TENVT << " " << vt.SLTON << "  " << vt.DVT << endl;
 						GetInfo_AdjustMatTab(vt, NutSuaVT);
-						Modify_VT(tree_vt, tmp, vt);
+						Modify_VT(tree_vt, VT[ins].MAVT, vt);
 					}
+					XoaBang(NutSuaVT);
 				}
 		}
 			XoaManHinh();
