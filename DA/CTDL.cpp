@@ -137,16 +137,63 @@ void GetInfo_AddMatTab(VATTU &vt, BUTTON *Table[10][10])
 		vt.DVT 		= Table[2][0]->text_tp;	
 		vt.SLTON 	= getNumber(Table[3][0]->text_tp);
 }
+
+void GetInfo_EmTab(NHANVIEN &nv, BUTTON *Table[10][10])
+{
+	nv.MANV = Table[0][0]->text_tp;
+	nv.TEN = Table[1][0]->text_tp;
+	nv.HO = Table[2][0]->text_tp;
+	if (Table[3][0]->CoBiChonKhong == true)
+		nv.PHAI = "NAM";
+	else
+		nv.PHAI = "NU";
+}
+void GetInfo_BillTab(HOADON hd, BUTTON *Table[10][10],string &manv)
+{
+	hd.SOHD = Table[0][0]->text_tp;
+	manv = Table[1][0]->text_tp;
+	hd.NGAYLAP.date = getNumber(Table[2][0]->text_tp);
+	hd.NGAYLAP.month = getNumber(Table[2][1]->text_tp);
+	hd.NGAYLAP.year = getNumber(Table[2][2]->text_tp);
+	if (Table[3][0]->CoBiChonKhong)
+		hd.LOAI = 'N';
+	else
+		hd.LOAI = 'X';
+	
+}
+DETAIL_HOADON getDetail(BUTTON *Table[10][10])
+{
+	DETAIL_HOADON dhd;
+	dhd.MAVT = Table[0][0]->text_tp;
+	dhd.SL = getNumber(Table[1][0]->text_tp);
+	dhd.DONGIA = getNumber(Table[2][0]->text_tp);
+	dhd.VAT = getNumber(Table[3][0]->text_tp);
+	return dhd;
+}
 //===========================================================================================================================
 //===========================================================================================================================
 //==========================================[HAM IN DANH SACH RA MAN HINH]===================================================
 int XemVatTu(VATTU VT[], int n)
 {
 	BUTTON *Table[Max][Max];
+	if (n == 0)
+	{
+		ThongBao(4);
+		return -1;
+	}
 	int page = 1, ins = 0;
 	int x[] = {120, 160, 300, 700, 790, 960};
-	int y = 60;
-	trangketiep:;
+	
+	setcolor(VANG);
+	setbkcolor(DENTHUI);
+	setusercharsize(1, 2, 1, 2);
+	outtextxy(x[1]+10, 50, "MA VAT TU");
+	outtextxy(x[2]+10, 50, "TEN VAT TU");
+	outtextxy(x[3]+10, 50, "SO LUONG TON");
+	outtextxy(x[4]+10, 50, "DON VI TINH");
+	outtextxy(x[0], 50, "STT");
+	int y = 90;
+	trangketiep1:;
 	page = max(page, 1);
 	page = min(page, 25);
 	for(int i = (page-1)*20; i < page*20; i++)
@@ -171,6 +218,58 @@ int XemVatTu(VATTU VT[], int n)
 	ins = InRaMH(Table, page, 5);
 	if (ins  == -1)
 	{
+		goto trangketiep1;
+	}
+	else if (ins == -2)
+	{
+		delete Table;
+		return -1; // tro ve bth
+	}
+	else if (ins >= 0)
+	{
+		delete Table;
+	}
+		return ins; // xoa;
+	
+}
+int XemNhanVien(LIST_NHANVIEN l)
+{
+	BUTTON *Table[Max][Max];
+	int page = 1, ins = 0;
+	int x[] = {120, 200, 280, 600, 790, 960};
+	setcolor(CAM);
+	setbkcolor(DENTHUI);
+	setusercharsize(1, 2, 1, 2);
+	outtextxy(x[1]+10, 50, "MA NHAN VIEN");
+	outtextxy(x[2]+10, 50, "HO");
+	outtextxy(x[3]+10, 50, "TEN");
+	outtextxy(x[4]+10, 50, "GIOI TINH");
+	outtextxy(x[0], 50, "STT");
+	int y = 90;
+	trangketiep:;
+	page = max(page, 1);
+	page = min(page, 25);
+	for(int i = (page-1)*20; i < page*20; i++)
+	{
+		string res;
+		Table[i][0] = new BUTTON(TRANG, DENXAM, VANG, "", x[0], y + (i%20)*27, x[1], y+(i%20+1)*27 -2);
+		Table[i][1] = new BUTTON(TRANG, DENXAM, VANG, "", x[1], y + (i%20)*27, x[2], y+(i%20+1)*27 -2);
+		Table[i][2] = new BUTTON(TRANG, DENXAM, VANG, "", x[2], y + (i%20)*27, x[3], y+(i%20+1)*27 -2);
+		Table[i][3] = new BUTTON(TRANG, DENXAM, VANG, "", x[3], y + (i%20)*27, x[4], y+(i%20+1)*27 -2);
+		Table[i][4] = new BUTTON(TRANG, DENXAM, VANG, "", x[4], y + (i%20)*27, x[5], y+(i%20+1)*27 -2);
+		res = to_string(i+1);
+		strcpy(Table[i][0]->text, res.c_str());
+		if (i >= 0 && i < l.n)
+		{
+			strcpy(Table[i][1]->text, l.NV[i]->MANV.c_str());
+			strcpy(Table[i][2]->text, l.NV[i]->HO.c_str());
+			strcpy(Table[i][3]->text, l.NV[i]->TEN.c_str());
+			strcpy(Table[i][4]->text, l.NV[i]->PHAI.c_str());
+		}
+	}
+	ins = InRaMH(Table, page, 5);
+	if (ins  == -1)
+	{
 		goto trangketiep;
 	}
 	else if (ins == -2)
@@ -179,9 +278,93 @@ int XemVatTu(VATTU VT[], int n)
 	}
 	else if (ins >= 0)
 		return ins; // xoa;
-	
 }
 
+int XemDanhsachHD(LIST_DETAIL_HOADON list_dt)
+{
+	BUTTON *Table[Max][Max];
+	BUTTON *But[10][10];
+	DETAIL_HOADON VT[Max];
+	int id = 0;
+	for(NODE_DETAIL_HOADON *p=list_dt.pHead;p!=NULL;p=p->pNext)
+	{
+		VT[id] = p->data;
+		id++;
+	}
+	int x[] = {120, 160, 300, 700, 790, 960};
+	setcolor(TRANG);
+	setbkcolor(DENTHUI);
+	setusercharsize(1, 2, 1, 2);
+	outtextxy(x[1]+10, 50, "MA VAT TU");
+	outtextxy(x[2]+10, 50, "SO LUONG");
+	outtextxy(x[3]+10, 50, "DON GIA");
+	outtextxy(x[4]+10, 50, "%VAT");
+	outtextxy(x[0], 50, "STT");
+	But[0][0] = new BUTTON(XANHNHAT, DENTHUI, VIENBOX,"XAC NHAN", 120, 630, 400, 660);
+	But[0][0]->value = NUTCONST;
+	But[0][1] = new BUTTON(XANHNHAT, DENTHUI,VIENBOX,"THEM", 402, 630, 750, 660);
+	But[0][1]->value = NUTCONST;
+	But[0][2] = new BUTTON(XANHNHAT, DENTHUI, VIENBOX,"THOAT", 752, 630, 960, 660);
+	But[0][2]->value = NUTCONST;
+	But[0][3] = new BUTTON(XANHNHAT, DENTHUI, VIENBOX,"", 120, 630, 400, 660);
+	But[0][3]->value = 0;
+	But[1][0] = new BUTTON(XANHNHAT, DENTHUI, VIENBOX,"", 120, 630, 400, 660);
+	VeBang(But);
+	int page = 1, ins = 0;
+	int y = 90;
+	trangketiep2:;
+	page = max(page, 1);
+	page = min(page, 25);
+	for(int i = (page-1)*20; i < page*20; i++)
+	{
+		string res;
+		Table[i][0] = new BUTTON(TRANG, DENXAM, VIENBOX, "", x[0], y + (i%20)*27, x[1], y+(i%20+1)*27 -2);
+		Table[i][1] = new BUTTON(TRANG, DENXAM, VIENBOX, "", x[1], y + (i%20)*27, x[2], y+(i%20+1)*27 -2);
+		Table[i][2] = new BUTTON(TRANG, DENXAM, VIENBOX, "", x[2], y + (i%20)*27, x[3], y+(i%20+1)*27 -2);
+		Table[i][3] = new BUTTON(TRANG, DENXAM, VIENBOX, "", x[3], y + (i%20)*27, x[4], y+(i%20+1)*27 -2);
+		Table[i][4] = new BUTTON(TRANG, DENXAM, VIENBOX, "", x[4], y + (i%20)*27, x[5], y+(i%20+1)*27 -2);
+		res = to_string(i+1);
+		strcpy(Table[i][0]->text, res.c_str());
+		if (i >= 0 && i < id)
+		{
+			strcpy(Table[i][1]->text, VT[i].MAVT.c_str());
+			res = to_string(VT[i].SL);
+			strcpy(Table[i][2]->text, res.c_str());
+			res = to_string(VT[i].DONGIA);
+			strcpy(Table[i][3]->text, res.c_str());
+			res = to_string(VT[i].VAT);
+			strcpy(Table[i][4]->text, res.c_str());
+		}
+	
+	}
+	ins = InRaMH(Table, page, 5);
+	if (ins  == -1)
+	{
+		goto trangketiep2;
+	}
+	else if (ins == -2)
+	{
+		delete Table;
+		delete But;
+		int p = boxMove(But);
+		if (p==0)
+		{
+			return XACNHAN;
+		} 
+		if (p==1)
+			return ADDID;
+		if(p==2)
+			return TROVE;
+		
+	}
+	else if (ins >= 0)
+	{
+		if(id == 0 || wrongText(Table[id][3]->text_tp))
+			goto trangketiep2;
+		return ins;
+	} // xoa;
+	
+}
 
 //====================================================== Khoi tao NODE ===========================================================
 
@@ -283,6 +466,21 @@ void Add_DHD(LIST_DETAIL_HOADON &l_dhd, NODE_DETAIL_HOADON *p)
 	p=l_dhd.pTail;
 }
 
+void erase_DHD(LIST_DETAIL_HOADON &l_dhd, int id)
+{
+	for(NODE_DETAIL_HOADON *p=l_dhd.pHead; id > 0; p=p->pNext, id--)
+	{
+		if(id == 1)
+		{
+			NODE_DETAIL_HOADON *q;
+			q = p->pNext;
+			p =  q->pNext;
+			delete q;
+			return;
+		}
+	}
+}
+
 //======================================================= Tim kiem ==============================================================
 
 NHANVIEN *Search_NV(LIST_NHANVIEN l_nv, string manv)
@@ -340,10 +538,14 @@ int Search_MaVT(LIST_NHANVIEN &l_nv, string mavt)
 
 NODE_HOADON *Search_HD(LIST_NHANVIEN &l_nv,string sohd)
 {
+	ofstream logs;
+	logs.open ("logs.txt", ios :: out);
+	logs << l_nv.n << endl;
 	for(int i=0;i<l_nv.n;i++)
 	{
 		for(NODE_HOADON *p=l_nv.NV[i]->DS_HOADON.pHead;p!=NULL;p=p->pNext)
 		{
+			logs << p->data.SOHD;
 			if(p->data.SOHD==sohd)
 			{
 				return p;
@@ -370,13 +572,7 @@ void Node_Temp(TREE_VATTU &t,NODE_VATTU *&x)
 }
 void Erase_VT(TREE_VATTU &t,string mavt)
 {
-	//dk nay dua ra ngoai function
-//	LIST_NHANVIEN l_nv;
-//	if(Search_MaVT(l_nv, mavt)==1)
-//	{
-//		//khong duoc phep xoa vat tu vi hoa don da ghi
-//		return;
-//	}
+
 	if (t != NULL)
 	{
 		if (t->data.MAVT == mavt)
@@ -407,18 +603,19 @@ void Erase_VT(TREE_VATTU &t,string mavt)
 	}
 }
 
-void Erase_NV(LIST_NHANVIEN &l_nv,string manv)
+void Erase_NV(LIST_NHANVIEN &l_nv, string manv)
 {
-	for(int i=0;i<l_nv.n;i++)
+	for(int i=0;i < l_nv.n;i++)
 	{
 		if(l_nv.NV[i]->MANV==manv)
 		{
 			delete l_nv.NV[i];
-			for(int j=l_nv.n-1;j>i;j--)
+			for(int j=i; j < l_nv.n-1; j++)
 			{
-				l_nv.NV[j]=l_nv.NV[j-1];
-				l_nv.n--;
+				l_nv.NV[j] = l_nv.NV[j+1];
 			}
+			
+			l_nv.n--;
 		}
 	}
 }

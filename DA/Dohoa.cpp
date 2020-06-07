@@ -13,10 +13,10 @@ typedef double db;
 char MenuTable[MAX_SE][MAX_MENU][MAXTEXT] = 	{ 	"Materials", 		"Employees", 		"Bills", 		"Statistics", 		"Help",
 													"Add Material", 	"Add Employee",		"Create Bill",	"Satistic Bills",	"_",
 													"Delete Material", 	"Show Employee",	"Show Bills",	"Top 10 revenue",	"_",
-													"Change Material",	"_",				"_",			"_",				"_",
+													"Change Material",	"Remove Employee",	"_",			"_",				"_",
 													"Material's info",	"_",				"_",			"_",				"_"};
 //==========================
-char BangThemVT[][MAXTEXT] = {	"ID:", "Name:", "Unit:", "Quantity:", "Cancel", "Add", "ADD MATERIALS"}; // tieu de textbox
+char BangThemVT[][MAXTEXT] = {	"ID:", "Ten Vat Tu:", "Don Vi Tinh:", "So Luong Ton:", "Tro ve", "Them", "THEM VAT TU"}; // tieu de textbox
 int MatranThemVT[10][10] = { 	{TEXBOXCONST, 0, 0},
 								{TEXBOXCONST, 0, 0},
 								{TEXBOXCONST, 0, 0},
@@ -24,45 +24,50 @@ int MatranThemVT[10][10] = { 	{TEXBOXCONST, 0, 0},
 								{0, 0, 0},
 							};				 // Bo tri textbox 
 //==========================
-char BangXoaVT[][MAXTEXT] = {	"ID:", "Cancel", "Delete", "DELETE MATERIALS"}; // tieu de textbox
-int MatranXoaVT[10][10] =  { 	{TEXBOXCONST,	0, 0},
-								{0,			 0, 0},
-							};	
 
 //==========================
-char BangSuaVT[][MAXTEXT] = {	"ID:", "Name:", "Unit:", "Cancel", "Adjust", "ADJUST THIS MATERIAL"}; // tieu de textbox
-int MatranSuaVT[10][10] =  { 	{TEXBOXCONST, 	0, 0},
+char BangSuaVT[][MAXTEXT] = {	"ID:", "Ten vat tu:", "Don vi tinh:", "Huy", "Sua", "SUA VAT TU"}; // tieu de textbox
+int MatranSuaVT[10][10] =  { 	{XXXX		, 	0, 0},
 								{TEXBOXCONST, 	0, 0},
 								{TEXBOXCONST, 	0, 0},
 								{0,  			0, 0},
 							};	
 //==========================
-char BangThemNV[][MAXTEXT] = {	"ID:", "First Name:", "Last Name:", "Male", "Female", "Cancel", "Add", "ADD EMPLOYEES"}; // tieu de textbox
+char BangThemNV[][MAXTEXT] = {	"ID:", "Ten: ", "Ho:", "Nam", "Nu", "Huy", "Them", "THEM NHAN VIEN"}; // tieu de textbox
 int MatranThemNV[10][10] =  { 	{TEXBOXCONST, 		0, 0},
 								{TEXBOXCONST, 		0, 0},
 								{TEXBOXCONST,	 	0, 0},
 								{TICKCONST, TICKCONST, 0},
 								{0,					0, 0}
 							};	
-char BangXoaNV[][MAXTEXT] = {	"ID:", "Name:", "Cancel", "Delete", "DELETE EMPLOYEES"}; // tieu de textbox
-int MatranXoaNV[10][10] =  { 	{TEXBOXCONST, 	0, 0},
-								{TEXBOXCONST, 	0, 0},
-								{0,				0, 0}
-							};	
-char BangSuaNV[][MAXTEXT] = {	"ID:", "First Name:", "Last Name:",  "Male", "Female", "Cancel", "Adjust", "ADJUST THIS EMPLOYEE"}; // tieu de textbox
-int MatranSuaNV[10][10] =  { 	{TEXBOXCONST, 		0, 0},
+char BangSuaNV[][MAXTEXT] = {	"ID:", "Ten:", "Ho:",  "Nam", "Nu", "Huy", "Chinh sua", "SUA NHAN VIEN"}; // tieu de textbox
+int MatranSuaNV[10][10] =  { 	{XXXX		, 		0, 0},
 								{TEXBOXCONST, 		0, 0},
 								{TEXBOXCONST,	 	0, 0},
 								{TICKCONST, TICKCONST, 0},
 								{0,					0, 0}
 							};		
-char BangLapHD[][MAXTEXT] = {	"ID:", "Day", "Month",  "Year", "Nhap", "Xuat:", "Cancel", "Create", "CREATE BILL"}; // tieu de textbox
+char BangLapHD[][MAXTEXT] = {	"SO HOA DON: ", "Ma nhan vien:", "Ngay", "Thang",  "Nam:", "Nhap", "Xuat", "Huy", "Tao hoa don", "LAP HOA DON"}; // tieu de textbox
 int MatranLapHD[10][10] =  { 	{TEXBOXCONST, 			0, 0, 0},
+								{TEXBOXCONST, 			0, 0, 0},
 								{DAYCONST, DAYCONST, DAYCONST ,0},
 								{TICKCONST,		TICKCONST, 0, 0},
 								{0,						0, 0, 0}
 							};			
-
+char BangCTHD[][MAXTEXT] = 	{	"MA VAT TU: ","So luong:","Don gia:","%VAT: ", "HUY", "THEM VAO HOA DON"}; // tieu de textbox
+int MatranCTHD[10][10] =  	{ 	{TEXBOXCONST, 			0, 0, 0},
+								{TEXBOXCONST, 			0, 0, 0},
+								{TEXBOXCONST,			0, 0 ,0},
+								{TEXBOXCONST,			0, 0, 0},
+								{0,						0, 0, 0}
+							};	
+char BangCTHD_ID[][MAXTEXT] = 	{	"MA VAT TU: ","So luong:","Don gia:","%VAT: ", "HUY", "THEM VAO HOA DON"}; // tieu de textbox
+int MatranCTHD_ID[10][10] =  	{ 	{XXXX, 					0, 0, 0},
+									{TEXBOXCONST, 			0, 0, 0},
+									{TEXBOXCONST,			0, 0 ,0},
+									{TEXBOXCONST,			0, 0, 0},
+									{0,						0, 0, 0}
+								};		
 //=======================================================CAC HAM VE HINH CHU NHAT===============================================================
 REC::REC()
 {
@@ -130,7 +135,11 @@ int REC:: beingTyped(char c)
 		memset(text_tp, '\0', sizeof(text_tp));
 	}
 	if (c != VK_BACK)
-		text_tp[0] = c;
+	{
+		if (CheckCharKey(text, c))
+			text_tp[0] = c;
+		else id = 0;
+	}
 	else
 		id = 0;
 	if (!wrongText(text_tp))
@@ -184,14 +193,16 @@ int REC:: beingTyped(char c)
 				}
 				else if (key != 0)
 				{
+					if (CheckCharKey(text, key) == false)
+						continue;
 					if ( id > MAXTEXT)
 							continue;
-					if (strcmp(text, "Day") == 0 || strcmp(text, "Month") == 0)
+					if (strcmp(text, "Ngay") == 0 || strcmp(text, "Thang") == 0)
 					{
 						if (strlen(text_tp)> 1 || isNumber(key) == false)
 							continue;
 					}
-					else if (strcmp(text, "Year") == 0)
+					else if (strcmp(text, "Nam:") == 0)
 					{
 						if (strlen(text_tp) > 3 || isNumber(key) == false)
 							continue;
@@ -384,6 +395,8 @@ void GetButton(char bangNoiDung[][MAXTEXT], int MatranBoTri[10][10], BUTTON *Tab
 					Table[i][j] = new BUTTON(TRANG, MAUBOX, VIENBOX, bangNoiDung[dem], LE_GIUA, DiemBatDauY + i*MENU_DY + i*MENU_DY, LE_GIUA+ BOX_LEN, DiemBatDauY + i*MENU_DY+ i*MENU_DY+MENU_DY);	
 					Table[i][j]->value = MatranBoTri[i][j];
 				}
+				if (MatranBoTri[i][0] == TICKCONST)
+					Table[i][j]->CoBiChonKhong = j;
 				j++;
 				dem++;
 			}
@@ -402,6 +415,8 @@ void GetButton(char bangNoiDung[][MAXTEXT], int MatranBoTri[10][10], BUTTON *Tab
 			Table[soLuongTextBox][j]->value = NUTCONST;
 			dem++;
 		}
+		else
+			Table[soLuongTextBox][j]->value = 0;
 	}
 	Table[soLuongTextBox+1][0] = new BUTTON(TRANG, MAUBOX, VIENBOX, bangNoiDung[dem], LE_GIUA-300, DiemBatDauY-2*MENU_DY, LE_GIUA + BOX_LEN+20, DiemBatDauY-MENU_DY);
 	Table[soLuongTextBox+1][0]->value = 0;
@@ -438,11 +453,20 @@ void VeBang(BUTTON *Table[10][10])
 					strcat(res, " /");
 					
 				outtextxy (Table[i][j]->x1-BOX_LEN+130 - j*MENU_DY*2, Table[i][j]->y1 + (Table[i][j]->y2-Table[i][j]->y1-textheight(Table[i][j]->text))/3, res);
-				
+				if (Table[i][j]->value == XXXX)
+				{
+					setcolor(DENTHUI);
+					bar(Table[i][j]->x1,Table[i][j]->y1,Table[i][j]->x2,Table[i][j]->y2);
+				}
+				else 
+					Table[i][j]->RecDraw();
 				
 				Table[i][j]->RecDraw();
 				if (Table[i][j]->value == TICKCONST)
 				{
+					
+					if (Table[i][j]->CoBiChonKhong)
+						Table[i][j]->beTicked();
 					setusercharsize(1, 3, 1, 3);
 					outtextxy (Table[i][j]->x1, Table[i][j]->y2 + MENU_DY/2, Table[i][j]->text);
 				}
@@ -459,9 +483,12 @@ void VeBang(BUTTON *Table[10][10])
 		}
 	}
 	
-	for (int j = 0; j < 2; j++)
+	int j = 0;
+	while(Table[soLuongTextBox][j]->value > 0)
 	{	
-		Table[soLuongTextBox][j]->solidDraw();
+		if (Table[soLuongTextBox][j]->value == NUTCONST)
+			Table[soLuongTextBox][j]->solidDraw();
+		j++;
 	}
 	Table[soLuongTextBox+1][0]->solidDraw();
 	return;
@@ -470,10 +497,10 @@ void VeBang(BUTTON *Table[10][10])
 //==============================================================================================================================================
 
 //==================================[DI CHUYEN]=================================================================================================================================
-bool boxMove(BUTTON *Bar[10][10])
+int boxMove(BUTTON *Bar[10][10])
 {
 
-	ll inow = -1, jnow = 1, ipas = 0, jpas = 0;
+	ll inow = 0, jnow = 0, ipas = 0, jpas = 0;
 	int arr[10] = {1};
 	int x = 0, y = 0;
 	int n = 0; // so luong text box va nut
@@ -487,6 +514,13 @@ bool boxMove(BUTTON *Bar[10][10])
 			arr[n] = j;
 			n++;
 	}
+	
+	if (Bar[inow][jnow]->value == XXXX)
+	{
+		;
+	}
+	else
+		Bar[inow][jnow]->emptyDraw(XANHLA);
 	while (1)
 	{
 		if (kbhit())
@@ -568,6 +602,15 @@ bool boxMove(BUTTON *Bar[10][10])
 							Bar[inow][jnow] -> emptyDraw(XANHLA);
 							continue;
 						}
+						if ( CheckAllTextBox(Bar) == false)
+						{
+							if (Bar[inow][0]->value == NUTCONST && jnow == 0)
+								return 0;
+							ThongBao(6);
+							VeBang(Bar);
+							continue;
+						}
+						
 						if (Bar[inow][0]->value == NUTCONST)
 						{
 							return jnow;
@@ -598,6 +641,12 @@ bool boxMove(BUTTON *Bar[10][10])
 					}
 					inow = (inow + n)%n;
 					jnow = (jnow+arr[inow])%arr[inow];
+					if (Bar[inow][jnow]->value == XXXX)
+					{
+						
+						inow = (inow + 1)%n;
+						jnow = (jnow +1)%arr[inow];
+					}
 	
 					if (jpas >= 0  && ipas >=0 )
 					{
@@ -658,6 +707,8 @@ void XoaBang(BUTTON *Table[10][10])
 		while (Table[i][j]-> value > 0)
 		{
 			Table[i][j]->EraseInfo();
+			if(Table[i][j]->value == TICKCONST)
+				Table[i][j]->CoBiChonKhong = j;
 			j++;
 		}
 		j = 0;
@@ -677,11 +728,7 @@ void TaoBangThemVattu(BUTTON *NutThemVT[10][10])
 	GetButton(BangThemVT, MatranThemVT, NutThemVT);
 	return;
 }
-void TaoBangXoaVattu(BUTTON *NutXoaVT[10][10])
-{
-	GetButton(BangXoaVT, MatranXoaVT, NutXoaVT);
-	return;
-}
+
 void TaoBangSuaVattu(BUTTON *NutSuaVT[10][10])
 {
 	GetButton(BangSuaVT, MatranSuaVT, NutSuaVT);
@@ -692,11 +739,7 @@ void TaoBangThemNV(BUTTON *NutThemNV[10][10])
 	GetButton(BangThemNV, MatranThemNV, NutThemNV);
 	return;
 }
-void TaoBangXoaNV(BUTTON *NutXoaNV[10][10])
-{
-	GetButton(BangXoaNV, MatranXoaNV, NutXoaNV);
-	return;
-}
+
 void TaoBangSuaNV(BUTTON *NutSuaNV[10][10])
 {
 	GetButton(BangSuaNV, MatranSuaNV, NutSuaNV);
@@ -707,6 +750,16 @@ void TaoBangLapHD(BUTTON *NutLapHD[10][10])
 	GetButton(BangLapHD, MatranLapHD, NutLapHD);
 	return;
 }
+void TaoBangCTHD(BUTTON *NutCTHD[10][10])
+{
+	GetButton(BangCTHD, MatranCTHD, NutCTHD);
+	return;
+}
+void TaoBangCTHD_ID(BUTTON *NutCTHD_ID[10][10])
+{
+	GetButton(BangCTHD_ID, MatranCTHD_ID, NutCTHD_ID);
+	return;
+}
 
 
 
@@ -715,7 +768,7 @@ void TaoBangLapHD(BUTTON *NutLapHD[10][10])
 //================================================================== [NOTIFICATION]========================================
 void ThongBao(int mode)
 {
-	setfillstyle (1, 0);
+	setfillstyle (1, DENXAM);
 	int x1 = 340, x2 = 680, y1 = 270, y2 = 320;  
 	bar (x1, y1, x2, y2);
 	bar (x1, y2, x2, y2+25);
@@ -729,14 +782,29 @@ void ThongBao(int mode)
 	switch (mode)
 	{
 		case TRUNGID:
-			{
-					outtextxy (x1+(x2-x1-textwidth("MA BAN VUA NHAP BI TRUNG!"))/2, y1 + (y2-y1-textheight("MA BAN VUA NHAP BI TRUNG"))/2 , "MA BAN VUA NHAP BI TRUNG!");
-			}break;
+		{
+				outtextxy (x1+(x2-x1-textwidth("MA BAN VUA NHAP BI TRUNG!"))/2, y1 + (y2-y1-textheight("MA BAN VUA NHAP BI TRUNG"))/2 , "MA BAN VUA NHAP BI TRUNG!");
+		}break;
 		case DAHET:
-			{
-					
-					outtextxy (x1+(x2-x1-textwidth("KHONG TON TAI!"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "KHONG TON TAI!");
-			}break;
+		{
+				
+				outtextxy (x1+(x2-x1-textwidth("KHONG TON TAI!"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "KHONG TON TAI!");
+		}break;
+		case 4:
+		{
+				outtextxy (x1+(x2-x1-textwidth("DANH SACH RONG!"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "DANH SACH RONG!");	
+		}	
+		break;
+		case 5:
+		{
+			outtextxy (x1+(x2-x1-textwidth("KHONG DU SO LUONG!"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "KHONG DU SO LUONG!");
+		}
+		break;
+		case 6: 
+		{
+			outtextxy (x1+(x2-x1-textwidth("KHONG DUOC BO TRONG!"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "KHONG DUOC BO TRONG!");
+		}
+		break;	
 		
 	}
 	setcolor (TRANG);
@@ -781,19 +849,25 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot)
 						Table[i][j]->emptyDraw(VIENBOX);
 		}
 	}
-	int i = (page-1)*20;
-	for(int j = 0; j < soluongcot; j++)
-	{
-		Table[i][j]->beChoose();
-		Table[i][j]->emptyDraw(VANG);
-	}
+	int i = (page-1)*20-1;
 	char key, keyNext;
 	while(true)
 	{
 		
-		
 		if (kbhit())
 		{
+			if (i == (page-1)*20-1)
+			{
+				i++;
+				for(int j = 0; j < soluongcot; j++)
+				{
+					Table[i][j]->beChoose();
+					Table[i][j]->emptyDraw(VANG);
+				}
+				continue;
+			}
+				
+			
 			for(int j = 0; j < soluongcot; j++)
 			{
 				Table[i][j]->beChoose();
@@ -829,7 +903,8 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot)
 							return -1;
 						}
 					case KEY_DELETE:
-						return i;
+						if(i >= (page-1)*20)
+							return i;
 				}
 					
 				i = (i+20)%20+ (page-1)*20;
@@ -841,13 +916,44 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot)
 						
 			}
 			else if (key == '\r')
+			{
+				
 				return i;
+			}
 			else if (key == VK_BACK || key == 27/* esc key  */)
 				return -2;
 		}
 		
 	}
 	
+}
+bool CheckAllTextBox(BUTTON *Table[10][10])
+{
+	int id = 0;
+	int soLuongTextBox = 0;
+	bool kocoloi = 0;
+	while (Table[soLuongTextBox][0]->value >0 && Table[soLuongTextBox][0]-> value != NUTCONST)
+	{
+			soLuongTextBox++;
+	}
+	for (int i = 0; i < soLuongTextBox; i++)
+	{
+		if (Table[i][0]->value)
+		{
+			int j = 0;
+			while (Table[i][j]->value >0)
+			{
+				if ((Table[i][j]->value == TEXBOXCONST ||Table[i][j]->value == DAYCONST)&& wrongText(Table[i][j]->text_tp))
+				{
+					Table[i][j]->emptyDraw(DO);
+					kocoloi = true;
+				}			
+				j++;
+			}
+		}
+	}
+	
+	return !kocoloi;
 }
 void XoaManHinh()
 {

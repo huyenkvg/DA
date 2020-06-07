@@ -81,3 +81,13 @@ string to_string(int num)
 	}
 	return res;
 }
+bool CheckCharKey(string text, char &c)
+{
+	if (text == "Ngay" || text == "Thang" || text == "Nam:" ||text == "Don Vi Tinh:"|| text == "So Luong Ton:" || text == "So Luong:"|| text == "Don Gia:" || text == "%VAT:")
+	{
+		return isNumber(c);
+	}
+	if (text == "ID:" || text == "Ma Nhan Vien:")
+		c = toupper(c);
+	return true;
+}

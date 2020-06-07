@@ -18,4 +18,5 @@ enum mau
 	DOTUOI = COLOR (255, 0, 0),
 	DENTHUI = COLOR (0, 0, 0),
 	CAM = COLOR(255, 135, 15),
+	XANHNHAT = COLOR (120, 243, 169),
 };

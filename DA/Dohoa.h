@@ -19,6 +19,13 @@ typedef double db;
 #define TICKCONST 1
 #define TEXBOXCONST 11
 #define DAYCONST  3
+#define XXXX 987
+#define XACNHAN -12
+#define CANCEL -19
+#define XEMDS -30
+#define TROVE -100
+#define ADDID -122
+
 
 #define Max 500
 //==============
@@ -63,7 +70,7 @@ class BUTTON : public REC
 void VeMenu(int &row, int &col);
 void GetButton(char bangNoiDung[][MAXTEXT], int bangBoTri[10][10], BUTTON *Table[10][10]);
 void VeBang(BUTTON *Table[10][10]);
-bool boxMove(BUTTON *Bar[10][10]);
+int boxMove(BUTTON *Bar[10][10]);
 void XoaBang(BUTTON *Table[10][10]);
 void XoaManHinh();
 void TaoBangThemVattu(BUTTON *NutThemVT[10][10]);
@@ -73,5 +80,8 @@ void TaoBangThemNV(BUTTON *NutThemNV[10][10]);
 void TaoBangXoaNV(BUTTON *NutXoaNV[10][10]);
 void TaoBangSuaNV(BUTTON *NutSuaNV[10][10]);
 void TaoBangLapHD(BUTTON *NutLapHD[10][10]);
+void TaoBangCTHD(BUTTON *NutCTHD[10][10]);
+void TaoBangCTHD_ID(BUTTON *NutCTHD_ID[10][10]);
+bool CheckAllTextBox(BUTTON *Table[10][10]);
 void ThongBao(int mode);
 int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot);
