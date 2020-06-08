@@ -579,7 +579,8 @@ int boxMove(BUTTON *Bar[10][10])
 									{
 										continue;
 									}
-									id = (id+Bar[inow][id]->beingTyped(key)+arr[inow])%arr[inow];
+									else if (isText(key) || isNumber(key) )
+										id = (id+Bar[inow][id]->beingTyped(key)+arr[inow])%arr[inow];
 									Bar[inow][0]-> emptyDraw(Bar[inow][0]->lineColor);
 									Bar[inow][1]-> emptyDraw(Bar[inow][1]->lineColor);
 									Bar[inow][2]-> emptyDraw(Bar[inow][2]->lineColor);
@@ -678,7 +679,7 @@ int boxMove(BUTTON *Bar[10][10])
 				else if (inow < n && inow >= 0 && jnow < arr[inow] && jnow >=0)
 				{
 					Bar[inow][jnow] -> emptyDraw(XANHLA);
-					if (Bar[inow][jnow]->value != NUTCONST && Bar[inow][jnow]->value != TICKCONST)
+					if (Bar[inow][jnow]->value != NUTCONST && Bar[inow][jnow]->value != TICKCONST &&Bar[inow][jnow]->value != XXXX)
 					{
 								int tmp = Bar[inow][jnow] -> beingTyped(key);
 								
@@ -904,7 +905,7 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot)
 						}
 					case KEY_DELETE:
 						if(i >= (page-1)*20)
-							return i;
+							return getNumber(Table[i][0]-> text)-1;
 				}
 					
 				i = (i+20)%20+ (page-1)*20;
@@ -917,8 +918,7 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot)
 			}
 			else if (key == '\r')
 			{
-				
-				return i;
+				return getNumber(Table[i][0]-> text)-1;
 			}
 			else if (key == VK_BACK || key == 27/* esc key  */)
 				return -2;

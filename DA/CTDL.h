@@ -149,7 +149,8 @@ void GetInfo_AdjustMatTab(VATTU &vt, BUTTON *Table[10][10]);
 void GetInfo_EmTab(NHANVIEN &nv, BUTTON *Table[10][10]);
 string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT]); // lay id cua o can tim kiem
 DETAIL_HOADON getDetail(BUTTON *Table[10][10]);
-void GetInfo_BillTab(HOADON hd, BUTTON *Table[10][10],string &manv);
+
+void GetInfo_BillTab(HOADON *hd, BUTTON *Table[10][10],string &manv);
 
 void Arr_VT(TREE_VATTU &t, VATTU VT[], int &n);
 
@@ -157,4 +158,4 @@ void Arr_VT(TREE_VATTU &t, VATTU VT[], int &n);
 
 int XemVatTu(VATTU VT[], int n);
 int XemNhanVien (LIST_NHANVIEN l);
-int XemDanhsachHD(LIST_DETAIL_HOADON list_dt);
+int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp);

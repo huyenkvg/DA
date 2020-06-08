@@ -92,7 +92,10 @@ string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 						setfillstyle (1, 0);
 						bar (x1-1, y1-1, x2+1, y2+1);
 						Table[i][j]->text_tp;
-						delete Table;
+						delete Table[0][0];
+						delete Table[1][0];
+						delete Table[0][1];
+						delete Table[1][1];
 						return "---";
 					}				
 				}
@@ -102,9 +105,14 @@ string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 					setfillstyle (1, 0);
 					bar (x1-1, y1-1, x2+1, y2+1);
 					string res = Table[i][j]->text_tp;
-					delete Table;
 					if (j==1)
+					{
+						delete Table[0][0];
+						delete Table[1][0];
+						delete Table[0][1];
+						delete Table[1][1];
 						return "+++";
+					}
 					return Table[0][0]->text_tp;
 				}
 			}
@@ -148,17 +156,18 @@ void GetInfo_EmTab(NHANVIEN &nv, BUTTON *Table[10][10])
 	else
 		nv.PHAI = "NU";
 }
-void GetInfo_BillTab(HOADON hd, BUTTON *Table[10][10],string &manv)
+
+void GetInfo_BillTab(HOADON *hd, BUTTON *Table[10][10],string &manv)
 {
-	hd.SOHD = Table[0][0]->text_tp;
+	hd->SOHD = Table[0][0]->text_tp;
 	manv = Table[1][0]->text_tp;
-	hd.NGAYLAP.date = getNumber(Table[2][0]->text_tp);
-	hd.NGAYLAP.month = getNumber(Table[2][1]->text_tp);
-	hd.NGAYLAP.year = getNumber(Table[2][2]->text_tp);
+	hd->NGAYLAP.date = getNumber(Table[2][0]->text_tp);
+	hd->NGAYLAP.month = getNumber(Table[2][1]->text_tp);
+	hd->NGAYLAP.year = getNumber(Table[2][2]->text_tp);
 	if (Table[3][0]->CoBiChonKhong)
-		hd.LOAI = 'N';
+		hd->LOAI = 'N';
 	else
-		hd.LOAI = 'X';
+		hd->LOAI = 'X';
 	
 }
 DETAIL_HOADON getDetail(BUTTON *Table[10][10])
@@ -175,6 +184,12 @@ DETAIL_HOADON getDetail(BUTTON *Table[10][10])
 //==========================================[HAM IN DANH SACH RA MAN HINH]===================================================
 int XemVatTu(VATTU VT[], int n)
 {
+	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 100, 145, 180);
+	tieude ->solidDraw();
+	tieude->emptyDraw(TRANG);
+	delete tieude;
+	outtextxy(30, 110, "DANH SACH");
+	outtextxy(30, 135, "VAT TU");
 	BUTTON *Table[Max][Max];
 	if (n == 0)
 	{
@@ -182,7 +197,7 @@ int XemVatTu(VATTU VT[], int n)
 		return -1;
 	}
 	int page = 1, ins = 0;
-	int x[] = {120, 160, 300, 700, 790, 960};
+	int x[] = {140, 170, 340, 700, 810, 960};
 	
 	setcolor(VANG);
 	setbkcolor(DENTHUI);
@@ -222,21 +237,32 @@ int XemVatTu(VATTU VT[], int n)
 	}
 	else if (ins == -2)
 	{
-		delete Table;
+//		delete Table;
 		return -1; // tro ve bth
 	}
 	else if (ins >= 0)
 	{
-		delete Table;
-	}
+//		delete Table;
+																		ofstream log2;
+																		log2.open ("log2.txt", ios :: out);
+																		log2 << ins;
+		if (ins >= n)
+			goto trangketiep1;
 		return ins; // xoa;
+	}
 	
 }
 int XemNhanVien(LIST_NHANVIEN l)
 {
+	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 100, 125, 180);
+	tieude ->solidDraw();
+	tieude->emptyDraw(TRANG);
+	delete tieude;
+	outtextxy(30, 110, "DANH SACH");
+	outtextxy(30, 135, "NHAN VIEN");
 	BUTTON *Table[Max][Max];
 	int page = 1, ins = 0;
-	int x[] = {120, 200, 280, 600, 790, 960};
+	int x[] = {140, 200, 310, 690, 860, 960};
 	setcolor(CAM);
 	setbkcolor(DENTHUI);
 	setusercharsize(1, 2, 1, 2);
@@ -276,12 +302,24 @@ int XemNhanVien(LIST_NHANVIEN l)
 	{
 		return -1; // tro ve bth
 	}
-	else if (ins >= 0)
-		return ins; // xoa;
+	else if (ins >= 0 && ins < l.n)
+		return ins;
+	else goto trangketiep; // xoa;
 }
 
-int XemDanhsachHD(LIST_DETAIL_HOADON list_dt)
+int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 {
+	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 100, 130, 210);
+	tieude ->solidDraw();
+	tieude->emptyDraw(TRANG);
+	delete tieude;
+	setcolor(TRANG);
+	setbkcolor(DOTHAM);
+	setusercharsize(1, 2, 1, 2);
+	outtextxy(30, 110, "DANH SACH");
+	outtextxy(30, 135, "CHI TIET");
+	outtextxy(30, 160, "HOA DON:");
+	outtextxy(30, 185, tmp.c_str());
 	BUTTON *Table[Max][Max];
 	BUTTON *But[10][10];
 	DETAIL_HOADON VT[Max];
@@ -291,7 +329,7 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt)
 		VT[id] = p->data;
 		id++;
 	}
-	int x[] = {120, 160, 300, 700, 790, 960};
+	int x[] = {140, 180, 380, 700, 820, 960};
 	setcolor(TRANG);
 	setbkcolor(DENTHUI);
 	setusercharsize(1, 2, 1, 2);
@@ -306,9 +344,9 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt)
 	But[0][1]->value = NUTCONST;
 	But[0][2] = new BUTTON(XANHNHAT, DENTHUI, VIENBOX,"THOAT", 752, 630, 960, 660);
 	But[0][2]->value = NUTCONST;
-	But[0][3] = new BUTTON(XANHNHAT, DENTHUI, VIENBOX,"", 120, 630, 400, 660);
+	But[0][3] = new BUTTON(XANHNHAT, DENTHUI, VIENBOX,"XAC NHAN", 120, 630, 400, 660);
 	But[0][3]->value = 0;
-	But[1][0] = new BUTTON(XANHNHAT, DENTHUI, VIENBOX,"", 120, 630, 400, 660);
+	But[1][0] = new BUTTON(XANHNHAT, DENTHUI, VIENBOX,"XAC NHAN", 120, 630, 400, 660);
 	VeBang(But);
 	int page = 1, ins = 0;
 	int y = 90;
@@ -359,7 +397,7 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt)
 	}
 	else if (ins >= 0)
 	{
-		if(id == 0 || wrongText(Table[id][3]->text_tp))
+		if(id == 0 || wrongText(Table[ins][3]->text_tp))
 			goto trangketiep2;
 		return ins;
 	} // xoa;
@@ -451,8 +489,8 @@ void Add_HD(LIST_HOADON &l_hd, NODE_HOADON *p)
 		l_hd.pHead=l_hd.pTail=p;
 		return;
 	}
-	l_hd.pTail->pNext=p;
-	p=l_hd.pTail;
+	l_hd.pTail->pNext = p;
+	l_hd.pTail = p;
 }
 
 void Add_DHD(LIST_DETAIL_HOADON &l_dhd, NODE_DETAIL_HOADON *p)
@@ -462,19 +500,20 @@ void Add_DHD(LIST_DETAIL_HOADON &l_dhd, NODE_DETAIL_HOADON *p)
 		l_dhd.pHead=l_dhd.pTail=p;
 		return;
 	}
-	l_dhd.pTail->pNext=p;
-	p=l_dhd.pTail;
+	l_dhd.pTail->pNext = p;
+	l_dhd.pTail = p;
 }
 
 void erase_DHD(LIST_DETAIL_HOADON &l_dhd, int id)
 {
-	for(NODE_DETAIL_HOADON *p=l_dhd.pHead; id > 0; p=p->pNext, id--)
+	for(NODE_DETAIL_HOADON *p=l_dhd.pHead; p!= NULL; p=p->pNext)
 	{
+		id--;
 		if(id == 1)
 		{
 			NODE_DETAIL_HOADON *q;
 			q = p->pNext;
-			p =  q->pNext;
+			p->pNext =  q->pNext;
 			delete q;
 			return;
 		}
@@ -1077,12 +1116,4 @@ void Clear_NV(LIST_NHANVIEN &l_nv)
 		delete l_nv.NV[i];
 	}
 }
-
-
-
-
-
-
-
-
 

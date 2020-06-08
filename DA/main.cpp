@@ -209,7 +209,8 @@ void ChinhSuaNhanVien()
 void LapHoaDon()
 {
 	VeBang(NutLapHD);
-	HOADON hd;
+	HOADON *hd;
+	hd = new HOADON;
 	NODE_HOADON *p;
 	NODE_HOADON *hdtmp;
 	NODE_VATTU *pd;
@@ -221,9 +222,10 @@ void LapHoaDon()
 	string mavt, tmp;
 	while (boxMove(NutLapHD))
 	{
+		
 		GetInfo_BillTab(hd, NutLapHD, manv);
 		nv = Search_NV(list_nv, manv);
-		hdtmp = Search_HD(list_nv, hd.SOHD);
+		hdtmp = Search_HD(list_nv, hd->SOHD);
 		if (hdtmp != NULL)
 		{
 			ThongBao(1);
@@ -241,7 +243,7 @@ void LapHoaDon()
 		XoaManHinh();
 		while (true)
 		{
-			ins = XemDanhsachHD(list_dt);
+			ins = XemDanhsachHD(list_dt, hd->SOHD);
 			XoaManHinh();
 			if (ins == ADDID)
 			{
@@ -291,6 +293,7 @@ void LapHoaDon()
 							int n = 0;
 							Arr_VT(tree_vt, VT, n);
 							chth = XemVatTu(VT, n);
+																	
 							XoaManHinh();
 							if (chth!= -1)
 							{
@@ -307,7 +310,7 @@ void LapHoaDon()
 											if(dhd.SL <= k->data.SLTON)
 											{
 												Add_DHD(list_dt, Create_NodeDHD(dhd));
-												break;
+												goto break2while;
 											}
 											else
 												ThongBao(5);
@@ -315,7 +318,9 @@ void LapHoaDon()
 										}
 										XoaBang(NutCTHD_ID);
 							}
+							
 						}
+						break2while:;
 					}
 					XoaManHinh();
 				
@@ -323,10 +328,14 @@ void LapHoaDon()
 			if (ins == XACNHAN)
 			{
 				// them list vat tu(detail hd vao list hd cua nhan vien
-				Create_ListDHD(hd.DS_DETAIL_HOADON); // tao ds detail;
-				hd.DS_DETAIL_HOADON = list_dt; // cho ds detail = list da  dc them trong ham Xem ds hoa don
-
-				p = Create_NodeHD(hd);
+				Create_ListDHD(hd->DS_DETAIL_HOADON); // tao ds detail;
+				if (list_dt.pTail == NULL)
+				{
+					ThongBao(4);
+					continue;
+				}
+				hd->DS_DETAIL_HOADON = list_dt; // cho ds detail = list da  dc them trong ham Xem ds hoa don
+				p = Create_NodeHD(*hd);
 				Create_ListHD(nv->DS_HOADON);
 				Add_HD(nv->DS_HOADON, p);
 				XoaBang(NutLapHD);
@@ -344,8 +353,9 @@ void LapHoaDon()
 				return;
 			}
 		}
+		XoaBang(NutLapHD);
 		
-		
+		VeBang(NutLapHD);
 	}
 }
 void MENU()
