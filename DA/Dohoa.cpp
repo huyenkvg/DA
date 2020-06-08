@@ -467,6 +467,7 @@ void VeBang(BUTTON *Table[10][10])
 					
 					if (Table[i][j]->CoBiChonKhong)
 						Table[i][j]->beTicked();
+					setcolor(VANG);
 					setusercharsize(1, 3, 1, 3);
 					outtextxy (Table[i][j]->x1, Table[i][j]->y2 + MENU_DY/2, Table[i][j]->text);
 				}
@@ -833,14 +834,14 @@ void ThongBao(int mode)
 		}
 	}
 }
-int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot)
+int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot, bool chophepxoa)
 {
 	setbkcolor (DENXAM);
 	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
 	setcolor (TRANG);
 	setusercharsize(1,1,1,1);
-	outtextxy (60+ (40-textwidth("<"))/2, 320 + 20 - textheight("<")/2, "<");
-	outtextxy (980+ (40-textwidth(">"))/2, 320 + 20 - textheight(">")/2, ">");
+	outtextxy (75+ (40-textwidth("<"))/2, 320 + 20 - textheight("<")/2, "<");
+	outtextxy (1010+ (40-textwidth(">"))/2, 320 + 20 - textheight(">")/2, ">");
 	
 	for (int i = (page-1)*20; i < page*20 ; i++)
 	{
@@ -850,29 +851,28 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot)
 						Table[i][j]->emptyDraw(VIENBOX);
 		}
 	}
-	int i = (page-1)*20-1;
+	int i = (page-1)*20;
+	bool firsttime = 1;
+	
 	char key, keyNext;
 	while(true)
 	{
-		
 		if (kbhit())
 		{
-			if (i == (page-1)*20-1)
+			if (firsttime)
 			{
-				i++;
 				for(int j = 0; j < soluongcot; j++)
 				{
 					Table[i][j]->beChoose();
 					Table[i][j]->emptyDraw(VANG);
 				}
-				continue;
-			}
-				
-			
-			for(int j = 0; j < soluongcot; j++)
-			{
-				Table[i][j]->beChoose();
-				Table[i][j]->emptyDraw(VANG);
+				if (chophepxoa)
+				{
+					setcolor(DO);
+					setbkcolor(DENTHUI);
+					outtextxy(Table[i][soluongcot-1]->x2+5, Table[i][soluongcot-1]->y1+2, "[XOA]");
+				}
+				firsttime = false;
 			}
 			key = getch();
 			if(key == 0)
@@ -882,6 +882,12 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot)
 				{
 					Table[i][j]->solidDraw();
 					Table[i][j]->emptyDraw(VIENBOX);
+				}
+				if (chophepxoa)
+				{
+					setcolor(DENTHUI);
+					setbkcolor(DENTHUI);
+					outtextxy(Table[i][soluongcot-1]->x2+5, Table[i][soluongcot-1]->y1+3, "      ");
 				}
 				switch(keyNext)
 				{
@@ -914,6 +920,12 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot)
 					Table[i][j]->beChoose();
 					Table[i][j]->emptyDraw(VANG);
 				}
+				if (chophepxoa)
+				{
+					setcolor(CAM);
+					setbkcolor(DENTHUI);
+					outtextxy(Table[i][soluongcot-1]->x2+5, Table[i][soluongcot-1]->y1+3, "[XOA]");
+				}
 						
 			}
 			else if (key == '\r')
@@ -921,7 +933,9 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot)
 				return getNumber(Table[i][0]-> text)-1;
 			}
 			else if (key == VK_BACK || key == 27/* esc key  */)
+			{
 				return -2;
+			}
 		}
 		
 	}

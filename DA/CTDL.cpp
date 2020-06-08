@@ -197,7 +197,7 @@ int XemVatTu(VATTU VT[], int n)
 		return -1;
 	}
 	int page = 1, ins = 0;
-	int x[] = {140, 170, 340, 700, 810, 960};
+	int x[] = {160, 190, 360, 700, 830, 960};
 	
 	setcolor(VANG);
 	setbkcolor(DENTHUI);
@@ -230,7 +230,7 @@ int XemVatTu(VATTU VT[], int n)
 			strcpy(Table[i][4]->text, VT[i].DVT.c_str());
 		}
 	}
-	ins = InRaMH(Table, page, 5);
+	ins = InRaMH(Table, page, 5, false);
 	if (ins  == -1)
 	{
 		goto trangketiep1;
@@ -243,9 +243,6 @@ int XemVatTu(VATTU VT[], int n)
 	else if (ins >= 0)
 	{
 //		delete Table;
-																		ofstream log2;
-																		log2.open ("log2.txt", ios :: out);
-																		log2 << ins;
 		if (ins >= n)
 			goto trangketiep1;
 		return ins; // xoa;
@@ -293,7 +290,7 @@ int XemNhanVien(LIST_NHANVIEN l)
 			strcpy(Table[i][4]->text, l.NV[i]->PHAI.c_str());
 		}
 	}
-	ins = InRaMH(Table, page, 5);
+	ins = InRaMH(Table, page, 5, false);
 	if (ins  == -1)
 	{
 		goto trangketiep;
@@ -356,11 +353,11 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 	for(int i = (page-1)*20; i < page*20; i++)
 	{
 		string res;
-		Table[i][0] = new BUTTON(TRANG, DENXAM, VIENBOX, "", x[0], y + (i%20)*27, x[1], y+(i%20+1)*27 -2);
-		Table[i][1] = new BUTTON(TRANG, DENXAM, VIENBOX, "", x[1], y + (i%20)*27, x[2], y+(i%20+1)*27 -2);
-		Table[i][2] = new BUTTON(TRANG, DENXAM, VIENBOX, "", x[2], y + (i%20)*27, x[3], y+(i%20+1)*27 -2);
-		Table[i][3] = new BUTTON(TRANG, DENXAM, VIENBOX, "", x[3], y + (i%20)*27, x[4], y+(i%20+1)*27 -2);
-		Table[i][4] = new BUTTON(TRANG, DENXAM, VIENBOX, "", x[4], y + (i%20)*27, x[5], y+(i%20+1)*27 -2);
+		Table[i][0] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[0], y + (i%20)*27, x[1], y+(i%20+1)*27 -2);
+		Table[i][1] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[1], y + (i%20)*27, x[2], y+(i%20+1)*27 -2);
+		Table[i][2] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[2], y + (i%20)*27, x[3], y+(i%20+1)*27 -2);
+		Table[i][3] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[3], y + (i%20)*27, x[4], y+(i%20+1)*27 -2);
+		Table[i][4] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[4], y + (i%20)*27, x[5], y+(i%20+1)*27 -2);
 		res = to_string(i+1);
 		strcpy(Table[i][0]->text, res.c_str());
 		if (i >= 0 && i < id)
@@ -375,15 +372,13 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 		}
 	
 	}
-	ins = InRaMH(Table, page, 5);
+	ins = InRaMH(Table, page, 5, true);
 	if (ins  == -1)
 	{
 		goto trangketiep2;
 	}
 	else if (ins == -2)
 	{
-		delete Table;
-		delete But;
 		int p = boxMove(But);
 		if (p==0)
 		{
@@ -404,6 +399,19 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 	
 }
 
+void TraLaiSoLuong(LIST_DETAIL_HOADON ls, TREE_VATTU &t, char NhapHayXuat)
+{
+
+	for(NODE_DETAIL_HOADON *p=ls.pHead;p!=NULL;p=p->pNext)
+	{
+		NODE_VATTU *k;
+		k = Search_VT(t, p->data.MAVT);
+		if (NhapHayXuat == 'N')
+			k->data.SLTON -= p->data.SL;
+		else
+			k->data.SLTON += p->data.SL;
+	}
+}
 //====================================================== Khoi tao NODE ===========================================================
 
 NODE_VATTU *Create_NodeVT(VATTU vt)

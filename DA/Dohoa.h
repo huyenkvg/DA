@@ -12,7 +12,7 @@ typedef double db;
 #define TAB_WID 1200
 #define TAB_HEI 700
 #define MENU_DX 150
-#define MENU_DY 20
+#define MENU_DY 22
 #define LE_GIUA 450
 #define BOX_LEN 400
 #define NUTCONST 5
@@ -84,4 +84,4 @@ void TaoBangCTHD(BUTTON *NutCTHD[10][10]);
 void TaoBangCTHD_ID(BUTTON *NutCTHD_ID[10][10]);
 bool CheckAllTextBox(BUTTON *Table[10][10]);
 void ThongBao(int mode);
-int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot);
+int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot, bool chophepxoa);

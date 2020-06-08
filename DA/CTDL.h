@@ -159,3 +159,4 @@ void Arr_VT(TREE_VATTU &t, VATTU VT[], int &n);
 int XemVatTu(VATTU VT[], int n);
 int XemNhanVien (LIST_NHANVIEN l);
 int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp);
+void TraLaiSoLuong(LIST_DETAIL_HOADON ls, TREE_VATTU &t, char NhapHayXuat);

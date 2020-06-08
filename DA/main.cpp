@@ -216,7 +216,6 @@ void LapHoaDon()
 	NODE_VATTU *pd;
 	NHANVIEN *nv;
 	LIST_DETAIL_HOADON list_dt;
-	Create_ListDHD(list_dt);
 	int ins = 0;
 	string manv; // de them vao list hoa don nhan vien
 	string mavt, tmp;
@@ -256,7 +255,8 @@ void LapHoaDon()
 					pd =  Search_VT(tree_vt, tmp) ;
 					if(pd == NULL)
 					{
-						ThongBao(2);
+						if(tmp != "+++")
+							ThongBao(2);
 					}
 					else 
 					{
@@ -310,6 +310,10 @@ void LapHoaDon()
 											if(dhd.SL <= k->data.SLTON)
 											{
 												Add_DHD(list_dt, Create_NodeDHD(dhd));
+												if (hd->LOAI == 'X')
+	/* tru di so luong ton*/						k->data.SLTON-=dhd.SL;
+												else
+													k->data.SLTON+=dhd.SL;
 												goto break2while;
 											}
 											else
@@ -336,20 +340,20 @@ void LapHoaDon()
 				}
 				hd->DS_DETAIL_HOADON = list_dt; // cho ds detail = list da  dc them trong ham Xem ds hoa don
 				p = Create_NodeHD(*hd);
-				Create_ListHD(nv->DS_HOADON);
 				Add_HD(nv->DS_HOADON, p);
 				XoaBang(NutLapHD);
 				VeBang(NutLapHD);
 				break;
 			}
-			if (ins >= 0) // xoabot
+			if (ins >= 0) // xoa bot vat tu ins trong list
 			{
 				erase_DHD(list_dt, ins);
 			}
-			if(ins == TROVE)
+			if(ins == TROVE) // boi vi khong xac nhan lap hoa don nen tra lai so luong cho so luong ton;
 			{
-				
+				TraLaiSoLuong(list_dt, tree_vt, hd->LOAI);
 				XoaBang(NutLapHD);
+				delete hd;
 				return;
 			}
 		}
@@ -357,6 +361,7 @@ void LapHoaDon()
 		
 		VeBang(NutLapHD);
 	}
+	delete hd;
 }
 void MENU()
 {
