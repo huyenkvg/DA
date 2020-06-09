@@ -16,3 +16,8 @@ bool CheckCharKey(string text, char &c);
 //	ofstream logs;
 //	logs.open ("logs.txt", ios :: out);
 //	logs << i << j;
+
+
+
+
+

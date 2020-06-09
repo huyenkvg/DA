@@ -120,13 +120,15 @@ void Print_VT(TREE_VATTU &t);
 void Write_FileVT(VATTU VT[], int n);
 void Print_Top10_VT(TREE_VATTU &t);
 void Write_FileTopVT(TREE_VATTU &t, fstream &fileout);
+void Read_FileVT(TREE_VATTU &t);//fix
 
 void Input_NV(NHANVIEN &nv);
 void Add_NV(LIST_NHANVIEN &l_nv, NHANVIEN nv);
 void Erase_NV(LIST_NHANVIEN &l_nv, string manv);
 void Modify_NV(LIST_NHANVIEN &l_nv, string manv, NHANVIEN nv);
 void Print_NV(LIST_NHANVIEN &l_nv);
-void Write_FileNV(LIST_NHANVIEN &l_nv, fstream &fileout);
+void Write_FileNV(LIST_NHANVIEN &l_nv);//fix
+void Read_FileNV(LIST_NHANVIEN &l_nv);
 
 void Input_HD(HOADON &hd);
 void Add_HD(LIST_HOADON &l_hd, NODE_HOADON *p);
@@ -159,4 +161,5 @@ void Arr_VT(TREE_VATTU &t, VATTU VT[], int &n);
 int XemVatTu(VATTU VT[], int n);
 int XemNhanVien (LIST_NHANVIEN l);
 int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp);
+void XemHD(LIST_DETAIL_HOADON list_dt, string sohd);
 void TraLaiSoLuong(LIST_DETAIL_HOADON ls, TREE_VATTU &t, char NhapHayXuat);

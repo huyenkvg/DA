@@ -19,16 +19,16 @@ using namespace std;
 string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 {
 	BUTTON *Table[3][3];
-	int x1 = 230, x2 = 770, y1 = 250, y2 = 350; 
+	int x1 = 210, x2 = 790, y1 = 250, y2 = 350; 
 	setcolor(DENXAM);
 	setfillstyle (1, 0);
 	bar (x1, y1, x2, y2);
 	setcolor(VIENBOX);
 	rectangle(x1, y1, x2, y2);
 	Table[0][0] = new BUTTON(TRANG, DENTHUI, VIENBOX, "ID:", x1+MENU_DY*2, y1+MENU_DY/2, (x1+x2)/2-MENU_DY/4, y1+4*MENU_DY/2);
-	Table[0][1] = new BUTTON(TRANG, DENTHUI, VIENBOX, text1, (x1+x2)/2+MENU_DY/4, y1+MENU_DY/2, x2 - MENU_DY/2, y1+4*MENU_DY/2);
-	Table[1][0] = new BUTTON(TRANG, DENTHUI, VIENBOX, text2, x1, y1+4*MENU_DY/2+20, (x2+x1)/2,y2);
-	Table[1][1] = new BUTTON(TRANG, DENTHUI, VIENBOX, "Exist", (x2+x1)/2, y1+4*MENU_DY/2+20, x2, y2);
+	Table[0][1] = new BUTTON(TRANG, XANHCAY, VIENBOX, text1, (x1+x2)/2+MENU_DY/4, y1+MENU_DY/2, x2 - MENU_DY/2, y1+4*MENU_DY/2);
+	Table[1][0] = new BUTTON(TRANG, MAUBOX, VIENBOX, text2, x1, y1+4*MENU_DY/2+20, (x2+x1)/2,y2);
+	Table[1][1] = new BUTTON(TRANG, MAUBOX, VIENBOX, "Exist", (x2+x1)/2, y1+4*MENU_DY/2+20, x2, y2);
 	Table[0][0]->RecDraw();
 	Table[0][0]->emptyDraw(XANHLA);
 	Table[0][1]->solidDraw();
@@ -184,7 +184,7 @@ DETAIL_HOADON getDetail(BUTTON *Table[10][10])
 //==========================================[HAM IN DANH SACH RA MAN HINH]===================================================
 int XemVatTu(VATTU VT[], int n)
 {
-	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 100, 145, 180);
+	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 90, 145, 180);
 	tieude ->solidDraw();
 	tieude->emptyDraw(TRANG);
 	delete tieude;
@@ -251,7 +251,7 @@ int XemVatTu(VATTU VT[], int n)
 }
 int XemNhanVien(LIST_NHANVIEN l)
 {
-	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 100, 125, 180);
+	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 90, 125, 180);
 	tieude ->solidDraw();
 	tieude->emptyDraw(TRANG);
 	delete tieude;
@@ -306,7 +306,7 @@ int XemNhanVien(LIST_NHANVIEN l)
 
 int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 {
-	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 100, 130, 210);
+	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 90, 130, 210);
 	tieude ->solidDraw();
 	tieude->emptyDraw(TRANG);
 	delete tieude;
@@ -335,15 +335,15 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 	outtextxy(x[3]+10, 50, "DON GIA");
 	outtextxy(x[4]+10, 50, "%VAT");
 	outtextxy(x[0], 50, "STT");
-	But[0][0] = new BUTTON(XANHNHAT, DENTHUI, VIENBOX,"XAC NHAN", 120, 630, 400, 660);
+	But[0][0] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THEM", 140, 630, 400, 660);
 	But[0][0]->value = NUTCONST;
-	But[0][1] = new BUTTON(XANHNHAT, DENTHUI,VIENBOX,"THEM", 402, 630, 750, 660);
+	But[0][1] = new BUTTON(XANHNHAT, DOTHAM,VIENBOX,"XAC NHAN", 402, 630, 750, 660);
 	But[0][1]->value = NUTCONST;
-	But[0][2] = new BUTTON(XANHNHAT, DENTHUI, VIENBOX,"THOAT", 752, 630, 960, 660);
+	But[0][2] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THOAT", 752, 630, 960, 660);
 	But[0][2]->value = NUTCONST;
-	But[0][3] = new BUTTON(XANHNHAT, DENTHUI, VIENBOX,"XAC NHAN", 120, 630, 400, 660);
+	But[0][3] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THEM", 140, 630, 400, 660);
 	But[0][3]->value = 0;
-	But[1][0] = new BUTTON(XANHNHAT, DENTHUI, VIENBOX,"XAC NHAN", 120, 630, 400, 660);
+	But[1][0] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THEM", 140, 630, 400, 660);
 	VeBang(But);
 	int page = 1, ins = 0;
 	int y = 90;
@@ -380,11 +380,11 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 	else if (ins == -2)
 	{
 		int p = boxMove(But);
-		if (p==0)
+		if (p==1)
 		{
 			return XACNHAN;
 		} 
-		if (p==1)
+		if (p==0)
 			return ADDID;
 		if(p==2)
 			return TROVE;
@@ -392,11 +392,75 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 	}
 	else if (ins >= 0)
 	{
-		if(id == 0 || wrongText(Table[ins][3]->text_tp))
+		if(id == 0 || wrongText(Table[ins][3]->text))
 			goto trangketiep2;
 		return ins;
 	} // xoa;
 	
+}
+void XemHD(LIST_DETAIL_HOADON list_dt, string sohd)
+{
+	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 90, 130, 210);
+	tieude ->solidDraw();
+	tieude->emptyDraw(TRANG);
+	delete tieude;
+	setcolor(TRANG);
+	setbkcolor(DOTHAM);
+	setusercharsize(1, 2, 1, 2);
+	outtextxy(30, 110, "DANH SACH");
+	outtextxy(30, 135, "CHI TIET");
+	outtextxy(30, 160, "HOA DON:");
+	outtextxy(30, 185, sohd.c_str());
+	BUTTON *Table[Max][Max];
+	DETAIL_HOADON VT[Max];
+	int id = 0;
+	for(NODE_DETAIL_HOADON *p=list_dt.pHead;p!=NULL;p=p->pNext)
+	{
+		VT[id] = p->data;
+		id++;
+	}
+	int x[] = {140, 180, 380, 700, 820, 960};
+	setcolor(TRANG);
+	setbkcolor(DENTHUI);
+	setusercharsize(1, 2, 1, 2);
+	outtextxy(x[1]+10, 50, "MA VAT TU");
+	outtextxy(x[2]+10, 50, "SO LUONG");
+	outtextxy(x[3]+10, 50, "DON GIA");
+	outtextxy(x[4]+10, 50, "%VAT");
+	outtextxy(x[0], 50, "STT");
+	int page = 1, ins = 0;
+	int y = 90;
+	trangketiep2:;
+	page = max(page, 1);
+	page = min(page, 25);
+	for(int i = (page-1)*20; i < page*20; i++)
+	{
+		string res;
+		Table[i][0] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[0], y + (i%20)*27, x[1], y+(i%20+1)*27 -2);
+		Table[i][1] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[1], y + (i%20)*27, x[2], y+(i%20+1)*27 -2);
+		Table[i][2] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[2], y + (i%20)*27, x[3], y+(i%20+1)*27 -2);
+		Table[i][3] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[3], y + (i%20)*27, x[4], y+(i%20+1)*27 -2);
+		Table[i][4] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[4], y + (i%20)*27, x[5], y+(i%20+1)*27 -2);
+		res = to_string(i+1);
+		strcpy(Table[i][0]->text, res.c_str());
+		if (i >= 0 && i < id)
+		{
+			strcpy(Table[i][1]->text, VT[i].MAVT.c_str());
+			res = to_string(VT[i].SL);
+			strcpy(Table[i][2]->text, res.c_str());
+			res = to_string(VT[i].DONGIA);
+			strcpy(Table[i][3]->text, res.c_str());
+			res = to_string(VT[i].VAT);
+			strcpy(Table[i][4]->text, res.c_str());
+		}
+	
+	}
+	ins = InRaMH(Table, page, 5, true);
+	if (ins  == -1)
+	{
+		goto trangketiep2;
+	}
+	return;
 }
 
 void TraLaiSoLuong(LIST_DETAIL_HOADON ls, TREE_VATTU &t, char NhapHayXuat)
@@ -514,10 +578,14 @@ void Add_DHD(LIST_DETAIL_HOADON &l_dhd, NODE_DETAIL_HOADON *p)
 
 void erase_DHD(LIST_DETAIL_HOADON &l_dhd, int id)
 {
+	if (l_dhd.pHead == l_dhd.pTail)
+	{
+		l_dhd.pHead=l_dhd.pTail = NULL;
+	}
 	for(NODE_DETAIL_HOADON *p=l_dhd.pHead; p!= NULL; p=p->pNext)
 	{
 		id--;
-		if(id == 1)
+		if(id == 0)
 		{
 			NODE_DETAIL_HOADON *q;
 			q = p->pNext;
@@ -946,8 +1014,7 @@ void Sort_RevenueVT(LIST_NHANVIEN &l_nv, VATTU VT[], int n, float *&k, NGAY Star
 }
 
 //============================================== Doc-Ghi FILE =======================================
-
-void Write_FileVT(VATTU VT[], int n)
+void Write_FileVT(VATTU VT[], int n)//fix
 {
 	fstream Fileout;
 	Fileout.open("VATTU.txt",ios_base::out);
@@ -962,27 +1029,27 @@ void Write_FileVT(VATTU VT[], int n)
 	}
 	Fileout.close();
 }
-
-void Read_FileVT(VATTU VT[], int &n)
+void Read_FileVT(TREE_VATTU &t)//fix
 {
 	fstream Filein;
-	Filein.open("VATTU.txt",ios_base::in);
-	Filein>>n;
-	int tam=0;
-	char temp;
-	while(!Filein.eof())
+	Filein.open("VATTU.txt",ios::in);
+	int count,n=0;
+	VATTU vt;
+	Filein>>count;
+	Filein.ignore();
+	while(n<count)
 	{
-		getline(Filein,VT[tam].MAVT,',');
-		getline(Filein,VT[tam].TENVT,',');
-		getline(Filein,VT[tam].DVT,',');
-		Filein>>VT[tam].SLTON;
-		Filein>>temp;
-		tam++;
+		getline(Filein,vt.MAVT,',');
+		getline(Filein,vt.TENVT,',');
+		getline(Filein,vt.DVT,',');
+		Filein>>vt.SLTON;
+		Add_VT(t,Create_NodeVT(vt));
+		Filein.ignore();
+		n++;
 	}
 	Filein.close();
 }
-
-void Write_FileNV(LIST_NHANVIEN &l_nv)
+void Write_FileNV(LIST_NHANVIEN &l_nv)//fix
 {
 	fstream Fileout;
 	Fileout.open("NHANVIEN.txt",ios_base::out);
@@ -990,26 +1057,27 @@ void Write_FileNV(LIST_NHANVIEN &l_nv)
 	for(int i=0;i<l_nv.n;i++)
 	{
 		Fileout<<l_nv.NV[i]->MANV<<',';
-		Fileout<<l_nv.NV[i]->HO<<',';
+		Fileout<<l_nv.NV[i]->HO<<'_';
 		Fileout<<l_nv.NV[i]->TEN<<',';
 		Fileout<<l_nv.NV[i]->PHAI;
 		Fileout<<"\n";
 	}
 	Fileout.close();
 }
-
-void Read_FileVT(LIST_NHANVIEN &l_nv)
+void Read_FileNV(LIST_NHANVIEN &l_nv)//fix
 {
 	fstream Filein;
 	Filein.open("NHANVIEN.txt",ios_base::in);
 	Filein>>l_nv.n;
+	Filein.ignore();
 	int tam=0;
 	while(!Filein.eof())
 	{
+		l_nv.NV[tam]=new NHANVIEN;
 		getline(Filein,l_nv.NV[tam]->MANV,',');
-		getline(Filein,l_nv.NV[tam]->HO,',');
+		getline(Filein,l_nv.NV[tam]->HO,'_');
 		getline(Filein,l_nv.NV[tam]->TEN,',');
-		getline(Filein,l_nv.NV[tam]->PHAI);
+		getline(Filein,l_nv.NV[tam]->PHAI,'\n');
 		tam++;
 	}
 	Filein.close();

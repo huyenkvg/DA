@@ -1,0 +1,5 @@
+4
+HUYEN,hd_huyen,NU
+HUYEN2,Thanh_huyen2,NAM
+HUYEN3,thanh_huyen3,NU
+HUYEN4,wwww_huyen4,NU

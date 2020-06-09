@@ -67,6 +67,11 @@ int MatranCTHD_ID[10][10] =  	{ 	{XXXX, 					0, 0, 0},
 									{TEXBOXCONST,			0, 0 ,0},
 									{TEXBOXCONST,			0, 0, 0},
 									{0,						0, 0, 0}
+								};
+								
+char BangXemHD[][MAXTEXT] = 	{	"SO HOA DON: ", "HUY", "XEM HOA DON"}; // tieu de textbox
+int MatranXemHD[10][10] =  		{ 	{TEXBOXCONST,			0, 0, 0},
+									{0,						0, 0, 0}
 								};		
 //=======================================================CAC HAM VE HINH CHU NHAT===============================================================
 REC::REC()
@@ -763,6 +768,12 @@ void TaoBangCTHD_ID(BUTTON *NutCTHD_ID[10][10])
 	return;
 }
 
+void TaoBangXemHD(BUTTON *Nut[10][10])
+{
+	GetButton(BangXemHD, MatranXemHD, Nut);
+	return;
+}
+
 
 
 
@@ -770,7 +781,7 @@ void TaoBangCTHD_ID(BUTTON *NutCTHD_ID[10][10])
 //================================================================== [NOTIFICATION]========================================
 void ThongBao(int mode)
 {
-	setfillstyle (1, DENXAM);
+	setfillstyle (1, DENTHUI);
 	int x1 = 340, x2 = 680, y1 = 270, y2 = 320;  
 	bar (x1, y1, x2, y2);
 	bar (x1, y2, x2, y2+25);
@@ -779,7 +790,7 @@ void ThongBao(int mode)
 	rectangle(x1, y2, x2, y2+25);
 	setusercharsize(1, 2, 1, 2);
 	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
-	setbkcolor (0);
+	setbkcolor (DENTHUI);
 	setcolor (DO);
 	switch (mode)
 	{

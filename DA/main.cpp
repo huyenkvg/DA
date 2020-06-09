@@ -21,6 +21,7 @@ BUTTON *NutLapHD[10][10];
 BUTTON *NutNhapID[10][10];
 BUTTON *NutCTHD[10][10];
 BUTTON *NutCTHD_ID[10][10];
+BUTTON *NutXemHD[10][10];
 TREE_VATTU tree_vt;
 LIST_NHANVIEN list_nv;
 //=================================================================================================================================
@@ -62,7 +63,7 @@ void XoaVatTu()
 		string tmp;
 		while(true)
 		{
-			tmp = Get_ID("Xem danh sach", "OK");
+			tmp = Get_ID("Xem danh sach Vat tu", "OK");
 			if (tmp == "---" || tmp == "")	break;
 			if( Search_VT(tree_vt, tmp) == NULL)
 			{
@@ -99,7 +100,7 @@ void SuaVatTu()
 		NODE_VATTU *p;
 		while(true)
 		{
-			tmp = Get_ID("Xem danh sach", "OK");
+			tmp = Get_ID("Xem danh sach Vat tu", "OK");
 			if (tmp == "---" || tmp == "")	break;
 			p =  Search_VT(tree_vt, tmp) ;
 			if(p == NULL)
@@ -127,9 +128,10 @@ void SuaVatTu()
 				int n = 0;
 				Arr_VT(tree_vt, VT, n);
 				ins = XemVatTu(VT, n);
-				XoaManHinh();
-				if (ins >= 0)
+//				XoaManHinh();
+				while (ins >= 0)
 				{
+					strcpy(NutSuaVT[0][0]->text_tp, VT[ins].MAVT.c_str());
 					VeBang(NutSuaVT);
 					if (boxMove(NutSuaVT))
 					{
@@ -138,6 +140,9 @@ void SuaVatTu()
 						Modify_VT(tree_vt, VT[ins].MAVT, vt);
 					}
 					XoaBang(NutSuaVT);
+					XoaManHinh();
+					Arr_VT(tree_vt, VT, n);
+					ins = XemVatTu(VT, n);
 				}
 		}
 			XoaManHinh();
@@ -174,9 +179,9 @@ void XoaNhanVien()
 		string tmp;
 		while(true)
 		{
-			tmp = Get_ID("Xem danh sach", "OK");
+			tmp = Get_ID("Xem danh sach Nhan vien", "OK");
 			if (tmp == "---" || tmp == "")	break;
-			if( Search_VT(tree_vt, tmp) == NULL)
+			if( Search_NV(list_nv, tmp) == NULL)
 			{
 				ThongBao(2);
 			}
@@ -202,9 +207,49 @@ void XoaNhanVien()
 }
 void ChinhSuaNhanVien()
 {
-	DETAIL_HOADON d;
-	
-	;
+		string tmp;
+		NHANVIEN nv;
+		while(true)
+		{
+			tmp = Get_ID("Xem danh sach Nhan vien", "OK");
+			if (tmp == "---" || tmp == "")	break;
+			if(Search_NV(list_nv, tmp) == NULL)
+			{
+				ThongBao(2);
+			}
+			else 
+			{
+				VeBang(NutSuaNV);
+				if (boxMove(NutSuaNV))
+				{
+					GetInfo_EmTab(nv, NutSuaNV);														
+					Modify_NV(list_nv, tmp, nv);
+				}
+				XoaBang(NutSuaNV);
+				
+			}
+		}
+		if (tmp == "---")
+		{
+				int ins = 0;
+				ins = XemNhanVien(list_nv);
+//				XoaManHinh();
+				while (ins >= 0)
+				{
+					strcpy(NutSuaNV[0][0]->text_tp, nv.MANV.c_str());
+					VeBang(NutSuaNV);
+					if (boxMove(NutSuaNV))
+					{
+						GetInfo_EmTab(nv, NutSuaNV);
+						Modify_NV(list_nv, nv.MANV, nv);
+					}
+					XoaBang(NutSuaNV);
+					XoaManHinh();
+					ins = XemNhanVien(list_nv);
+				}
+		}
+			XoaManHinh();
+	return;	
 }
 void LapHoaDon()
 {
@@ -347,6 +392,7 @@ void LapHoaDon()
 			}
 			if (ins >= 0) // xoa bot vat tu ins trong list
 			{
+					
 				erase_DHD(list_dt, ins);
 			}
 			if(ins == TROVE) // boi vi khong xac nhan lap hoa don nen tra lai so luong cho so luong ton;
@@ -362,6 +408,29 @@ void LapHoaDon()
 		VeBang(NutLapHD);
 	}
 	delete hd;
+}
+void XemHoaDon()
+{
+	VeBang(NutXemHD);
+	HOADON hd;
+	NODE_HOADON *p;
+	while (boxMove(NutXemHD))
+	{
+			
+		hd.SOHD = NutXemHD[0][0]->text_tp;
+		p = Search_HD(list_nv, hd.SOHD);
+		if (p == NULL)
+		{
+			ThongBao(2);
+			VeBang(NutXemHD);
+		}
+		else{
+			XemHD(p->data.DS_DETAIL_HOADON, p->data.SOHD);
+			break;
+		}
+	}
+	XoaBang(NutXemHD);
+	XoaManHinh();
 }
 void MENU()
 {
@@ -419,6 +488,7 @@ void MENU()
 			case 1:
 				{
 					ThemNhanVien();
+					Write_FileNV(list_nv);
 				}
 				break;
 			case 2:
@@ -430,6 +500,7 @@ void MENU()
 			case 3:
 				{
 					ChinhSuaNhanVien();
+					Write_FileNV(list_nv);
 				}
 				break;
 			case 4:
@@ -445,7 +516,7 @@ void MENU()
 				LapHoaDon();
 				break;
 			case 2:
-//				XemHoaDon();
+				XemHoaDon();
 				break;
 		}
 	}
@@ -477,17 +548,16 @@ int main()
 	
 	TaoBangCTHD(NutCTHD);
 	TaoBangCTHD_ID(NutCTHD_ID);
+	TaoBangXemHD(NutXemHD);
 	Create_ListVT(tree_vt);
+	Read_FileVT(tree_vt);
+	Read_FileNV(list_nv);
 	while(1)
 	{
 			
 		MENU();
 		XoaManHinh();
 	}
-//	boxMove(NutThemVT);
-//	boxMove(NutSuaVT);
-//	boxMove(NutLapHD);
-//	boxMove(NutThemNV);
 	system("pause");
 	return 0;
 }
