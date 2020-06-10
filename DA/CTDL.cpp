@@ -91,7 +91,7 @@ string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 						setcolor(DENTHUI);
 						setfillstyle (1, 0);
 						bar (x1-1, y1-1, x2+1, y2+1);
-						Table[i][j]->text_tp;
+						Table[0][0]->EraseInfo();
 						delete Table[0][0];
 						delete Table[1][0];
 						delete Table[0][1];
@@ -113,7 +113,9 @@ string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 						delete Table[1][1];
 						return "+++";
 					}
-					return Table[0][0]->text_tp;
+					string tmpt = Table[0][0]->text_tp;
+					Table[0][0]->EraseInfo();
+					return tmpt;
 				}
 			}
 			else if (i == 0 && j == 0)
@@ -342,8 +344,8 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 	But[0][2] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THOAT", 752, 630, 960, 660);
 	But[0][2]->value = NUTCONST;
 	But[0][3] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THEM", 140, 630, 400, 660);
-	But[0][3]->value = 0;
 	But[1][0] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THEM", 140, 630, 400, 660);
+	But[1][1] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THEM", 140, 630, 400, 660);
 	VeBang(But);
 	int page = 1, ins = 0;
 	int y = 90;
@@ -381,9 +383,7 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 	{
 		int p = boxMove(But);
 		if (p==1)
-		{
 			return XACNHAN;
-		} 
 		if (p==0)
 			return ADDID;
 		if(p==2)
@@ -398,6 +398,7 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 	} // xoa;
 	
 }
+
 void XemHD(LIST_DETAIL_HOADON list_dt, string sohd)
 {
 	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 90, 130, 210);
@@ -818,6 +819,98 @@ bool operator<(NGAY d1, NGAY d2)
 	return (d1.year<d2.year || d1.year==d2.year && d1.month<d2.month || d1.year==d2.year && d1.month==d2.month && d1.date<d2.date);
 }
 
+void TaoBangThongKe(LIST_NHANVIEN list_nv, ngay date1, ngay date2)
+{
+	XoaManHinh();
+	
+	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 90, 130, 210);
+	tieude ->solidDraw();
+	tieude->emptyDraw(TRANG);
+	delete tieude;
+	setcolor(TRANG);
+	setbkcolor(DOTHAM);
+	setusercharsize(1, 2, 1, 2);
+	outtextxy(30, 130, "DANH SACH");
+	outtextxy(30, 160, "HOA DON:");
+	BUTTON *Table[Max][Max];
+	BUTTON *But[10][10];
+	HOADON HD[Max];
+	char tennv[Max][MAXTEXT], giatri[Max][Max];
+	int id = 0;
+	for(int i=0;i<list_nv.n;i++)
+	{
+		for(NODE_HOADON *p=list_nv.NV[i]->DS_HOADON.pHead;p!=NULL;p=p->pNext)
+		{
+			if((p->data.NGAYLAP > date1 || p->data.NGAYLAP == date1) && (p->data.NGAYLAP < date2 || p->data.NGAYLAP == date2))
+			{
+				HD[i].LOAI = p->data.LOAI;
+				HD[i].SOHD = p->data.SOHD;
+				HD[i].NGAYLAP = p->data.NGAYLAP;
+				float vae = 0;
+				for(NODE_DETAIL_HOADON *k=p->data.DS_DETAIL_HOADON.pHead;k!=NULL;k=k->pNext)
+				{
+					vae += k->data.DONGIA * k->data.SL;
+					vae -= vae*k->data.VAT/100; 
+				}
+				strcpy(giatri[id], to_string((vae)).c_str());
+				strcpy(tennv[id], list_nv.NV[i]->HO.c_str());
+				strcat(tennv[id]," ");
+				strcat(tennv[id], list_nv.NV[i]->TEN.c_str());
+				id++;
+			}
+		}
+	}
+	int x[] = {140, 180, 300, 370, 480, 860,  960};
+	setcolor(CAM);
+	setbkcolor(DENTHUI);
+	setusercharsize(1, 2, 1, 2);
+	outtextxy(x[1]+10, 50, "SO HOA DON");
+	outtextxy(x[2]+10, 50, "LOAI");
+	outtextxy(x[3]+10, 50, "NGAY LAP");
+	outtextxy(x[4]+10, 50, "NHAN VIEN");
+	outtextxy(x[5]+10, 50, "GIA TRI");
+	outtextxy(x[0], 50, "STT");
+	int page = 1, ins = 0;
+	int y = 90;
+	trangketiep22:;
+	page = max(page, 1);
+	page = min(page, 25);
+	for(int i = (page-1)*20; i < page*20; i++)
+	{
+		string res;
+		Table[i][0] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[0], y + (i%20)*27, x[1], y+(i%20+1)*27 -2);
+		Table[i][1] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[1], y + (i%20)*27, x[2], y+(i%20+1)*27 -2);
+		Table[i][2] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[2], y + (i%20)*27, x[3], y+(i%20+1)*27 -2);
+		Table[i][3] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[3], y + (i%20)*27, x[4], y+(i%20+1)*27 -2);
+		Table[i][4] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[4], y + (i%20)*27, x[5], y+(i%20+1)*27 -2);
+		Table[i][5] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[5], y + (i%20)*27, x[6], y+(i%20+1)*27 -2);
+		res = to_string(i+1);
+		strcpy(Table[i][0]->text, res.c_str());
+		if (i >= 0 && i < id)
+		{
+			strcpy(Table[i][1]->text, HD[i].SOHD.c_str());
+			if (HD[i].LOAI == 'X')
+				res = "XUAT";
+			else 
+				res = "NHAP";
+			strcpy(Table[i][2]->text, res.c_str());
+			strcpy(Table[i][3]->text, to_string(HD[i].NGAYLAP.date).c_str());
+			strcat(Table[i][3]->text, "/ ");
+			strcat(Table[i][3]->text, to_string(HD[i].NGAYLAP.month).c_str());
+			strcat(Table[i][3]->text,"/ ");
+			strcat(Table[i][3]->text, to_string(HD[i].NGAYLAP.year).c_str());
+			strcpy(Table[i][4]->text, tennv[i]);
+			strcpy(Table[i][5]->text_tp, giatri[i]);
+			
+		}
+	
+	}
+	ins = InRaMH(Table, page, 6, false);
+	if (ins  == -1)
+	{
+		goto trangketiep22;
+	}
+}
 //=========================================== Sap xep ==============================================
 
 void Arr_VT(TREE_VATTU &t, VATTU VT[], int &n)

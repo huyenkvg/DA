@@ -13,8 +13,8 @@ typedef double db;
 char MenuTable[MAX_SE][MAX_MENU][MAXTEXT] = 	{ 	"Materials", 		"Employees", 		"Bills", 		"Statistics", 		"Help",
 													"Add Material", 	"Add Employee",		"Create Bill",	"Satistic Bills",	"_",
 													"Delete Material", 	"Show Employee",	"Show Bills",	"Top 10 revenue",	"_",
-													"Change Material",	"Remove Employee",	"_",			"_",				"_",
-													"Material's info",	"_",				"_",			"_",				"_"};
+													"Adjust Material",	"Adjsust Employee",	"_",			"_",				"_",
+													"View Material's",	"Remove Employee",				"_",			"_",				"_"};
 //==========================
 char BangThemVT[][MAXTEXT] = {	"ID:", "Ten Vat Tu:", "Don Vi Tinh:", "So Luong Ton:", "Tro ve", "Them", "THEM VAT TU"}; // tieu de textbox
 int MatranThemVT[10][10] = { 	{TEXBOXCONST, 0, 0},
@@ -61,7 +61,7 @@ int MatranCTHD[10][10] =  	{ 	{TEXBOXCONST, 			0, 0, 0},
 								{TEXBOXCONST,			0, 0, 0},
 								{0,						0, 0, 0}
 							};	
-char BangCTHD_ID[][MAXTEXT] = 	{	"MA VAT TU: ","So luong:","Don gia:","%VAT: ", "HUY", "THEM VAO HOA DON"}; // tieu de textbox
+char BangCTHD_ID[][MAXTEXT] = 	{	"MA VAT TU: ","So luong:","Don gia:","%VAT: ", "HUY", "THEM VAO HOA DON", "NHAP CHI TIET"}; // tieu de textbox
 int MatranCTHD_ID[10][10] =  	{ 	{XXXX, 					0, 0, 0},
 									{TEXBOXCONST, 			0, 0, 0},
 									{TEXBOXCONST,			0, 0 ,0},
@@ -69,7 +69,12 @@ int MatranCTHD_ID[10][10] =  	{ 	{XXXX, 					0, 0, 0},
 									{0,						0, 0, 0}
 								};
 								
-char BangXemHD[][MAXTEXT] = 	{	"SO HOA DON: ", "HUY", "XEM HOA DON"}; // tieu de textbox
+char BangTK[][MAXTEXT] = 	{	"Ngay", "Thang", "Nam:","Ngay", "Thang", "Nam:",  "HUY", "XEM HOA DON", "NHAP KHOANG THOI GIAN"}; // tieu de textbox
+int MatranTK[10][10] =  		{ 	{DAYCONST, DAYCONST, DAYCONST ,0},
+									{DAYCONST, DAYCONST, DAYCONST ,0},
+									{		0,		0,		0, 0}
+								};	
+char BangXemHD[][MAXTEXT] = 	{	"SO HOA DON: ", "HUY", "THONG KE"}; // tieu de textbox
 int MatranXemHD[10][10] =  		{ 	{TEXBOXCONST,			0, 0, 0},
 									{0,						0, 0, 0}
 								};		
@@ -107,7 +112,6 @@ void REC::RecDraw()
 	bar (x1, y1, x2, y2);	
 	emptyDraw(lineColor);		
 }
-
 void REC::eraseDraw()
 {
 	setfillstyle(1, 0);
@@ -125,12 +129,10 @@ void REC:: beTicked()
 	{
 		RecDraw();
 	}
-		
 }
 
 int REC:: beingTyped(char c)
 {
-	
 	char key, keyNext;
 	int id = 1;
 	if (text_tp[0] != '\0')
@@ -182,7 +184,6 @@ int REC:: beingTyped(char c)
 						emptyDraw(lineColor);
 						return 1;
 				}
-					
 				else if ( key == VK_BACK )
 				{
 					if (id > 0)
@@ -257,9 +258,6 @@ BUTTON::BUTTON (mau text_color, mau bk_color, mau line_Color, char textOnScreen[
 	bkColor  =  bk_color;
 	lineColor = line_Color;	
 	strcpy(text , textOnScreen);
-
-	
-							
 	CoBiChonKhong = false;
 	text_tp[0] = '\0'; 
 	value = 0;
@@ -286,7 +284,6 @@ void BUTTON::beChoose()
 	setcolor (textColor);
 	outtextxy (x1+(x2-x1-textwidth(text))/2, y1 + (y2-y1-textheight(text))/2 , text);
 }
-
 //=====================================================VE MENU=================================================================
 void VeMenu(int &row, int &col)
 {
@@ -367,9 +364,6 @@ void VeMenu(int &row, int &col)
 		}
 	}
 }
-//=========================================================[KHOI TAO CAC BANG NUT]===============================================================================
-
-
 //======================================================[Ham lay info nut]========================================================================================
 void GetButton(char bangNoiDung[][MAXTEXT], int MatranBoTri[10][10], BUTTON *Table[10][10])
 {
@@ -506,7 +500,7 @@ void VeBang(BUTTON *Table[10][10])
 int boxMove(BUTTON *Bar[10][10])
 {
 
-	ll inow = 0, jnow = 0, ipas = 0, jpas = 0;
+	ll inow = 0, jnow = 0, ipas = 0, jpas = 0, id = 0;
 	int arr[10] = {1};
 	int x = 0, y = 0;
 	int n = 0; // so luong text box va nut
@@ -546,11 +540,13 @@ int boxMove(BUTTON *Bar[10][10])
 							}
 							continue;
 						}
-						if (Bar[inow][0]->value == DAYCONST)
+						if (n > 1 && Bar[2][0]->value == DAYCONST && Bar[inow][jnow]->value == NUTCONST && jnow == 1)
 						{
-							int id = 0;
-							while (CheckDay(Bar[inow][0]->text_tp, Bar[inow][1]->text_tp, Bar[inow][2]->text_tp) == false) // Ngay bi sai
+							id = 0;
+							Bar[inow][jnow]->emptyDraw(VIENBOX);
+							while (CheckDay(Bar[2][0]->text_tp, Bar[2][1]->text_tp, Bar[2][2]->text_tp) == false) // Ngay bi sai
 							{
+								tieptuccheck:;
 								
 								setfillstyle(1, DOTUOI);
 								setusercharsize(1, 3, 1, 3);
@@ -565,7 +561,7 @@ int boxMove(BUTTON *Bar[10][10])
 									Bar[inow][id] -> emptyDraw(DOTUOI);
 								if (kbhit)
 								{
-									Bar[inow][id]->RecDraw();
+//									Bar[inow][id]->RecDraw();
 									Bar[inow][id] -> emptyDraw(DOTUOI);
 									key = getch();
 									if(key == 0)
@@ -606,8 +602,8 @@ int boxMove(BUTTON *Bar[10][10])
 									
 							inow = (inow+1)%n;
 							jnow = 0;
-							Bar[inow][jnow] -> emptyDraw(XANHLA);
-							continue;
+//							Bar[inow][jnow] -> emptyDraw(XANHLA);
+//							continue;
 						}
 						if ( CheckAllTextBox(Bar) == false)
 						{
@@ -632,11 +628,18 @@ int boxMove(BUTTON *Bar[10][10])
 					switch (keyNext)
 					{
 							case KEY_DOWN:
-								inow++, jnow = 0;		
+								{
+									inow++, jnow = 0;
+									if(Bar[inow][0]->value == NUTCONST)
+										jnow = 1;
+								}		
 							break;
 							case KEY_UP:
-								inow--, jnow = 0;
+								{
+									inow--, jnow = 0;
+								}
 							break;
+								
 							case KEY_LEFT:
 								jnow--;
 							break;
@@ -664,7 +667,8 @@ int boxMove(BUTTON *Bar[10][10])
 							{
 								Bar[ipas][jpas]->beTicked();
 							}
-							else
+							
+							else 
 							{
 								setbkcolor (Bar[ipas][jpas]->bkColor);
 								settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
@@ -774,7 +778,11 @@ void TaoBangXemHD(BUTTON *Nut[10][10])
 	return;
 }
 
-
+void TaoBangTK(BUTTON *Nut[10][10])
+{
+	GetButton(BangTK, MatranTK, Nut);
+	return;
+}
 
 
 
@@ -870,25 +878,28 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot, bool chophepxoa)
 	{
 		if (kbhit())
 		{
-			if (firsttime)
-			{
-				for(int j = 0; j < soluongcot; j++)
-				{
-					Table[i][j]->beChoose();
-					Table[i][j]->emptyDraw(VANG);
-				}
-				if (chophepxoa)
-				{
-					setcolor(DO);
-					setbkcolor(DENTHUI);
-					outtextxy(Table[i][soluongcot-1]->x2+5, Table[i][soluongcot-1]->y1+2, "[XOA]");
-				}
-				firsttime = false;
-			}
+			
 			key = getch();
 			if(key == 0)
 			{
 				keyNext = getch();
+				if (firsttime)
+				{
+					for(int j = 0; j < soluongcot; j++)
+					{
+						Table[i][j]->beChoose();
+						Table[i][j]->emptyDraw(VANG);
+					}
+					if (chophepxoa)
+					{
+						setcolor(DO);
+						setbkcolor(DENTHUI);
+						outtextxy(Table[i][soluongcot-1]->x2+5, Table[i][soluongcot-1]->y1+2, "[XOA]");
+					}
+					
+					firsttime = false;
+					continue;
+				}
 				for(int j = 0; j < soluongcot; j++)
 				{
 					Table[i][j]->solidDraw();
@@ -968,7 +979,7 @@ bool CheckAllTextBox(BUTTON *Table[10][10])
 			int j = 0;
 			while (Table[i][j]->value >0)
 			{
-				if ((Table[i][j]->value == TEXBOXCONST ||Table[i][j]->value == DAYCONST)&& wrongText(Table[i][j]->text_tp))
+				if ((Table[i][j]->value == TEXBOXCONST ||Table[i][j]->value == DAYCONST&& CheckDay(Table[i][0]->text_tp, Table[i][1]->text_tp, Table[i][2]->text_tp))&& wrongText(Table[i][j]->text_tp))
 				{
 					Table[i][j]->emptyDraw(DO);
 					kocoloi = true;

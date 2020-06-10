@@ -162,4 +162,5 @@ int XemVatTu(VATTU VT[], int n);
 int XemNhanVien (LIST_NHANVIEN l);
 int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp);
 void XemHD(LIST_DETAIL_HOADON list_dt, string sohd);
+void TaoBangThongKe(LIST_NHANVIEN list_nv, ngay date1, ngay date2);
 void TraLaiSoLuong(LIST_DETAIL_HOADON ls, TREE_VATTU &t, char NhapHayXuat);

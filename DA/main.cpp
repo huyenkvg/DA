@@ -22,6 +22,7 @@ BUTTON *NutNhapID[10][10];
 BUTTON *NutCTHD[10][10];
 BUTTON *NutCTHD_ID[10][10];
 BUTTON *NutXemHD[10][10];
+BUTTON *NutTK[10][10];
 TREE_VATTU tree_vt;
 LIST_NHANVIEN list_nv;
 //=================================================================================================================================
@@ -432,6 +433,23 @@ void XemHoaDon()
 	XoaBang(NutXemHD);
 	XoaManHinh();
 }
+void ThongKeHoaDon()
+{
+	ngay date1, date2;
+	VeBang(NutTK);
+	if (boxMove(NutTK))
+	{
+		date1.date = getNumber(NutTK[0][0]->text_tp);
+		date1.month = getNumber(NutTK[0][1]->text_tp);
+		date1.year = getNumber(NutTK[0][2]->text_tp);
+		date2.date = getNumber(NutTK[1][0]->text_tp);
+		date2.month = getNumber(NutTK[1][1]->text_tp);
+		date2.year = getNumber(NutTK[1][2]->text_tp);
+	}
+	TaoBangThongKe(list_nv, date1, date2);
+	XoaManHinh();
+	XoaBang(NutTK);
+}
 void MENU()
 {
 	int i = 0, j = 1;
@@ -495,7 +513,7 @@ void MENU()
 				{
 					Sort_NV(list_nv);
 					XemNhanVien(list_nv);
-				}	// o ben ctdl a
+				}
 				break;
 			case 3:
 				{
@@ -505,6 +523,7 @@ void MENU()
 				break;
 			case 4:
 				XoaNhanVien();
+				Write_FileNV(list_nv);
 					
 		}
 	}
@@ -513,11 +532,19 @@ void MENU()
 		switch (i)
 		{
 			case 1:
-				LapHoaDon();
-				break;
+				{
+					LapHoaDon();		
+					VATTU VT[Max];
+					int n=0;
+					Arr_VT(tree_vt, VT, n);
+					Write_FileVT(VT,n);
+					break;
+				}
 			case 2:
-				XemHoaDon();
-				break;
+				{
+					XemHoaDon();
+					break;	
+				}
 		}
 	}
 	if (j == 3)
@@ -525,7 +552,8 @@ void MENU()
 		switch (i)
 		{
 			case 1:
-//				Sat_Bill();		break;
+				ThongKeHoaDon();		
+				break;
 			case 2:
 //				Top10();		
 				break;
@@ -545,6 +573,7 @@ int main()
 	TaoBangThemNV(NutThemNV);
 	TaoBangSuaNV(NutSuaNV);
 	TaoBangLapHD(NutLapHD);
+	TaoBangTK(NutTK);
 	
 	TaoBangCTHD(NutCTHD);
 	TaoBangCTHD_ID(NutCTHD_ID);
