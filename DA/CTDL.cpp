@@ -823,15 +823,15 @@ void TaoBangThongKe(LIST_NHANVIEN list_nv, ngay date1, ngay date2)
 {
 	XoaManHinh();
 	
-	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 90, 130, 210);
+	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 70, 130, 180);
 	tieude ->solidDraw();
 	tieude->emptyDraw(TRANG);
 	delete tieude;
 	setcolor(TRANG);
 	setbkcolor(DOTHAM);
 	setusercharsize(1, 2, 1, 2);
-	outtextxy(30, 130, "DANH SACH");
-	outtextxy(30, 160, "HOA DON:");
+	outtextxy(30, 95, "DANH SACH");
+	outtextxy(30, 140, "HOA DON:");
 	BUTTON *Table[Max][Max];
 	BUTTON *But[10][10];
 	HOADON HD[Max];
@@ -843,16 +843,13 @@ void TaoBangThongKe(LIST_NHANVIEN list_nv, ngay date1, ngay date2)
 		{
 			if((p->data.NGAYLAP > date1 || p->data.NGAYLAP == date1) && (p->data.NGAYLAP < date2 || p->data.NGAYLAP == date2))
 			{
-				HD[i].LOAI = p->data.LOAI;
-				HD[i].SOHD = p->data.SOHD;
-				HD[i].NGAYLAP = p->data.NGAYLAP;
-				float vae = 0;
+				HD[id] = p->data;
+				int vae = 0;
 				for(NODE_DETAIL_HOADON *k=p->data.DS_DETAIL_HOADON.pHead;k!=NULL;k=k->pNext)
 				{
-					vae += k->data.DONGIA * k->data.SL;
-					vae -= vae*k->data.VAT/100; 
+					vae += k->data.DONGIA * k->data.SL - (k->data.DONGIA * k->data.SL *  k->data.VAT)/100;
 				}
-				strcpy(giatri[id], to_string((vae)).c_str());
+				strcpy(giatri[id], to_string(vae).c_str());
 				strcpy(tennv[id], list_nv.NV[i]->HO.c_str());
 				strcat(tennv[id]," ");
 				strcat(tennv[id], list_nv.NV[i]->TEN.c_str());
@@ -860,7 +857,7 @@ void TaoBangThongKe(LIST_NHANVIEN list_nv, ngay date1, ngay date2)
 			}
 		}
 	}
-	int x[] = {140, 180, 300, 370, 480, 860,  960};
+	int x[] = {140, 180, 300, 370, 490, 860,  990};
 	setcolor(CAM);
 	setbkcolor(DENTHUI);
 	setusercharsize(1, 2, 1, 2);
@@ -871,7 +868,7 @@ void TaoBangThongKe(LIST_NHANVIEN list_nv, ngay date1, ngay date2)
 	outtextxy(x[5]+10, 50, "GIA TRI");
 	outtextxy(x[0], 50, "STT");
 	int page = 1, ins = 0;
-	int y = 90;
+	int y = 70;
 	trangketiep22:;
 	page = max(page, 1);
 	page = min(page, 25);
@@ -1285,4 +1282,78 @@ void Clear_NV(LIST_NHANVIEN &l_nv)
 		delete l_nv.NV[i];
 	}
 }
-
+void Write_Bill(LIST_NHANVIEN l_nv)
+{
+	fstream Fileout;
+	Fileout.open("HOADON.txt",ios_base::out);
+	for(int i=0;i<l_nv.n;i++)
+	{
+		if(l_nv.NV[i]->DS_HOADON.pHead!=NULL)
+		{
+			Fileout<<l_nv.NV[i]->MANV<<"\n";
+			for(NODE_HOADON *p=l_nv.NV[i]->DS_HOADON.pHead;p!=NULL;p=p->pNext)
+			{
+				Fileout<<p->data.SOHD<<','<<p->data.NGAYLAP.date<<'/'<<p->data.NGAYLAP.month<<'/'<<p->data.NGAYLAP.year<<','<<p->data.LOAI<<"\n";
+				if(p->data.DS_DETAIL_HOADON.pHead!=NULL)
+				{
+					for(NODE_DETAIL_HOADON *k=p->data.DS_DETAIL_HOADON.pHead;k!=NULL;k=k->pNext)
+					{
+						Fileout<<k->data.MAVT<<','<<k->data.SL<<',';
+						Fileout<<k->data.DONGIA<<','<<k->data.VAT<<"\n";
+					}
+					Fileout<<"-------------------\n";
+				}
+			}
+			Fileout<<"=====================================\n";
+		}
+	}
+	Fileout.close();
+}
+void Read_Bill(LIST_NHANVIEN &l_nv)
+{
+	fstream Filein;
+	Filein.open("HOADON.txt",ios_base::in);
+	if(Filein.fail())
+	{
+		return;
+	}
+	while(!Filein.eof())
+	{
+		string tmp;
+		char flag;
+		HOADON hd;
+		while(flag!='=')
+		{
+			if(flag != '-')
+			{
+				getline(Filein,tmp,'\n');
+				NHANVIEN *p=Search_NV(l_nv,tmp);
+				Create_ListHD(p->DS_HOADON);
+				getline(Filein,hd.SOHD,',');
+				Filein>>hd.NGAYLAP.date;
+				Filein>>hd.NGAYLAP.month;
+				Filein>>hd.NGAYLAP.year;
+				Filein>>hd.LOAI;
+				Add_HD(p->DS_HOADON,Create_NodeHD(hd));
+				Create_ListDHD(hd.DS_DETAIL_HOADON);
+			}
+			char kt;
+			while(kt!='-')
+			{
+				DETAIL_HOADON dhd;
+				getline(Filein,dhd.MAVT,',');
+				Filein>>dhd.SL;
+				Filein>>dhd.DONGIA;
+				Filein>>dhd.VAT;
+				Add_DHD(hd.DS_DETAIL_HOADON,Create_NodeDHD(dhd));
+				Filein>>kt;
+				Filein.seekg(-1,ios_base::cur);
+			}
+//			getline(Filein,tmp);
+			Filein>>flag;
+			Filein.seekg(-1,ios_base::cur);
+		}
+		getline(Filein,tmp);
+	}
+	Filein.close();
+}

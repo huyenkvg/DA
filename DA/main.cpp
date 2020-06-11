@@ -389,6 +389,11 @@ void LapHoaDon()
 				Add_HD(nv->DS_HOADON, p);
 				XoaBang(NutLapHD);
 				VeBang(NutLapHD);
+				int n=0;
+				VATTU VT[Max];
+				Arr_VT(tree_vt, VT, n);
+				Write_FileVT(VT,n);
+				Write_Bill(list_nv);
 				break;
 			}
 			if (ins >= 0) // xoa bot vat tu ins trong list
@@ -533,11 +538,7 @@ void MENU()
 		{
 			case 1:
 				{
-					LapHoaDon();		
-					VATTU VT[Max];
-					int n=0;
-					Arr_VT(tree_vt, VT, n);
-					Write_FileVT(VT,n);
+					LapHoaDon();	
 					break;
 				}
 			case 2:
@@ -581,6 +582,7 @@ int main()
 	Create_ListVT(tree_vt);
 	Read_FileVT(tree_vt);
 	Read_FileNV(list_nv);
+	Read_Bill(list_nv);
 	while(1)
 	{
 			

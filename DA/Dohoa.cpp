@@ -553,27 +553,27 @@ int boxMove(BUTTON *Bar[10][10])
 								settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
 								setcolor(DOTUOI);
 								setbkcolor (DENXAM);
-								outtextxy(Bar[inow][0]-> x1, Bar[inow][2]->y2 + MENU_DY*3/4- textheight("-> NGAY / THANG / NAM  SAI!"), "-> NGAY / THANG / NAM  SAI!" );
+								outtextxy(Bar[2][0]-> x1, Bar[2][0]->y2 + MENU_DY*3/4- textheight("-> NGAY / THANG / NAM  SAI!"), "-> NGAY / THANG / NAM  SAI!" );
 								setusercharsize(1, 2, 1, 2);
-								Bar[inow][0]->emptyDraw(DO);
-								Bar[inow][1]->emptyDraw(DO);
-								Bar[inow][2]->emptyDraw(DO);
-									Bar[inow][id] -> emptyDraw(DOTUOI);
+								Bar[2][0]->emptyDraw(DO);
+								Bar[2][1]->emptyDraw(DO);
+								Bar[2][2]->emptyDraw(DO);
+									Bar[2][id] -> emptyDraw(DOTUOI);
 								if (kbhit)
 								{
 //									Bar[inow][id]->RecDraw();
-									Bar[inow][id] -> emptyDraw(DOTUOI);
+									Bar[2][id] -> emptyDraw(DOTUOI);
 									key = getch();
 									if(key == 0)
 									{
 										key= getch();
 										if (key == KEY_LEFT)
 										{
-											id = (id+arr[inow]-1)%arr[inow];
+											id = (id+arr[2]-1)%arr[2];
 										}
 										else if (key == KEY_RIGHT)
 										{
-											id = (id+arr[inow]+1)%arr[inow];
+											id = (id+arr[2]+1)%arr[2];
 										}
 										continue;
 									}
@@ -582,10 +582,10 @@ int boxMove(BUTTON *Bar[10][10])
 										continue;
 									}
 									else if (isText(key) || isNumber(key) )
-										id = (id+Bar[inow][id]->beingTyped(key)+arr[inow])%arr[inow];
-									Bar[inow][0]-> emptyDraw(Bar[inow][0]->lineColor);
-									Bar[inow][1]-> emptyDraw(Bar[inow][1]->lineColor);
-									Bar[inow][2]-> emptyDraw(Bar[inow][2]->lineColor);
+										id = (id+Bar[2][id]->beingTyped(key)+arr[2])%arr[2];
+									Bar[2][0]-> emptyDraw(Bar[2][0]->lineColor);
+									Bar[2][1]-> emptyDraw(Bar[2][1]->lineColor);
+									Bar[2][2]-> emptyDraw(Bar[2][2]->lineColor);
 									
 									
 								}
@@ -594,15 +594,15 @@ int boxMove(BUTTON *Bar[10][10])
 							
 							setbkcolor (DENXAM);
 							setusercharsize(1, 3, 1, 3);
-							outtextxy(Bar[inow][0]-> x1, Bar[inow][2]->y2 + MENU_DY*3/4- textheight("H"), "                             " );
+							outtextxy(Bar[2][0]-> x1, Bar[2][2]->y2 + MENU_DY*3/4- textheight("H"), "                             " );
 							setusercharsize(1, 2, 1, 2);
-							Bar[inow][0]-> emptyDraw(Bar[inow][0]->lineColor);
-							Bar[inow][1]-> emptyDraw(Bar[inow][1]->lineColor);
-							Bar[inow][2]-> emptyDraw(Bar[inow][2]->lineColor);
+							Bar[2][0]-> emptyDraw(Bar[2][0]->lineColor);
+							Bar[2][1]-> emptyDraw(Bar[2][1]->lineColor);
+							Bar[2][2]-> emptyDraw(Bar[2][2]->lineColor);
 									
-							inow = (inow+1)%n;
-							jnow = 0;
-//							Bar[inow][jnow] -> emptyDraw(XANHLA);
+//							inow = (2+1)%n;
+//							jnow = 0;
+							Bar[inow][jnow] -> emptyDraw(XANHLA);
 //							continue;
 						}
 						if ( CheckAllTextBox(Bar) == false)

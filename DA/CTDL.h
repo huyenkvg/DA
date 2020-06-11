@@ -155,7 +155,9 @@ DETAIL_HOADON getDetail(BUTTON *Table[10][10]);
 void GetInfo_BillTab(HOADON *hd, BUTTON *Table[10][10],string &manv);
 
 void Arr_VT(TREE_VATTU &t, VATTU VT[], int &n);
-
+void Read_Bill(HOADON &hd, string &manv);
+void Write_Bill(LIST_NHANVIEN l_nv);
+void Read_Bill(LIST_NHANVIEN &l_nv);
 //==================Ham Mo DanhSach ra man hinh===================================
 
 int XemVatTu(VATTU VT[], int n);
