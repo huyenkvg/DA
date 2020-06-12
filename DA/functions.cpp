@@ -87,14 +87,9 @@ bool CheckCharKey(string text, char &c)
 	{
 		return isNumber(c);
 	}
-	
-	if ( c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z')
-	{
-		if (text == "ID:" || text == "Ma Nhan Vien:" || text == "So Hoa Don:" || text == "Ma Vat Tu:")
+	if (text == "ID:" || text == "Ma Nhan Vien:" || text == "So Hoa Don:" || text == "Ma Vat Tu:")
 			c = toupper(c);
-		return true;
-	}
-	return false;
+	return true;
 		
 }
 

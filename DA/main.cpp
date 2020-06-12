@@ -256,7 +256,7 @@ void LapHoaDon()
 {
 	VeBang(NutLapHD);
 	HOADON *hd;
-//	hd = new HOADON;
+	hd = new HOADON;
 	NODE_HOADON *p;
 	NODE_HOADON *hdtmp;
 	NODE_VATTU *pd;
@@ -274,6 +274,9 @@ void LapHoaDon()
 		nv = Search_NV(list_nv, manv);
 		
 		hdtmp = Search_HD(list_nv, hd->SOHD);
+//																													ofstream logs;
+//																													logs.open ("logs.txt", ios :: out);
+//																													logs << "--------  vbvbvnvbn[[]]]]]]]]-- " <<endl;
 		if (hdtmp != NULL)
 		{
 			ThongBao(1);
@@ -286,6 +289,7 @@ void LapHoaDon()
 			VeBang(NutLapHD);
 			continue;
 		}
+				
 		// lap hoa don va danh sach cac vat tu trong hoa don truoc:
 		XoaManHinh();
 		while (true)
@@ -584,8 +588,8 @@ int main()
 	TaoBangCTHD_ID(NutCTHD_ID);
 	TaoBangXemHD(NutXemHD);
 	Create_ListVT(tree_vt);
-	Read_FileVT(tree_vt);
-	Read_FileNV(list_nv);
+//	Read_FileVT(tree_vt);
+//	Read_FileNV(list_nv);
 //	Read_Bill(list_nv);
 	while(1)
 	{

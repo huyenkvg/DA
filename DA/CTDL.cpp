@@ -92,10 +92,10 @@ string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 						setfillstyle (1, 0);
 						bar (x1-1, y1-1, x2+1, y2+1);
 						Table[0][0]->EraseInfo();
-						delete Table[0][0];
-						delete Table[1][0];
-						delete Table[0][1];
-						delete Table[1][1];
+//						delete Table[0][0];
+//						delete Table[1][0];
+//						delete Table[0][1];
+//						delete Table[1][1];
 						return "---";
 					}				
 				}
@@ -107,10 +107,10 @@ string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 					string res = Table[i][j]->text_tp;
 					if (j==1)
 					{
-						delete Table[0][0];
-						delete Table[1][0];
-						delete Table[0][1];
-						delete Table[1][1];
+//						delete Table[0][0];
+//						delete Table[1][0];
+//						delete Table[0][1];
+//						delete Table[1][1];
 						return "+++";
 					}
 					string tmpt = Table[0][0]->text_tp;
@@ -163,11 +163,6 @@ void GetInfo_BillTab(HOADON *hd, BUTTON *Table[10][10],string &manv)
 {
 																		
 	hd->NGAYLAP.date = getNumber(Table[2][0]->text_tp);
-	
-
-																													ofstream logs;
-																													logs.open ("logs.txt", ios :: out);
-																													logs << "--------   " << Table[2][0]->text_tp<<" -- " <<endl;		
 	hd->SOHD = Table[0][0]->text_tp;
 	manv = Table[1][0]->text_tp;
 	hd->NGAYLAP.month = getNumber(Table[2][1]->text_tp);
