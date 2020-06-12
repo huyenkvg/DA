@@ -256,12 +256,13 @@ void LapHoaDon()
 {
 	VeBang(NutLapHD);
 	HOADON *hd;
-	hd = new HOADON;
+//	hd = new HOADON;
 	NODE_HOADON *p;
 	NODE_HOADON *hdtmp;
 	NODE_VATTU *pd;
 	NHANVIEN *nv;
 	LIST_DETAIL_HOADON list_dt;
+	Create_ListDHD(list_dt);
 	int ins = 0;
 	string manv; // de them vao list hoa don nhan vien
 	string mavt, tmp;
@@ -269,7 +270,9 @@ void LapHoaDon()
 	{
 		
 		GetInfo_BillTab(hd, NutLapHD, manv);
+		
 		nv = Search_NV(list_nv, manv);
+		
 		hdtmp = Search_HD(list_nv, hd->SOHD);
 		if (hdtmp != NULL)
 		{
@@ -283,11 +286,11 @@ void LapHoaDon()
 			VeBang(NutLapHD);
 			continue;
 		}
-		Create_ListDHD(list_dt);
 		// lap hoa don va danh sach cac vat tu trong hoa don truoc:
 		XoaManHinh();
 		while (true)
 		{
+			
 			ins = XemDanhsachHD(list_dt, hd->SOHD);
 			XoaManHinh();
 			if (ins == ADDID)
@@ -450,8 +453,9 @@ void ThongKeHoaDon()
 		date2.date = getNumber(NutTK[1][0]->text_tp);
 		date2.month = getNumber(NutTK[1][1]->text_tp);
 		date2.year = getNumber(NutTK[1][2]->text_tp);
+		XoaManHinh();
+		TaoBangThongKe(list_nv, date1, date2);
 	}
-	TaoBangThongKe(list_nv, date1, date2);
 	XoaManHinh();
 	XoaBang(NutTK);
 }
@@ -582,7 +586,7 @@ int main()
 	Create_ListVT(tree_vt);
 	Read_FileVT(tree_vt);
 	Read_FileNV(list_nv);
-	Read_Bill(list_nv);
+//	Read_Bill(list_nv);
 	while(1)
 	{
 			

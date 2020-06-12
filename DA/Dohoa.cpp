@@ -540,7 +540,7 @@ int boxMove(BUTTON *Bar[10][10])
 							}
 							continue;
 						}
-						if (n > 1 && Bar[2][0]->value == DAYCONST && Bar[inow][jnow]->value == NUTCONST && jnow == 1)
+						if (n > 1 && Bar[2][0]->value == DAYCONST && Bar[inow][0]->value == NUTCONST && jnow == 1)
 						{
 							id = 0;
 							Bar[inow][jnow]->emptyDraw(VIENBOX);
@@ -575,6 +575,10 @@ int boxMove(BUTTON *Bar[10][10])
 										{
 											id = (id+arr[2]+1)%arr[2];
 										}
+										if (key == KEY_DOWN || key == KEY_UP)
+										{
+											;
+										}
 										continue;
 									}
 									else if (key == '\r')
@@ -605,6 +609,7 @@ int boxMove(BUTTON *Bar[10][10])
 							Bar[inow][jnow] -> emptyDraw(XANHLA);
 //							continue;
 						}
+						
 						if ( CheckAllTextBox(Bar) == false)
 						{
 							if (Bar[inow][0]->value == NUTCONST && jnow == 0)

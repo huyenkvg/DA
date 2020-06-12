@@ -161,9 +161,15 @@ void GetInfo_EmTab(NHANVIEN &nv, BUTTON *Table[10][10])
 
 void GetInfo_BillTab(HOADON *hd, BUTTON *Table[10][10],string &manv)
 {
+																		
+	hd->NGAYLAP.date = getNumber(Table[2][0]->text_tp);
+	
+
+																													ofstream logs;
+																													logs.open ("logs.txt", ios :: out);
+																													logs << "--------   " << Table[2][0]->text_tp<<" -- " <<endl;		
 	hd->SOHD = Table[0][0]->text_tp;
 	manv = Table[1][0]->text_tp;
-	hd->NGAYLAP.date = getNumber(Table[2][0]->text_tp);
 	hd->NGAYLAP.month = getNumber(Table[2][1]->text_tp);
 	hd->NGAYLAP.year = getNumber(Table[2][2]->text_tp);
 	if (Table[3][0]->CoBiChonKhong)
@@ -654,14 +660,10 @@ int Search_MaVT(LIST_NHANVIEN &l_nv, string mavt)
 
 NODE_HOADON *Search_HD(LIST_NHANVIEN &l_nv,string sohd)
 {
-	ofstream logs;
-	logs.open ("logs.txt", ios :: out);
-	logs << l_nv.n << endl;
 	for(int i=0;i<l_nv.n;i++)
 	{
 		for(NODE_HOADON *p=l_nv.NV[i]->DS_HOADON.pHead;p!=NULL;p=p->pNext)
-		{
-			logs << p->data.SOHD;
+		{													
 			if(p->data.SOHD==sohd)
 			{
 				return p;
