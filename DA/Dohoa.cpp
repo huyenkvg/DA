@@ -13,8 +13,8 @@ typedef double db;
 char MenuTable[MAX_SE][MAX_MENU][MAXTEXT] = 	{ 	"Materials", 		"Employees", 		"Bills", 		"Statistics", 		"Help",
 													"Add Material", 	"Add Employee",		"Create Bill",	"Satistic Bills",	"_",
 													"Delete Material", 	"Show Employee",	"Show Bills",	"Top 10 revenue",	"_",
-													"Adjust Material",	"Adjsust Employee",	"_",			"_",				"_",
-													"View Material's",	"Remove Employee",				"_",			"_",				"_"};
+													"Adjust Material",	"Adjust Employee",	"_",			"_",				"_",
+													"View Material's",	"Remove Employee",	"_",			"_",				"_"};
 //==========================
 char BangThemVT[][MAXTEXT] = {	"ID:", "Ten Vat Tu:", "Don Vi Tinh:", "So Luong Ton:", "Tro ve", "Them", "THEM VAT TU"}; // tieu de textbox
 int MatranThemVT[10][10] = { 	{TEXBOXCONST, 0, 0},
@@ -26,7 +26,7 @@ int MatranThemVT[10][10] = { 	{TEXBOXCONST, 0, 0},
 //==========================
 
 //==========================
-char BangSuaVT[][MAXTEXT] = {	"ID:", "Ten vat tu:", "Don vi tinh:", "Huy", "Sua", "SUA VAT TU"}; // tieu de textbox
+char BangSuaVT[][MAXTEXT] = {	"ID:", "Ten Vat Tu:", "Don Vi Tinh:", "Huy", "Sua", "SUA VAT TU"}; // tieu de textbox
 int MatranSuaVT[10][10] =  { 	{XXXX		, 	0, 0},
 								{TEXBOXCONST, 	0, 0},
 								{TEXBOXCONST, 	0, 0},
@@ -47,21 +47,21 @@ int MatranSuaNV[10][10] =  { 	{XXXX		, 		0, 0},
 								{TICKCONST, TICKCONST, 0},
 								{0,					0, 0}
 							};		
-char BangLapHD[][MAXTEXT] = {	"SO HOA DON: ", "Ma Nhan Vien:", "Ngay", "Thang",  "Nam:", "Nhap", "Xuat", "Huy", "Tao hoa don", "LAP HOA DON"}; // tieu de textbox
+char BangLapHD[][MAXTEXT] = {	"So Hoa Don:", "Ma Nhan Vien:", "Ngay", "Thang",  "Nam:", "Nhap", "Xuat", "Huy", "Tao hoa don", "LAP HOA DON"}; // tieu de textbox
 int MatranLapHD[10][10] =  { 	{TEXBOXCONST, 			0, 0, 0},
 								{TEXBOXCONST, 			0, 0, 0},
 								{DAYCONST, DAYCONST, DAYCONST ,0},
 								{TICKCONST,		TICKCONST, 0, 0},
 								{0,						0, 0, 0}
 							};			
-char BangCTHD[][MAXTEXT] = 	{	"MA VAT TU: ","So luong:","Don gia:","%VAT: ", "HUY", "THEM VAO HOA DON"}; // tieu de textbox
+char BangCTHD[][MAXTEXT] = 	{	"MA VAT TU:","So luong:","Don Gia:","%VAT:", "HUY", "THEM VAO HOA DON"}; // tieu de textbox
 int MatranCTHD[10][10] =  	{ 	{TEXBOXCONST, 			0, 0, 0},
 								{TEXBOXCONST, 			0, 0, 0},
 								{TEXBOXCONST,			0, 0 ,0},
 								{TEXBOXCONST,			0, 0, 0},
 								{0,						0, 0, 0}
 							};	
-char BangCTHD_ID[][MAXTEXT] = 	{	"MA VAT TU: ","So luong:","Don gia:","%VAT: ", "HUY", "THEM VAO HOA DON", "NHAP CHI TIET"}; // tieu de textbox
+char BangCTHD_ID[][MAXTEXT] = 	{	"MA VAT TU:","So Luong:","Don Gia:","%VAT:", "HUY", "THEM VAO HOA DON", "NHAP CHI TIET"}; // tieu de textbox
 int MatranCTHD_ID[10][10] =  	{ 	{XXXX, 					0, 0, 0},
 									{TEXBOXCONST, 			0, 0, 0},
 									{TEXBOXCONST,			0, 0 ,0},
@@ -69,12 +69,12 @@ int MatranCTHD_ID[10][10] =  	{ 	{XXXX, 					0, 0, 0},
 									{0,						0, 0, 0}
 								};
 								
-char BangTK[][MAXTEXT] = 	{	"Ngay", "Thang", "Nam:","Ngay", "Thang", "Nam:",  "HUY", "XEM HOA DON", "NHAP KHOANG THOI GIAN"}; // tieu de textbox
+char BangTK[][MAXTEXT] = 	{	"Ngay", "Thang", "Nam:","Ngay", "Thang", "Nam:",  "HUY", "Thong ke", "NHAP KHOANG THOI GIAN"}; // tieu de textbox
 int MatranTK[10][10] =  		{ 	{DAYCONST, DAYCONST, DAYCONST ,0},
 									{DAYCONST, DAYCONST, DAYCONST ,0},
 									{		0,		0,		0, 0}
 								};	
-char BangXemHD[][MAXTEXT] = 	{	"SO HOA DON: ", "HUY", "THONG KE"}; // tieu de textbox
+char BangXemHD[][MAXTEXT] = 	{	"So Hoa Don: ", "HUY", "THONG KE"}; // tieu de textbox
 int MatranXemHD[10][10] =  		{ 	{TEXBOXCONST,			0, 0, 0},
 									{0,						0, 0, 0}
 								};		
@@ -831,6 +831,11 @@ void ThongBao(int mode)
 			outtextxy (x1+(x2-x1-textwidth("KHONG DUOC BO TRONG!"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "KHONG DUOC BO TRONG!");
 		}
 		break;	
+		case 9:
+			{
+				outtextxy (x1+(x2-x1-textwidth("KHONG DUOC PHEP XOA!"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "KHONG DUOC PHEP XOA!");
+			}
+		break;
 		
 	}
 	setcolor (TRANG);
@@ -897,7 +902,7 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot, bool chophepxoa)
 					}
 					if (chophepxoa)
 					{
-						setcolor(DO);
+						setcolor(CAM);
 						setbkcolor(DENTHUI);
 						outtextxy(Table[i][soluongcot-1]->x2+5, Table[i][soluongcot-1]->y1+2, "[XOA]");
 					}

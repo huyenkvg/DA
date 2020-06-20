@@ -327,18 +327,18 @@ void GetInfo_EmTab(NHANVIEN &nv, BUTTON *Table[10][10])
 		nv.PHAI = "NU";
 }
 
-void GetInfo_BillTab(HOADON *hd, BUTTON *Table[10][10],string &manv)
+void GetInfo_BillTab(HOADON &hd, BUTTON *Table[10][10],string &manv)
 {
 																		
-	hd->NGAYLAP.date = getNumber(Table[2][0]->text_tp);
-	hd->SOHD = Table[0][0]->text_tp;
+	hd.NGAYLAP.date = getNumber(Table[2][0]->text_tp);
+	hd.SOHD = Table[0][0]->text_tp;
 	manv = Table[1][0]->text_tp;
-	hd->NGAYLAP.month = getNumber(Table[2][1]->text_tp);
-	hd->NGAYLAP.year = getNumber(Table[2][2]->text_tp);
+	hd.NGAYLAP.month = getNumber(Table[2][1]->text_tp);
+	hd.NGAYLAP.year = getNumber(Table[2][2]->text_tp);
 	if (Table[3][0]->CoBiChonKhong)
-		hd->LOAI = 'N';
+		hd.LOAI = 'N';
 	else
-		hd->LOAI = 'X';
+		hd.LOAI = 'X';
 	
 }
 DETAIL_HOADON getDetail(BUTTON *Table[10][10])
@@ -745,7 +745,8 @@ void TaoBangThongKeTop10(LIST_NHANVIEN list_nv, TREE_VATTU tree_vt, ngay date1, 
 {
 	XoaManHinh();
 	
-	
+																													ofstream logs;
+																													logs.open ("logs.txt", ios :: out);
 	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 70, 130, 180);
 	setcolor(TRANG);
 	setbkcolor(DOTHAM);
@@ -755,7 +756,7 @@ void TaoBangThongKeTop10(LIST_NHANVIEN list_nv, TREE_VATTU tree_vt, ngay date1, 
 	VATTU VT[Max];
 	int vae = 0, id = 0, num = 0, es = 1;
 	Arr_VT(tree_vt, VT, num);
-	for (int i = 0; i <= num; i++)
+	for (int i = 0; i < num; i++)
 	{
 		VT[i].SLTON = 0;
 	}
@@ -770,7 +771,7 @@ void TaoBangThongKeTop10(LIST_NHANVIEN list_nv, TREE_VATTU tree_vt, ngay date1, 
 				{
 					for(NODE_DETAIL_HOADON *k=p->data.DS_DETAIL_HOADON.pHead;k!=NULL;k=k->pNext)
 					{
-							sum =sum + k->data.DONGIA*k->data.SL*(k->data.VAT+1);
+							sum = k->data.DONGIA*k->data.SL*(k->data.VAT+1);
 							id = Bi_Search(VT, num, k->data.MAVT);
 							if (id >= 0)
 							{
@@ -779,8 +780,7 @@ void TaoBangThongKeTop10(LIST_NHANVIEN list_nv, TREE_VATTU tree_vt, ngay date1, 
 							}
 							
 							
-																													ofstream logs;
-																													logs.open ("logs.txt", ios :: out);
+																												
 																													logs << "id---> " << id << " " << num << endl;
 					}
 				}
@@ -811,7 +811,7 @@ void TaoBangThongKeTop10(LIST_NHANVIEN list_nv, TREE_VATTU tree_vt, ngay date1, 
 	trangketiep223:;
 	page = max(page, 1);
 	page = min(page, 1);
-	for(int i = (page-1)*10; i < page*10; i++)
+	for(int i = (page-1)*20; i < page*20; i++)
 	{
 		string res;
 		Table[i][0] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[0], y + (i%20)*27, x[1], y+(i%20+1)*27 -2);
@@ -1408,11 +1408,11 @@ void Write_Bill(LIST_NHANVIEN l_nv)
 	}
 	Fileout.close();
 }
+
 void Read_Bill(LIST_NHANVIEN &l_nv)
 {
 	fstream Filein, Fileout;
 	Filein.open("HOADON.txt",ios_base::in);
-	Fileout.open("HD.txt",ios_base::out);
 	if(Filein.fail())
 	{
 		return;
@@ -1422,7 +1422,7 @@ void Read_Bill(LIST_NHANVIEN &l_nv)
 		string manv,tmp;
 		char flag='\0'; 
 		getline(Filein,manv,'\n');
-				Fileout<<manv<<"\n";
+//		chuanhoa(manv);
 		NHANVIEN *p=Search_NV(l_nv,manv);
 		if(p==NULL)
 		{
@@ -1433,39 +1433,33 @@ void Read_Bill(LIST_NHANVIEN &l_nv)
 		{
 			HOADON hd;
 			getline(Filein,hd.SOHD,',');
-					Fileout<<hd.SOHD<<",";
-			Filein>>hd.NGAYLAP.date;
-					Fileout<<hd.NGAYLAP.date<<"/";
+//			chuanhoa(hd.SOHD);
+			Filein>>hd.NGAYLAP.date;	
 			Filein.seekg(1,ios_base::cur);
 			Filein>>hd.NGAYLAP.month;
-					Fileout<<hd.NGAYLAP.month<<"/";
 			Filein.seekg(1,ios_base::cur);
 			Filein>>hd.NGAYLAP.year;
-					Fileout<<hd.NGAYLAP.year<<",";
 			Filein.seekg(1,ios_base::cur);
 			Filein>>hd.LOAI;
-					Fileout<<hd.LOAI<<"\n";
+			hd.LOAI=toupper(hd.LOAI);					
 			Filein.ignore();
-			Add_HD(p->DS_HOADON,Create_NodeHD(hd));
 			Create_ListDHD(hd.DS_DETAIL_HOADON);
 			while(flag!='-')
 			{
 				DETAIL_HOADON dhd;
 				getline(Filein,dhd.MAVT,',');
-						Fileout<<dhd.MAVT<<",";
+//				chuanhoa(dhd.MAVT);
 				Filein>>dhd.SL;
-						Fileout<<dhd.SL<<",";
 				Filein.seekg(1,ios_base::cur);
 				Filein>>dhd.DONGIA;
-						Fileout<<dhd.DONGIA<<",";
 				Filein.seekg(1,ios_base::cur);
 				Filein>>dhd.VAT;
-						Fileout<<dhd.VAT<<"\n";
 				Filein.ignore();
 				Add_DHD(hd.DS_DETAIL_HOADON,Create_NodeDHD(dhd));
 				Filein>>flag;
 				Filein.seekg(-1,ios_base::cur);
 			}
+			Add_HD(p->DS_HOADON,Create_NodeHD(hd));
 			getline(Filein,tmp);
 			Filein>>flag;
 			Filein.seekg(-1,ios_base::cur);
@@ -1475,3 +1469,4 @@ void Read_Bill(LIST_NHANVIEN &l_nv)
 	Fileout.close();
 	Filein.close();
 }
+

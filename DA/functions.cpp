@@ -83,13 +83,32 @@ string to_string(int num)
 }
 bool CheckCharKey(string text, char &c)
 {
+	
 	if (text == "Ngay" || text == "Thang" || text == "Nam:" || text == "So Luong Ton:" || text == "So Luong:"|| text == "Don Gia:" || text == "%VAT:")
 	{
 		return isNumber(c);
 	}
-	if (text == "ID:" || text == "Ma Nhan Vien:" || text == "So Hoa Don:" || text == "Ma Vat Tu:"||text == "Ma Nhan Vien:")
-			c = toupper(c);
-	return true;
+	if ( c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9')
+	{
+		if (text == "ID:" || text == "Ma Nhan Vien:" || text == "So Hoa Don:" || text == "Ma Vat Tu:")
+		{
+			if( c >= 'a' && c <= 'z')
+			{
+				c = toupper(c);
+			}
+			return true;
+		}
+		if (text == "Ho:" || text == "Ten:" || text == "Don Vi Tinh:" || text == "Ten Vat Tu:")
+		{
+			if( c >= 'a' && c <= 'z')
+			{
+				c = toupper(c);
+				return true;
+			}
+		}
+	}
+	
+	return false;
 		
 }
 

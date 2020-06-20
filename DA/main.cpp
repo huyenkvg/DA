@@ -87,14 +87,14 @@ void XoaVatTu()
 				ins = XemVatTu(VT, n);
 				if (ins!= -1)
 				{
-						//dk nay dua ra ngoai function
-						//	LIST_NHANVIEN l_nv;
-						//	if(Search_MaVT(l_nv, mavt)==1)
-						//	{
-						//		//khong duoc phep xoa vat tu vi hoa don da ghi
-						//		return;
-						//	}
-					Erase_VT(tree_vt, VT[ins].MAVT);
+						
+					if(Search_MaVT(list_nv, VT[ins].MAVT)==1)
+					{
+						ThongBao(9);
+						XoaManHinh();
+					}
+					else
+						Erase_VT(tree_vt, VT[ins].MAVT);
 				}
 				else
 					break;
@@ -209,7 +209,9 @@ void XoaNhanVien()
 				Sort_NV(list_nv);
 				ins = XemNhanVien(list_nv);
 				if (ins!= -1)
+				{
 					Erase_NV(list_nv,list_nv.NV[ins]->MANV);
+				}
 			}
 		}
 		XoaManHinh();
@@ -243,6 +245,7 @@ void ChinhSuaNhanVien()
 		{
 				int ins = 0;
 				ins = XemNhanVien(list_nv);
+				nv = *list_nv.NV[ins];
 //				XoaManHinh();
 				while (ins >= 0)
 				{
@@ -264,13 +267,12 @@ void ChinhSuaNhanVien()
 void LapHoaDon()
 {
 	VeBang(NutLapHD);
-	HOADON *hd;
-	hd = new HOADON;
+	HOADON hd;
+//	hd = new HOADON;
 	NODE_HOADON *p;
 	NODE_HOADON *hdtmp;
 	NODE_VATTU *pd;
 	NHANVIEN *nv;
-	LIST_DETAIL_HOADON list_dt;
 	int ins = 0;
 	string manv; // de them vao list hoa don nhan vien
 	string mavt, tmp;
@@ -281,7 +283,7 @@ void LapHoaDon()
 		
 		nv = Search_NV(list_nv, manv);
 		
-		hdtmp = Search_HD(list_nv, hd->SOHD);
+		hdtmp = Search_HD(list_nv, hd.SOHD);
 		if (hdtmp != NULL)
 		{
 			ThongBao(1);
@@ -294,14 +296,14 @@ void LapHoaDon()
 			VeBang(NutLapHD);
 			continue;
 		}
-				
+		LIST_DETAIL_HOADON list_dt;
 		Create_ListDHD(list_dt);
 		// lap hoa don va danh sach cac vat tu trong hoa don truoc:
 		XoaManHinh();
 		while (true)
 		{
 			
-			ins = XemDanhsachHD(list_dt, hd->SOHD);
+			ins = XemDanhsachHD(list_dt, hd.SOHD);
 			XoaManHinh();
 			if (ins == ADDID)
 			{
@@ -310,7 +312,7 @@ void LapHoaDon()
 				//==============================
 					Arr_VT(tree_vt, VT, n);
 					tmp = Get_ID("Xem danh sach", "OK");
-					if (tmp == "---" || tmp == "")	goto nextt;
+					if (tmp == "---" || tmp == "")	goto nexttc;
 					pd =  Search_VT(tree_vt, tmp) ;
 					if(pd == NULL)
 					{
@@ -323,7 +325,7 @@ void LapHoaDon()
 						VeBang(NutCTHD_ID);
 						while (true)
 						{
-							// them hoax bao loi
+							// them hoac bao loi
 							if(boxMove(NutCTHD_ID) == 0) break;
 							NODE_VATTU *k;
 							k = Search_VT(tree_vt, tmp);
@@ -332,8 +334,13 @@ void LapHoaDon()
 							if(dhd.SL <= k->data.SLTON)
 							{
 								Add_DHD(list_dt, Create_NodeDHD(dhd));
-								break;
+								if (hd.LOAI == 'X')
+/* tru di so luong ton*/			k->data.SLTON-=dhd.SL;
+								else
+									k->data.SLTON+=dhd.SL;
 							}
+							else if(hd.LOAI == 'N')
+								k->data.SLTON+=dhd.SL;
 							else
 								ThongBao(5);
 							VeBang(NutCTHD_ID);
@@ -343,7 +350,7 @@ void LapHoaDon()
 					}
 					if (tmp == "---") // xem danh sach va chon vat tu thu chth
 					{
-						nextt:;
+						nexttc:;
 						int chth = 0;
 						
 						while(chth != -1)
@@ -369,12 +376,14 @@ void LapHoaDon()
 											if(dhd.SL <= k->data.SLTON)
 											{
 												Add_DHD(list_dt, Create_NodeDHD(dhd));
-												if (hd->LOAI == 'X')
+												if (hd.LOAI == 'X')
 	/* tru di so luong ton*/						k->data.SLTON-=dhd.SL;
 												else
 													k->data.SLTON+=dhd.SL;
 												goto break2while;
 											}
+											else if(hd.LOAI == 'N')
+												k->data.SLTON+=dhd.SL;
 											else
 												ThongBao(5);
 											VeBang(NutCTHD_ID);
@@ -391,14 +400,14 @@ void LapHoaDon()
 			if (ins == XACNHAN)
 			{
 				// them list vat tu(detail hd vao list hd cua nhan vien
-				Create_ListDHD(hd->DS_DETAIL_HOADON); // tao ds detail;
+				Create_ListDHD(hd.DS_DETAIL_HOADON); // tao ds detail;
 				if (list_dt.pTail == NULL)
 				{
 					ThongBao(4);
 					continue;
 				}
-				hd->DS_DETAIL_HOADON = list_dt; // cho ds detail = list da  dc them trong ham Xem ds hoa don
-				p = Create_NodeHD(*hd);
+				hd.DS_DETAIL_HOADON = list_dt; // cho ds detail = list da  dc them trong ham Xem ds hoa don
+				p = Create_NodeHD(hd);
 				Add_HD(nv->DS_HOADON, p);
 				XoaBang(NutLapHD);
 				VeBang(NutLapHD);
@@ -411,14 +420,12 @@ void LapHoaDon()
 			}
 			if (ins >= 0) // xoa bot vat tu ins trong list
 			{
-					
 				erase_DHD(list_dt, ins);
 			}
 			if(ins == TROVE) // boi vi khong xac nhan lap hoa don nen tra lai so luong cho so luong ton;
 			{
-				TraLaiSoLuong(list_dt, tree_vt, hd->LOAI);
+				TraLaiSoLuong(list_dt, tree_vt, hd.LOAI);
 				XoaBang(NutLapHD);
-				delete hd;
 				return;
 			}
 		}
@@ -426,7 +433,6 @@ void LapHoaDon()
 		
 		VeBang(NutLapHD);
 	}
-	delete hd;
 }
 void XemHoaDon()
 {
