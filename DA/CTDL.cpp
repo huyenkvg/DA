@@ -7,10 +7,178 @@ using namespace std;
 //=================================================================================================================================
 
 
+//=========================================== So sanh ==============================================
+
+int StrCmp(string a, string b)
+{
+	int i=0;
+	do
+	{
+		if(a[i]>b[i])
+		{
+			return 1;
+		}
+		if(a[i]<b[i])
+		{
+			return -1;
+		}
+		i++;
+	}
+	while(a[i]!=0||b[i]!=0);
+	if(a.length()<b.length())
+	{
+		return -1;
+	}
+	if(a.length()>b.length())
+	{
+		return 1;
+	}
+	return 0;
+}
 
 
 
+int DateCmp(NGAY d1, NGAY d2)
+{
+	if(d1.year>d2.year)
+	{
+		return 1;
+	}
+	else 
+	{
+		if(d1.year<d2.year)
+		{
+			return -1;
+		}
+		else
+		{
+			if(d1.month>d2.month)
+			{
+				return 1;
+			}
+			else
+			{
+				if(d1.month<d2.month)
+				{
+					return -1;
+				}
+				else
+				{
+					if(d1.date>d2.date)
+					{
+						return 1;
+					}
+					if(d1.date<d2.date)
+					{
+						return -1;
+					}
+					return 0;
+				}
+			}
+		}
+	}
+}
 
+bool operator==(NGAY d1, NGAY d2)
+{
+	return (d1.date==d2.date && d1.month==d2.month && d1.year==d2.year);
+}
+bool operator>(NGAY d1, NGAY d2)
+{
+	return (d1.year>d2.year || d1.year==d2.year && d1.month>d2.month || d1.year==d2.year && d1.month==d2.month && d1.date>d2.date);
+} 
+bool operator<(NGAY d1, NGAY d2)
+{
+	return (d1.year<d2.year || d1.year==d2.year && d1.month<d2.month || d1.year==d2.year && d1.month==d2.month && d1.date<d2.date);
+}
+//=========================================== Sap xep ==============================================
+
+//void Arr_VT(TREE_VATTU &t, VATTU VT[], int &n)
+//{
+//	if(t!=NULL)
+//	{
+//		VT[n]=t->data;
+//		n++;
+//		Arr_VT(t->pRight, VT, n);
+//		Arr_VT(t->pLeft, VT, n);
+//	}
+//}
+void Arr_VT(TREE_VATTU &t, VATTU VT[], int &n)
+{
+	if(t!=NULL)
+	{
+		Arr_VT(t->pLeft, VT, n);
+		VT[n]=t->data;
+		n++;
+		Arr_VT(t->pRight, VT, n);
+	}
+}
+
+void Sort_VT(TREE_VATTU &t, VATTU VT[], int n)
+{
+	Arr_VT(t,VT,n);
+	for(int i=0;i<n-1;i++)
+	{
+		for(int j=i+1;j<n;j++)
+		{
+			if(StrCmp(VT[i].TENVT,VT[j].TENVT)>0)
+			{
+				VATTU temp=VT[j];
+				VT[j]=VT[i];
+				VT[i]=temp;
+			}
+		}
+	}
+}
+
+void Sort_NV(LIST_NHANVIEN &l_nv)
+{
+	for(int i=0;i<l_nv.n-1;i++)
+	{
+		for(int j=i+1;j<l_nv.n;j++)
+		{
+			if(StrCmp(l_nv.NV[i]->TEN,l_nv.NV[j]->TEN)>0)
+			{
+					NHANVIEN *temp=l_nv.NV[i];
+					l_nv.NV[i]=l_nv.NV[j];
+					l_nv.NV[j]=temp;
+			}
+			else
+			{
+				if(StrCmp(l_nv.NV[i]->TEN,l_nv.NV[j]->TEN)==0)
+				{
+					if(StrCmp(l_nv.NV[i]->HO,l_nv.NV[j]->HO)>0)
+					{
+						NHANVIEN *temp=l_nv.NV[i];
+						l_nv.NV[i]=l_nv.NV[j];
+						l_nv.NV[j]=temp;
+					}
+				}
+			}
+		}
+	}
+}
+//float Revenue_VT(LIST_NHANVIEN &l_nv, VATTU VT[], NGAY Start, NGAY End)
+//{
+//	
+//	return sum;
+//}
+
+void Sort_RevenueVT(VATTU VT[], int n)
+{
+	for(int i=0;i<n-1;i++)
+	{
+		for(int j=i+1;j<n;j++)
+		{
+			if(VT[i].SLTON < VT[j].SLTON)
+			{
+				VATTU tam=VT[i];
+				VT[i]=VT[j];
+				VT[j]=tam;
+			}
+		}
+	}
+}
 
 //===========================================================================================================================
 //================================================CAC HAM LAY INFO TU NUT===========================================================================
@@ -28,7 +196,7 @@ string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 	Table[0][0] = new BUTTON(TRANG, DENTHUI, VIENBOX, "ID:", x1+MENU_DY*2, y1+MENU_DY/2, (x1+x2)/2-MENU_DY/4, y1+4*MENU_DY/2);
 	Table[0][1] = new BUTTON(TRANG, XANHCAY, VIENBOX, text1, (x1+x2)/2+MENU_DY/4, y1+MENU_DY/2, x2 - MENU_DY/2, y1+4*MENU_DY/2);
 	Table[1][0] = new BUTTON(TRANG, MAUBOX, VIENBOX, text2, x1, y1+4*MENU_DY/2+20, (x2+x1)/2,y2);
-	Table[1][1] = new BUTTON(TRANG, MAUBOX, VIENBOX, "Exist", (x2+x1)/2, y1+4*MENU_DY/2+20, x2, y2);
+	Table[1][1] = new BUTTON(TRANG, MAUBOX, VIENBOX, "Exit", (x2+x1)/2, y1+4*MENU_DY/2+20, x2, y2);
 	Table[0][0]->RecDraw();
 	Table[0][0]->emptyDraw(XANHLA);
 	Table[0][1]->solidDraw();
@@ -464,7 +632,211 @@ void XemHD(LIST_DETAIL_HOADON list_dt, string sohd)
 	}
 	return;
 }
+void TaoBangThongKe(LIST_NHANVIEN list_nv, ngay date1, ngay date2)
+{
+	XoaManHinh();
+	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 70, 130, 180);
+	tieude ->solidDraw();
+	tieude->emptyDraw(TRANG);
+	delete tieude;
+	setcolor(TRANG);
+	setbkcolor(DOTHAM);
+	setusercharsize(1, 2, 1, 2);
+	outtextxy(30, 95, "DANH SACH");
+	outtextxy(30, 140, "HOA DON:");
+	BUTTON *Table[Max][Max];
+	BUTTON *But[10][10];
+	HOADON HD[Max];
+	char tennv[Max][MAXTEXT], giatri[Max][Max];
+	int id = 0;
+	for(int i=0;i<list_nv.n;i++)
+	{
+		for(NODE_HOADON *p=list_nv.NV[i]->DS_HOADON.pHead;p!=NULL;p=p->pNext)
+		{
+			if((p->data.NGAYLAP > date1 || p->data.NGAYLAP == date1) && (p->data.NGAYLAP < date2 || p->data.NGAYLAP == date2))
+			{
+				HD[id] = p->data;
+				int vae = 0;
+				for(NODE_DETAIL_HOADON *k=p->data.DS_DETAIL_HOADON.pHead;k!=NULL;k=k->pNext)
+				{
+					vae += k->data.DONGIA * k->data.SL - (k->data.DONGIA * k->data.SL *  k->data.VAT)/100;
+				}
+				strcpy(giatri[id], to_string(vae).c_str());
+				strcpy(tennv[id], list_nv.NV[i]->HO.c_str());
+				strcat(tennv[id]," ");
+				strcat(tennv[id], list_nv.NV[i]->TEN.c_str());
+				id++;
+			}
+		}
+	}
+	int x[] = {140, 180, 300, 370, 490, 860,  990};
+	setcolor(CAM);
+	setbkcolor(DENTHUI);
+	setusercharsize(1, 2, 1, 2);
+	outtextxy(x[1]+10, 50, "SO HOA DON");
+	outtextxy(x[2]+10, 50, "LOAI");
+	outtextxy(x[3]+10, 50, "NGAY LAP");
+	outtextxy(x[4]+10, 50, "NHAN VIEN");
+	outtextxy(x[5]+10, 50, "GIA TRI");
+	outtextxy(x[0], 50, "STT");
+	int page = 1, ins = 0;
+	int y = 70;
+	trangketiep22:;
+	page = max(page, 1);
+	page = min(page, 25);
+	for(int i = (page-1)*20; i < page*20; i++)
+	{
+		string res;
+		Table[i][0] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[0], y + (i%20)*27, x[1], y+(i%20+1)*27 -2);
+		Table[i][1] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[1], y + (i%20)*27, x[2], y+(i%20+1)*27 -2);
+		Table[i][2] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[2], y + (i%20)*27, x[3], y+(i%20+1)*27 -2);
+		Table[i][3] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[3], y + (i%20)*27, x[4], y+(i%20+1)*27 -2);
+		Table[i][4] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[4], y + (i%20)*27, x[5], y+(i%20+1)*27 -2);
+		Table[i][5] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[5], y + (i%20)*27, x[6], y+(i%20+1)*27 -2);
+		res = to_string(i+1);
+		strcpy(Table[i][0]->text, res.c_str());
+		if (i >= 0 && i < id)
+		{
+			strcpy(Table[i][1]->text, HD[i].SOHD.c_str());
+			if (HD[i].LOAI == 'X')
+				res = "XUAT";
+			else 
+				res = "NHAP";
+			strcpy(Table[i][2]->text, res.c_str());
+			strcpy(Table[i][3]->text, to_string(HD[i].NGAYLAP.date).c_str());
+			strcat(Table[i][3]->text, "/ ");
+			strcat(Table[i][3]->text, to_string(HD[i].NGAYLAP.month).c_str());
+			strcat(Table[i][3]->text,"/ ");
+			strcat(Table[i][3]->text, to_string(HD[i].NGAYLAP.year).c_str());
+			strcpy(Table[i][4]->text, tennv[i]);
+			strcpy(Table[i][5]->text, giatri[i]);
+			
+		}
+	
+	}
+	ins = InRaMH(Table, page, 6, false);
+	if (ins  == -1)
+	{
+		goto trangketiep22;
+	}
+}
 
+int Bi_Search(VATTU VT[], int num, string mavt)
+{
+	int L = 0, R = num-1, mid = 0;
+    while(L <= R)
+    {
+    	mid = (L + R) / 2;
+        if (StrCmp(VT[mid].MAVT, mavt) == -1)
+        {
+            L = mid + 1;
+		}
+        else if (StrCmp(VT[mid].MAVT, mavt) == 1)
+        {
+            R = mid - 1;
+		}
+        else
+            return mid;
+	}
+    return -1;
+}
+
+void TaoBangThongKeTop10(LIST_NHANVIEN list_nv, TREE_VATTU tree_vt, ngay date1, ngay date2)
+{
+	XoaManHinh();
+	
+	
+	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 70, 130, 180);
+	setcolor(TRANG);
+	setbkcolor(DOTHAM);
+	setusercharsize(1, 2, 1, 2);
+	BUTTON *Table[Max][Max];
+	char tenvt[Max][MAXTEXT], giatri[Max][Max];
+	VATTU VT[Max];
+	int vae = 0, id = 0, num = 0, es = 1;
+	Arr_VT(tree_vt, VT, num);
+	for (int i = 0; i <= num; i++)
+	{
+		VT[i].SLTON = 0;
+	}
+	float sum=0;
+	for(int i=0;i<list_nv.n;i++)
+	{
+		for(NODE_HOADON *p=list_nv.NV[i]->DS_HOADON.pHead;p!=NULL;p=p->pNext)
+		{
+			if((p->data.NGAYLAP>date1 || p->data.NGAYLAP==date1)  && (p->data.NGAYLAP<date2 || p->data.NGAYLAP==date2))
+			{
+				if(p->data.LOAI=='X')
+				{
+					for(NODE_DETAIL_HOADON *k=p->data.DS_DETAIL_HOADON.pHead;k!=NULL;k=k->pNext)
+					{
+							sum =sum + k->data.DONGIA*k->data.SL*(k->data.VAT+1);
+							id = Bi_Search(VT, num, k->data.MAVT);
+							if (id >= 0)
+							{
+								VT[id].SLTON += sum;	
+								es = 0;
+							}
+							
+							
+																													ofstream logs;
+																													logs.open ("logs.txt", ios :: out);
+																													logs << "id---> " << id << " " << num << endl;
+					}
+				}
+			}
+		}
+	}
+	if (es) 
+	{
+		ThongBao(2);
+		return;
+	}
+	tieude ->solidDraw();
+	tieude->emptyDraw(TRANG);
+	outtextxy(30, 95, "DANH SACH");
+	outtextxy(30, 140, "TOP 10:");
+	delete tieude;
+	Sort_RevenueVT(VT, num);
+	int x[] = {140, 180, 300, 690,  990};
+	setcolor(CAM);
+	setbkcolor(DENTHUI);
+	setusercharsize(1, 2, 1, 2);
+	outtextxy(x[1]+10, 50, "Ma Vat tu:");
+	outtextxy(x[2]+10, 50, "Ten Vat tu:");
+	outtextxy(x[3]+10, 50, "Doanh thu:");
+	outtextxy(x[0], 50, "STT");
+	int page = 1, ins = 0;
+	int y = 70;
+	trangketiep223:;
+	page = max(page, 1);
+	page = min(page, 1);
+	for(int i = (page-1)*10; i < page*10; i++)
+	{
+		string res;
+		Table[i][0] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[0], y + (i%20)*27, x[1], y+(i%20+1)*27 -2);
+		Table[i][1] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[1], y + (i%20)*27, x[2], y+(i%20+1)*27 -2);
+		Table[i][2] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[2], y + (i%20)*27, x[3], y+(i%20+1)*27 -2);
+		Table[i][3] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[3], y + (i%20)*27, x[4], y+(i%20+1)*27 -2);
+		res = to_string(i+1);
+		strcpy(Table[i][0]->text, res.c_str());
+		if (i >= 0 && i < min(10, num))
+		{
+			strcpy(Table[i][1]->text, VT[i].MAVT.c_str());
+			strcpy(Table[i][2]->text, VT[i].TENVT.c_str());
+			res = to_string(VT[i].SLTON);
+			if (VT[i].SLTON == 0)
+				res = "0";
+			strcpy(Table[i][3]->text, res.c_str());
+		}
+	
+	}
+	ins = InRaMH(Table, page, 4, false);
+	if (ins  == -1)
+	{
+		goto trangketiep223;
+	}
+}
 void TraLaiSoLuong(LIST_DETAIL_HOADON ls, TREE_VATTU &t, char NhapHayXuat)
 {
 
@@ -685,7 +1057,12 @@ void Node_Temp(TREE_VATTU &t,NODE_VATTU *&x)
 }
 void Erase_VT(TREE_VATTU &t,string mavt)
 {
-
+//	LIST_NHANVIEN l_nv;
+//	if(Search_MaVT(l_nv, mavt)==1)
+//	{
+//		//khong duoc phep xoa vat tu vi hoa don da ghi
+//		return;
+//	}
 	if (t != NULL)
 	{
 		if (t->data.MAVT == mavt)
@@ -733,235 +1110,7 @@ void Erase_NV(LIST_NHANVIEN &l_nv, string manv)
 	}
 }
 
-//=========================================== So sanh ==============================================
 
-int StrCmp(string a, string b)
-{
-	int i=0;
-	do
-	{
-		if(a[i]>b[i])
-		{
-			return 1;
-		}
-		if(a[i]<b[i])
-		{
-			return -1;
-		}
-		i++;
-	}
-	while(a[i]!=0||b[i]!=0);
-	if(a.length()<b.length())
-	{
-		return -1;
-	}
-	if(a.length()>b.length())
-	{
-		return 1;
-	}
-	return 0;
-}
-
-int DateCmp(NGAY d1, NGAY d2)
-{
-	if(d1.year>d2.year)
-	{
-		return 1;
-	}
-	else 
-	{
-		if(d1.year<d2.year)
-		{
-			return -1;
-		}
-		else
-		{
-			if(d1.month>d2.month)
-			{
-				return 1;
-			}
-			else
-			{
-				if(d1.month<d2.month)
-				{
-					return -1;
-				}
-				else
-				{
-					if(d1.date>d2.date)
-					{
-						return 1;
-					}
-					if(d1.date<d2.date)
-					{
-						return -1;
-					}
-					return 0;
-				}
-			}
-		}
-	}
-}
-
-bool operator==(NGAY d1, NGAY d2)
-{
-	return (d1.date==d2.date && d1.month==d2.month && d1.year==d2.year);
-}
-bool operator>(NGAY d1, NGAY d2)
-{
-	return (d1.year>d2.year || d1.year==d2.year && d1.month>d2.month || d1.year==d2.year && d1.month==d2.month && d1.date>d2.date);
-} 
-bool operator<(NGAY d1, NGAY d2)
-{
-	return (d1.year<d2.year || d1.year==d2.year && d1.month<d2.month || d1.year==d2.year && d1.month==d2.month && d1.date<d2.date);
-}
-
-void TaoBangThongKe(LIST_NHANVIEN list_nv, ngay date1, ngay date2)
-{
-	XoaManHinh();
-	
-	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 70, 130, 180);
-	tieude ->solidDraw();
-	tieude->emptyDraw(TRANG);
-	delete tieude;
-	setcolor(TRANG);
-	setbkcolor(DOTHAM);
-	setusercharsize(1, 2, 1, 2);
-	outtextxy(30, 95, "DANH SACH");
-	outtextxy(30, 140, "HOA DON:");
-	BUTTON *Table[Max][Max];
-	BUTTON *But[10][10];
-	HOADON HD[Max];
-	char tennv[Max][MAXTEXT], giatri[Max][Max];
-	int id = 0;
-	for(int i=0;i<list_nv.n;i++)
-	{
-		for(NODE_HOADON *p=list_nv.NV[i]->DS_HOADON.pHead;p!=NULL;p=p->pNext)
-		{
-			if((p->data.NGAYLAP > date1 || p->data.NGAYLAP == date1) && (p->data.NGAYLAP < date2 || p->data.NGAYLAP == date2))
-			{
-				HD[id] = p->data;
-				int vae = 0;
-				for(NODE_DETAIL_HOADON *k=p->data.DS_DETAIL_HOADON.pHead;k!=NULL;k=k->pNext)
-				{
-					vae += k->data.DONGIA * k->data.SL - (k->data.DONGIA * k->data.SL *  k->data.VAT)/100;
-				}
-				strcpy(giatri[id], to_string(vae).c_str());
-				strcpy(tennv[id], list_nv.NV[i]->HO.c_str());
-				strcat(tennv[id]," ");
-				strcat(tennv[id], list_nv.NV[i]->TEN.c_str());
-				id++;
-			}
-		}
-	}
-	int x[] = {140, 180, 300, 370, 490, 860,  990};
-	setcolor(CAM);
-	setbkcolor(DENTHUI);
-	setusercharsize(1, 2, 1, 2);
-	outtextxy(x[1]+10, 50, "SO HOA DON");
-	outtextxy(x[2]+10, 50, "LOAI");
-	outtextxy(x[3]+10, 50, "NGAY LAP");
-	outtextxy(x[4]+10, 50, "NHAN VIEN");
-	outtextxy(x[5]+10, 50, "GIA TRI");
-	outtextxy(x[0], 50, "STT");
-	int page = 1, ins = 0;
-	int y = 70;
-	trangketiep22:;
-	page = max(page, 1);
-	page = min(page, 25);
-	for(int i = (page-1)*20; i < page*20; i++)
-	{
-		string res;
-		Table[i][0] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[0], y + (i%20)*27, x[1], y+(i%20+1)*27 -2);
-		Table[i][1] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[1], y + (i%20)*27, x[2], y+(i%20+1)*27 -2);
-		Table[i][2] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[2], y + (i%20)*27, x[3], y+(i%20+1)*27 -2);
-		Table[i][3] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[3], y + (i%20)*27, x[4], y+(i%20+1)*27 -2);
-		Table[i][4] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[4], y + (i%20)*27, x[5], y+(i%20+1)*27 -2);
-		Table[i][5] = new BUTTON(TRANG, XANHCAY, VIENBOX, "", x[5], y + (i%20)*27, x[6], y+(i%20+1)*27 -2);
-		res = to_string(i+1);
-		strcpy(Table[i][0]->text, res.c_str());
-		if (i >= 0 && i < id)
-		{
-			strcpy(Table[i][1]->text, HD[i].SOHD.c_str());
-			if (HD[i].LOAI == 'X')
-				res = "XUAT";
-			else 
-				res = "NHAP";
-			strcpy(Table[i][2]->text, res.c_str());
-			strcpy(Table[i][3]->text, to_string(HD[i].NGAYLAP.date).c_str());
-			strcat(Table[i][3]->text, "/ ");
-			strcat(Table[i][3]->text, to_string(HD[i].NGAYLAP.month).c_str());
-			strcat(Table[i][3]->text,"/ ");
-			strcat(Table[i][3]->text, to_string(HD[i].NGAYLAP.year).c_str());
-			strcpy(Table[i][4]->text, tennv[i]);
-			strcpy(Table[i][5]->text_tp, giatri[i]);
-			
-		}
-	
-	}
-	ins = InRaMH(Table, page, 6, false);
-	if (ins  == -1)
-	{
-		goto trangketiep22;
-	}
-}
-//=========================================== Sap xep ==============================================
-
-void Arr_VT(TREE_VATTU &t, VATTU VT[], int &n)
-{
-	if(t!=NULL)
-	{
-		VT[n]=t->data;
-		n++;
-		Arr_VT(t->pRight, VT, n);
-		Arr_VT(t->pLeft, VT, n);
-	}
-}
-
-void Sort_VT(TREE_VATTU &t, VATTU VT[], int n)
-{
-	Arr_VT(t,VT,n);
-	for(int i=0;i<n-1;i++)
-	{
-		for(int j=i+1;j<n;j++)
-		{
-			if(StrCmp(VT[i].TENVT,VT[j].TENVT)>0)
-			{
-				VATTU temp=VT[j];
-				VT[j]=VT[i];
-				VT[i]=temp;
-			}
-		}
-	}
-}
-
-void Sort_NV(LIST_NHANVIEN &l_nv)
-{
-	for(int i=0;i<l_nv.n-1;i++)
-	{
-		for(int j=i+1;j<l_nv.n;j++)
-		{
-			if(StrCmp(l_nv.NV[i]->TEN,l_nv.NV[j]->TEN)>0)
-			{
-					NHANVIEN *temp=l_nv.NV[i];
-					l_nv.NV[i]=l_nv.NV[j];
-					l_nv.NV[j]=temp;
-			}
-			else
-			{
-				if(StrCmp(l_nv.NV[i]->TEN,l_nv.NV[j]->TEN)==0)
-				{
-					if(StrCmp(l_nv.NV[i]->HO,l_nv.NV[j]->HO)>0)
-					{
-						NHANVIEN *temp=l_nv.NV[i];
-						l_nv.NV[i]=l_nv.NV[j];
-						l_nv.NV[j]=temp;
-					}
-				}
-			}
-		}
-	}
-}
 
 //============================================== Hieu chinh ========================================
 
@@ -1052,53 +1201,6 @@ float Revenue_Month(LIST_NHANVIEN &l_nv, int thang, int nam)
 	return sum;
 }
 
-float Revenue_VT(LIST_NHANVIEN &l_nv, string mavt, NGAY Start, NGAY End)
-{
-	float sum=0;
-	for(int i=0;i<l_nv.n;i++)
-	{
-		for(NODE_HOADON *p=l_nv.NV[i]->DS_HOADON.pHead;p!=NULL;p=p->pNext)
-		{
-			if((p->data.NGAYLAP>Start || p->data.NGAYLAP==Start)  && (p->data.NGAYLAP<End || p->data.NGAYLAP==End))
-			{
-				if(p->data.LOAI=='X')
-				{
-					for(NODE_DETAIL_HOADON *k=p->data.DS_DETAIL_HOADON.pHead;k!=NULL;k=k->pNext)
-					{
-						if(k->data.MAVT==mavt)
-						{
-							sum =sum + k->data.DONGIA*k->data.SL*(k->data.VAT+1);
-						}
-					}
-				}
-			}
-		}
-	}
-	return sum;
-}
-
-void Sort_RevenueVT(LIST_NHANVIEN &l_nv, VATTU VT[], int n, float *&k, NGAY Start, NGAY End)
-{
-	for(int i=0;i<n;i++)
-	{
-		k[i]=Revenue_VT(l_nv,VT[i].MAVT, Start, End);
-	}
-	for(int i=0;i<n-1;i++)
-	{
-		for(int j=i+1;j<n;j++)
-		{
-			if(k[i]>k[j])
-			{
-				float temp=k[i];
-				k[i]=k[j];
-				k[j]=temp;
-				VATTU tam=VT[i];
-				VT[i]=VT[j];
-				VT[j]=tam;
-			}
-		}
-	}
-}
 
 //============================================== Doc-Ghi FILE =======================================
 void Write_FileVT(VATTU VT[], int n)//fix
@@ -1308,49 +1410,68 @@ void Write_Bill(LIST_NHANVIEN l_nv)
 }
 void Read_Bill(LIST_NHANVIEN &l_nv)
 {
-	fstream Filein;
+	fstream Filein, Fileout;
 	Filein.open("HOADON.txt",ios_base::in);
+	Fileout.open("HD.txt",ios_base::out);
 	if(Filein.fail())
 	{
 		return;
 	}
 	while(!Filein.eof())
 	{
-		string tmp;
-		char flag;
-		HOADON hd;
+		string manv,tmp;
+		char flag='\0'; 
+		getline(Filein,manv,'\n');
+				Fileout<<manv<<"\n";
+		NHANVIEN *p=Search_NV(l_nv,manv);
+		if(p==NULL)
+		{
+			return;
+		}
+		Create_ListHD(p->DS_HOADON);
 		while(flag!='=')
 		{
-			if(flag != '-')
-			{
-				getline(Filein,tmp,'\n');
-				NHANVIEN *p=Search_NV(l_nv,tmp);
-				Create_ListHD(p->DS_HOADON);
-				getline(Filein,hd.SOHD,',');
-				Filein>>hd.NGAYLAP.date;
-				Filein>>hd.NGAYLAP.month;
-				Filein>>hd.NGAYLAP.year;
-				Filein>>hd.LOAI;
-				Add_HD(p->DS_HOADON,Create_NodeHD(hd));
-				Create_ListDHD(hd.DS_DETAIL_HOADON);
-			}
-			char kt;
-			while(kt!='-')
+			HOADON hd;
+			getline(Filein,hd.SOHD,',');
+					Fileout<<hd.SOHD<<",";
+			Filein>>hd.NGAYLAP.date;
+					Fileout<<hd.NGAYLAP.date<<"/";
+			Filein.seekg(1,ios_base::cur);
+			Filein>>hd.NGAYLAP.month;
+					Fileout<<hd.NGAYLAP.month<<"/";
+			Filein.seekg(1,ios_base::cur);
+			Filein>>hd.NGAYLAP.year;
+					Fileout<<hd.NGAYLAP.year<<",";
+			Filein.seekg(1,ios_base::cur);
+			Filein>>hd.LOAI;
+					Fileout<<hd.LOAI<<"\n";
+			Filein.ignore();
+			Add_HD(p->DS_HOADON,Create_NodeHD(hd));
+			Create_ListDHD(hd.DS_DETAIL_HOADON);
+			while(flag!='-')
 			{
 				DETAIL_HOADON dhd;
 				getline(Filein,dhd.MAVT,',');
+						Fileout<<dhd.MAVT<<",";
 				Filein>>dhd.SL;
+						Fileout<<dhd.SL<<",";
+				Filein.seekg(1,ios_base::cur);
 				Filein>>dhd.DONGIA;
+						Fileout<<dhd.DONGIA<<",";
+				Filein.seekg(1,ios_base::cur);
 				Filein>>dhd.VAT;
+						Fileout<<dhd.VAT<<"\n";
+				Filein.ignore();
 				Add_DHD(hd.DS_DETAIL_HOADON,Create_NodeDHD(dhd));
-				Filein>>kt;
+				Filein>>flag;
 				Filein.seekg(-1,ios_base::cur);
 			}
-//			getline(Filein,tmp);
+			getline(Filein,tmp);
 			Filein>>flag;
 			Filein.seekg(-1,ios_base::cur);
 		}
 		getline(Filein,tmp);
 	}
+	Fileout.close();
 	Filein.close();
 }

@@ -47,7 +47,7 @@ int MatranSuaNV[10][10] =  { 	{XXXX		, 		0, 0},
 								{TICKCONST, TICKCONST, 0},
 								{0,					0, 0}
 							};		
-char BangLapHD[][MAXTEXT] = {	"SO HOA DON: ", "Ma nhan vien:", "Ngay", "Thang",  "Nam:", "Nhap", "Xuat", "Huy", "Tao hoa don", "LAP HOA DON"}; // tieu de textbox
+char BangLapHD[][MAXTEXT] = {	"SO HOA DON: ", "Ma Nhan Vien:", "Ngay", "Thang",  "Nam:", "Nhap", "Xuat", "Huy", "Tao hoa don", "LAP HOA DON"}; // tieu de textbox
 int MatranLapHD[10][10] =  { 	{TEXBOXCONST, 			0, 0, 0},
 								{TEXBOXCONST, 			0, 0, 0},
 								{DAYCONST, DAYCONST, DAYCONST ,0},

@@ -86,7 +86,16 @@ void XoaVatTu()
 				Arr_VT(tree_vt, VT, n);
 				ins = XemVatTu(VT, n);
 				if (ins!= -1)
+				{
+						//dk nay dua ra ngoai function
+						//	LIST_NHANVIEN l_nv;
+						//	if(Search_MaVT(l_nv, mavt)==1)
+						//	{
+						//		//khong duoc phep xoa vat tu vi hoa don da ghi
+						//		return;
+						//	}
 					Erase_VT(tree_vt, VT[ins].MAVT);
+				}
 				else
 					break;
 			}
@@ -262,7 +271,6 @@ void LapHoaDon()
 	NODE_VATTU *pd;
 	NHANVIEN *nv;
 	LIST_DETAIL_HOADON list_dt;
-	Create_ListDHD(list_dt);
 	int ins = 0;
 	string manv; // de them vao list hoa don nhan vien
 	string mavt, tmp;
@@ -274,9 +282,6 @@ void LapHoaDon()
 		nv = Search_NV(list_nv, manv);
 		
 		hdtmp = Search_HD(list_nv, hd->SOHD);
-//																													ofstream logs;
-//																													logs.open ("logs.txt", ios :: out);
-//																													logs << "--------  vbvbvnvbn[[]]]]]]]]-- " <<endl;
 		if (hdtmp != NULL)
 		{
 			ThongBao(1);
@@ -290,6 +295,7 @@ void LapHoaDon()
 			continue;
 		}
 				
+		Create_ListDHD(list_dt);
 		// lap hoa don va danh sach cac vat tu trong hoa don truoc:
 		XoaManHinh();
 		while (true)
@@ -463,6 +469,30 @@ void ThongKeHoaDon()
 	XoaManHinh();
 	XoaBang(NutTK);
 }
+void Top10()
+{
+	
+	ngay date1, date2;
+	VeBang(NutTK);
+	if (boxMove(NutTK))
+	{
+		date1.date = getNumber(NutTK[0][0]->text_tp);
+		date1.month = getNumber(NutTK[0][1]->text_tp);
+		date1.year = getNumber(NutTK[0][2]->text_tp);
+		date2.date = getNumber(NutTK[1][0]->text_tp);
+		date2.month = getNumber(NutTK[1][1]->text_tp);
+		date2.year = getNumber(NutTK[1][2]->text_tp);
+		XoaManHinh();
+		TaoBangThongKeTop10(list_nv, tree_vt, date1, date2);
+	}
+	XoaManHinh();
+	XoaBang(NutTK);
+}
+
+void ThongKeDoanhThuTheoNam()
+{
+	;
+}
 void MENU()
 {
 	int i = 0, j = 1;
@@ -564,8 +594,11 @@ void MENU()
 				ThongKeHoaDon();		
 				break;
 			case 2:
-//				Top10();		
+				Top10();		
 				break;
+			case 3:
+				ThongKeDoanhThuTheoNam();
+			break;
 		}		
 	}
 	if (j == 4)
@@ -588,8 +621,8 @@ int main()
 	TaoBangCTHD_ID(NutCTHD_ID);
 	TaoBangXemHD(NutXemHD);
 	Create_ListVT(tree_vt);
-//	Read_FileVT(tree_vt);
-//	Read_FileNV(list_nv);
+	Read_FileVT(tree_vt);
+	Read_FileNV(list_nv);
 //	Read_Bill(list_nv);
 	while(1)
 	{
@@ -597,7 +630,6 @@ int main()
 		MENU();
 		XoaManHinh();
 	}
-	system("pause");
 	return 0;
 }
 //=================================================================================================================================

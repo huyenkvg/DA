@@ -25,7 +25,7 @@ typedef double db;
 #define XEMDS -30
 #define TROVE -100
 #define ADDID -122
-
+#define INF 9999999999;
 
 #define Max 500
 //==============
