@@ -245,10 +245,10 @@ void ChinhSuaNhanVien()
 		{
 				int ins = 0;
 				ins = XemNhanVien(list_nv);
-				nv = *list_nv.NV[ins];
 //				XoaManHinh();
 				while (ins >= 0)
 				{
+					nv = *list_nv.NV[ins];
 					strcpy(NutSuaNV[0][0]->text_tp, nv.MANV.c_str());
 					VeBang(NutSuaNV);
 					if (boxMove(NutSuaNV))

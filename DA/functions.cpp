@@ -81,18 +81,24 @@ string to_string(int num)
 	}
 	return res;
 }
+bool isText(char c)
+{
+	if (c >= 'a' && c <= 'z' || c >='A' && c <= 'Z');
+}
 bool CheckCharKey(string text, char &c)
 {
 	
+	if (c == ' ' && (text == "Ho:" || text == "Ten Vat Tu:"))
+		return true;
 	if (text == "Ngay" || text == "Thang" || text == "Nam:" || text == "So Luong Ton:" || text == "So Luong:"|| text == "Don Gia:" || text == "%VAT:")
 	{
 		return isNumber(c);
 	}
-	if ( c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9')
+	if (isText( c) || c >= '0' && c <= '9')
 	{
 		if (text == "ID:" || text == "Ma Nhan Vien:" || text == "So Hoa Don:" || text == "Ma Vat Tu:")
 		{
-			if( c >= 'a' && c <= 'z')
+			if( isText( c))
 			{
 				c = toupper(c);
 			}
@@ -100,7 +106,7 @@ bool CheckCharKey(string text, char &c)
 		}
 		if (text == "Ho:" || text == "Ten:" || text == "Don Vi Tinh:" || text == "Ten Vat Tu:")
 		{
-			if( c >= 'a' && c <= 'z')
+			if( isText( c))
 			{
 				c = toupper(c);
 				return true;
@@ -112,7 +118,3 @@ bool CheckCharKey(string text, char &c)
 		
 }
 
-bool isText(char c)
-{
-	if (c >= 'a' && c <= 'z' || c >='A' && c <= 'Z');
-}

@@ -260,10 +260,6 @@ string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 						setfillstyle (1, 0);
 						bar (x1-1, y1-1, x2+1, y2+1);
 						Table[0][0]->EraseInfo();
-//						delete Table[0][0];
-//						delete Table[1][0];
-//						delete Table[0][1];
-//						delete Table[1][1];
 						return "---";
 					}				
 				}
@@ -275,10 +271,6 @@ string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 					string res = Table[i][j]->text_tp;
 					if (j==1)
 					{
-//						delete Table[0][0];
-//						delete Table[1][0];
-//						delete Table[0][1];
-//						delete Table[1][1];
 						return "+++";
 					}
 					string tmpt = Table[0][0]->text_tp;
@@ -745,8 +737,8 @@ void TaoBangThongKeTop10(LIST_NHANVIEN list_nv, TREE_VATTU tree_vt, ngay date1, 
 {
 	XoaManHinh();
 	
-																													ofstream logs;
-																													logs.open ("logs.txt", ios :: out);
+//																													ofstream logs;
+//																													logs.open ("logs.txt", ios :: out);
 	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 70, 130, 180);
 	setcolor(TRANG);
 	setbkcolor(DOTHAM);
@@ -781,7 +773,7 @@ void TaoBangThongKeTop10(LIST_NHANVIEN list_nv, TREE_VATTU tree_vt, ngay date1, 
 							
 							
 																												
-																													logs << "id---> " << id << " " << num << endl;
+//																													logs << "id---> " << id << " " << num << endl;
 					}
 				}
 			}

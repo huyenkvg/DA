@@ -10,7 +10,7 @@ typedef long long ll;
 typedef double db;
 
 //====================================================BANG MENU CHINH============================================================================
-char MenuTable[MAX_SE][MAX_MENU][MAXTEXT] = 	{ 	"Materials", 		"Employees", 		"Bills", 		"Statistics", 		"Help",
+char MenuTable[MAX_SE][MAX_MENU][MAXTEXT] = 	{ 	"Materials", 		"Employees", 		"Bills", 		"Statistics", 		"Guide",
 													"Add Material", 	"Add Employee",		"Create Bill",	"Satistic Bills",	"_",
 													"Delete Material", 	"Show Employee",	"Show Bills",	"Top 10 revenue",	"_",
 													"Adjust Material",	"Adjust Employee",	"_",			"_",				"_",
@@ -33,7 +33,7 @@ int MatranSuaVT[10][10] =  { 	{XXXX		, 	0, 0},
 								{0,  			0, 0},
 							};	
 //==========================
-char BangThemNV[][MAXTEXT] = {	"ID:", "Ten: ", "Ho:", "Nam", "Nu", "Huy", "Them", "THEM NHAN VIEN"}; // tieu de textbox
+char BangThemNV[][MAXTEXT] = {	"ID:", "Ten:", "Ho:", "Nam", "Nu", "Huy", "Them", "THEM NHAN VIEN"}; // tieu de textbox
 int MatranThemNV[10][10] =  { 	{TEXBOXCONST, 		0, 0},
 								{TEXBOXCONST, 		0, 0},
 								{TEXBOXCONST,	 	0, 0},
@@ -166,6 +166,8 @@ int REC:: beingTyped(char c)
 						
 						if (wrongText(text_tp))
 						{
+							if (key == 0)
+								keyNext = getch();
 							emptyDraw(DO);
 							continue;
 						}
@@ -213,6 +215,20 @@ int REC:: beingTyped(char c)
 						if (strlen(text_tp) > 3 || isNumber(key) == false)
 							continue;
 					}
+					else if (strcmp(text, "So Hoa Don:") == 0)
+					{
+							if (strlen(text_tp) > 10 )
+								continue;
+					}
+					else if (strcmp(text, "Ten Vat Tu:") == 0 || strcmp(text, "Ho:") == 0)
+					{
+						if (id > 0)
+						{
+							if (key == ' ' && text_tp[id-1] == ' ')
+							continue;
+						}
+					}
+					
 					text_tp[id] = key;
 					id++;
 					text_tp[id] ='\0';
@@ -962,7 +978,8 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot, bool chophepxoa)
 			}
 			else if (key == '\r')
 			{
-				return getNumber(Table[i][0]-> text)-1;
+				if (firsttime == 0)
+					return getNumber(Table[i][0]-> text)-1;
 			}
 			else if (key == VK_BACK || key == 27/* esc key  */)
 			{
