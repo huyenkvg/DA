@@ -119,6 +119,7 @@ void SuaVatTu()
 			}
 			else 
 			{
+				strcpy(NutSuaVT[0][0]->text_tp, tmp.c_str());
 				VeBang(NutSuaVT);
 				if (boxMove(NutSuaVT))
 				{
@@ -151,6 +152,7 @@ void SuaVatTu()
 					}
 					XoaBang(NutSuaVT);
 					XoaManHinh();
+					n=0;
 					Arr_VT(tree_vt, VT, n);
 					ins = XemVatTu(VT, n);
 				}
