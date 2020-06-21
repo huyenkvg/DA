@@ -40,6 +40,6 @@ int getNumber(char c[MAXTEXT*2]);
 bool CheckDay(char day[3], char month[3], char year[5]);
 string to_string(int num);
 bool CheckCharKey(string text, char &c);
-
+int StrCmp(string a, string b);
 
 

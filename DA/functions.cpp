@@ -118,3 +118,29 @@ bool CheckCharKey(string text, char &c)
 		
 }
 
+int StrCmp(string a, string b)
+{
+	int i=0;
+	do
+	{
+		if(a[i]>b[i])
+		{
+			return 1;
+		}
+		if(a[i]<b[i])
+		{
+			return -1;
+		}
+		i++;
+	}
+	while(a[i]!=0||b[i]!=0);
+	if(a.length()<b.length())
+	{
+		return -1;
+	}
+	if(a.length()>b.length())
+	{
+		return 1;
+	}
+	return 0;
+}

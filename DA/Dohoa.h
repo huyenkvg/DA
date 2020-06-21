@@ -30,8 +30,6 @@ class REC{
 		virtual void EraseInfo();
 		virtual void EraseDraw();
 };
-
-
 class BUTTON : public REC
 {
 	protected:
@@ -62,3 +60,4 @@ void TaoBangNAM(BUTTON *Nut[maxbutton][maxbutton]);
 bool CheckAllTextBox(BUTTON *Table[maxbutton][maxbutton]);
 void ThongBao(int mode);
 int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot, bool chophepxoa);
+void DELETE_BUTTON(BUTTON *Table[maxbutton][maxbutton]);

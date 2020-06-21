@@ -1,17 +1,11 @@
 #include <iostream>
 #include <cmath>
 #include <stdio.h>
-
 #include "Dohoa.h"
-
 using namespace std;
-typedef unsigned long long ull;
-typedef long long ll;
-typedef double db;
-
 //====================================================BANG MENU CHINH============================================================================
 char MenuTable[MAX_SE][MAX_MENU][MAXTEXT*2] = 	{ 	"Materials", 		"Employees", 		"Bills", 		"Statistics", 		"Guide",
-													"Add Material", 	"Add Employee",		"Create Bill",	"Satistic Bills",	"_",
+													"Add Material", 	"Add Employee",		"Create Bill",	"Satistic Bills",	"--- EXIT ---",
 													"Delete Material", 	"Show Employee",	"Show Bills",	"Top 10 revenue",	"_",
 													"Adjust Material",	"Adjust Employee",	"_",			"Year's revenue",				"_",
 													"View Material's",	"Remove Employee",	"_",			"_",				"_"};
@@ -23,8 +17,6 @@ int MatranThemVT[maxbutton][maxbutton] = { 	{TEXBOXCONST, 0, 0},
 											{TEXBOXCONST, 0, 0},
 											{0, 0, 0},
 										};				 // Bo tri textbox 
-//==========================
-
 //==========================
 char BangSuaVT[][MAXTEXT*2] = {	"ID:", "Ten Vat Tu:", "Don Vi Tinh:", "Huy", "Sua", "SUA VAT TU"}; // tieu de textbox
 int MatranSuaVT[maxbutton][maxbutton] =  { 	{XXXX		, 	0, 0},
@@ -145,7 +137,7 @@ int REC:: beingTyped(char c)
 		emptyDraw(XANHLA);
 		memset(text_tp, '\0', sizeof(text_tp));
 	}
-	if (c != VK_BACK)
+	if (c != VK_BACK && c!= ' ')
 	{
 		if (CheckCharKey(text, c))
 			text_tp[0] = c;
@@ -209,6 +201,12 @@ int REC:: beingTyped(char c)
 						continue;
 					if ( id > MAXTEXT)
 							continue;
+							
+					if (strcmp(text, "So Luong:") == 0 || strcmp(text, "So Luong Ton") == 0)
+					{
+						if (id > 9)
+						continue;
+					}
 					if (strcmp(text, "Ngay") == 0 || strcmp(text, "Thang") == 0)
 					{
 						if (strlen(text_tp)> 1 || isNumber(key) == false)
@@ -219,18 +217,24 @@ int REC:: beingTyped(char c)
 						if (strlen(text_tp) > 3 || isNumber(key) == false)
 							continue;
 					}
-					else if (strcmp(text, "So Hoa Don:") == 0)
+					if (strcmp(text, "So Hoa Don:") == 0 || strcmp(text, "Ho:") == 0)
+					{
+							if (strlen(text_tp) > 20 )
+								continue;
+					}
+					if (strcmp(text, "ID:") == 0 ||strcmp(text, "Ma Nhan Vien:") == 0 ||strcmp(text, "Ma Vat Tu:") == 0 || strcmp(text, "Ten:") == 0)
 					{
 							if (strlen(text_tp) > 10 )
 								continue;
 					}
-					else if (strcmp(text, "Ten Vat Tu:") == 0 || strcmp(text, "Ho:") == 0)
+					if (strcmp(text, "Ten Vat Tu:") != 0 && strcmp(text, "Ho:") != 0 && key == ' ')
 					{
-						if (id > 0)
-						{
+						continue;
+					}
+					if (id > 0)
+					{
 							if (key == ' ' && text_tp[id-1] == ' ')
 							continue;
-						}
 					}
 					
 					text_tp[id] = key;
@@ -306,7 +310,11 @@ void BUTTON::beChoose()
 	setbkcolor (BICHON);
 	setcolor (TRANGBOC);
 	if (value == 0)
+	{
 		outtextxy (x1+17, y1 + (y2-y1-textheight(text))/2 , text);
+		setfillstyle (1, VANG);
+		bar(x1+1,y1,x1+3, y2);
+	}
 	else
 		outtextxy (x1+(x2-x1-textwidth(text))/2, y1 + (y2-y1-textheight(text))/2 , text);
 }
@@ -524,7 +532,7 @@ void VeBang(BUTTON *Table[maxbutton][maxbutton])
 //==================================[DI CHUYEN]=================================================================================================================================
 int boxMove(BUTTON *Bar[maxbutton][maxbutton])
 {
-	ll inow = 0, jnow = 0, ipas = 0, jpas = 0, id = 0;
+	int inow = 0, jnow = 0, ipas = 0, jpas = 0, id = 0;
 	int arr[10] = {1};
 	int x = 0, y = 0;
 	int n = 0; // so luong text box va nut
@@ -618,8 +626,6 @@ int boxMove(BUTTON *Bar[maxbutton][maxbutton])
 											Bar[index][0]-> emptyDraw(Bar[index][0]->lineColor);
 											Bar[index][1]-> emptyDraw(Bar[index][1]->lineColor);
 											Bar[index][2]-> emptyDraw(Bar[index][2]->lineColor);
-											
-											
 										}
 										
 									}
@@ -631,10 +637,6 @@ int boxMove(BUTTON *Bar[maxbutton][maxbutton])
 									Bar[index][0]-> emptyDraw(Bar[index][0]->lineColor);
 									Bar[index][1]-> emptyDraw(Bar[index][1]->lineColor);
 									Bar[index][2]-> emptyDraw(Bar[index][2]->lineColor);
-											
-		//							inow = (2+1)%n;
-		//							jnow = 0;
-//									continue;
 							}
 							Bar[inow][jnow] -> emptyDraw(XANHLA);
 							if (codivoday) continue;
@@ -648,7 +650,6 @@ int boxMove(BUTTON *Bar[maxbutton][maxbutton])
 							VeBang(Bar);
 							continue;
 						}
-						
 						if (Bar[inow][0]->value == NUTCONST)
 						{
 							return jnow;
@@ -734,7 +735,6 @@ int boxMove(BUTTON *Bar[maxbutton][maxbutton])
 					}
 				}
 		}
-
 	}
 }
 //===================================================================================================================================================================
@@ -840,7 +840,6 @@ void ThongBao(int mode)
 		}break;
 		case DAHET:
 		{
-				
 				outtextxy (x1+(x2-x1-textwidth("ID KHONG TON TAI"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "ID KHONG TON TAI");
 		}break;
 		case 4:
@@ -851,19 +850,15 @@ void ThongBao(int mode)
 		case 5:
 		{
 			outtextxy (x1+(x2-x1-textwidth("KHONG DU SO LUONG!"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "KHONG DU SO LUONG!");
-		}
-		break;
+		}break;
 		case 6: 
 		{
 			outtextxy (x1+(x2-x1-textwidth("KHONG DUOC BO TRONG!"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "KHONG DUOC BO TRONG!");
-		}
-		break;	
+		}break;	
 		case 9:
 			{
 				outtextxy (x1+(x2-x1-textwidth("KHONG DUOC PHEP XOA!"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "KHONG DUOC PHEP XOA!");
-			}
-		break;
-		
+			}break;
 	}
 	setcolor (TRANG);
 	outtextxy (x1+(x2-x1-textwidth("OK"))/2, y2 + (25-textheight("OK"))/2 , "OK");
@@ -927,6 +922,7 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot, bool chophepxoa)
 					{
 						setcolor(CAM);
 						setbkcolor(DENTHUI);
+						setusercharsize(1,2,1,2);
 						outtextxy(Table[i][soluongcot-1]->x2+5, Table[i][soluongcot-1]->y1+2, "[XOA]");
 					}
 					
@@ -979,6 +975,7 @@ int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot, bool chophepxoa)
 				{
 					setcolor(CAM);
 					setbkcolor(DENTHUI);
+					setusercharsize(1,2,1,2);
 					outtextxy(Table[i][soluongcot-1]->x2+5, Table[i][soluongcot-1]->y1+3, "[XOA]");
 				}
 						
@@ -1022,6 +1019,29 @@ bool CheckAllTextBox(BUTTON *Table[maxbutton][maxbutton])
 			}
 		}
 	}
-	
 	return !kocoloi;
+}
+void DELETE_BUTTON(BUTTON *Table[maxbutton][maxbutton])
+{
+	int soLuongTextBox = 0;
+	while (Table[soLuongTextBox][0]->value >0 && Table[soLuongTextBox][0]-> value != NUTCONST)
+	{
+			soLuongTextBox++;
+	}
+	for (int i = 0; i < soLuongTextBox; i++)
+	{
+		if (Table[i][0]->value)
+		{
+			int j = 0;
+			while (Table[i][j]->value >0)
+			{
+					delete Table[i][j];
+					j++;
+			}
+			delete Table[i][j];
+		}
+	}
+	delete Table[soLuongTextBox][0];
+	delete Table[soLuongTextBox][1];
+	delete Table[soLuongTextBox+1][0];
 }

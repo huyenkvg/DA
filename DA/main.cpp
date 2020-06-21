@@ -11,14 +11,10 @@ typedef double db;
 
 
 BUTTON *NutThemVT[maxbutton][maxbutton];
-BUTTON *NutXoaVT[maxbutton][maxbutton];
 BUTTON *NutSuaVT[maxbutton][maxbutton];
 BUTTON *NutThemNV[maxbutton][maxbutton];
-
-BUTTON *NutXoaNV[maxbutton][maxbutton];
 BUTTON *NutSuaNV[maxbutton][maxbutton];
 BUTTON *NutLapHD[maxbutton][maxbutton];
-BUTTON *NutNhapID[maxbutton][maxbutton];
 BUTTON *NutCTHD[maxbutton][maxbutton];
 BUTTON *NutCTHD_ID[maxbutton][maxbutton];
 BUTTON *NutXemHD[maxbutton][maxbutton];
@@ -239,6 +235,7 @@ void ChinhSuaNhanVien()
 			}
 			else 
 			{
+				strcpy(NutSuaNV[0][0]->text_tp, Search_NV(list_nv, tmp)->MANV.c_str());
 				VeBang(NutSuaNV);
 				if (boxMove(NutSuaNV))
 				{
@@ -350,14 +347,18 @@ void LapHoaDon()
 /* tru di so luong ton*/			k->data.SLTON-=dhd.SL;
 								else
 									k->data.SLTON+=dhd.SL;
+								break;
 							}
 							else if(hd.LOAI == 'N')
+							{
 								k->data.SLTON+=dhd.SL;
+								break;
+							}
 							else
 								ThongBao(5);
 							VeBang(NutCTHD_ID);
 						}
-						XoaBang(NutCTHD_ID);
+							XoaBang(NutCTHD_ID);
 					
 					}
 					if (tmp == "---") // xem danh sach va chon vat tu thu chth
@@ -480,7 +481,14 @@ void XemHoaDon()
 void ThongKeHoaDon()
 {
 	ngay date1, date2;
-	VeBang(NutTK);
+	if (DateCmp(date2, date1) == 1)
+	{
+		ngay dtmp = date2;
+		date2 = date1;
+		date1 = dtmp;	
+	}
+
+		VeBang(NutTK);
 	if (boxMove(NutTK))
 	{
 		date1.date = getNumber(NutTK[0][0]->text_tp);
@@ -491,6 +499,7 @@ void ThongKeHoaDon()
 		date2.year = getNumber(NutTK[1][2]->text_tp);
 		XoaManHinh();
 		TaoBangThongKe(list_nv, date1, date2);
+		Write_HD(list_nv, date1, date2);
 	}
 	XoaManHinh();
 	XoaBang(NutTK);
@@ -522,10 +531,11 @@ void ThongKeDoanhThuTheoNam()
 	{
 		XoaManHinh();
 		TopDoanhThu(list_nv, getNumber(NAM[0][0]->text_tp));
+		Write_FileRevenue(list_nv, getNumber(NAM[0][0]->text_tp));
 	}
 	XoaBang(NAM);
 }
-void MENU()
+int MENU()
 {
 	int i = 0, j = 1;
 	VeMenu(i, j);
@@ -626,7 +636,7 @@ void MENU()
 				ThongKeHoaDon();		
 				break;
 			case 2:
-				Top10();		
+				Top10();	
 				break;
 			case 3:
 				ThongKeDoanhThuTheoNam();
@@ -634,7 +644,24 @@ void MENU()
 		}		
 	}
 	if (j == 4)
-	return;
+	{
+		if (i == 0);
+		else if (i == 1)
+		{	
+			DELETE_BUTTON (NutThemVT);
+			DELETE_BUTTON (NutSuaVT);
+			DELETE_BUTTON (NutThemNV);
+			DELETE_BUTTON (NutSuaNV);
+			DELETE_BUTTON (NutLapHD);
+			DELETE_BUTTON (NutCTHD);
+			DELETE_BUTTON (NutCTHD_ID);
+			DELETE_BUTTON (NutXemHD);
+			DELETE_BUTTON (NutTK);
+			DELETE_BUTTON (NAM);
+			return 0;
+		}
+	}
+	return 1;
 }
 
 
@@ -649,18 +676,17 @@ int main()
 	TaoBangLapHD(NutLapHD);
 	TaoBangTK(NutTK);
 	TaoBangNAM(NAM);
-	
 	TaoBangCTHD(NutCTHD);
 	TaoBangCTHD_ID(NutCTHD_ID);
 	TaoBangXemHD(NutXemHD);
+	
 	Create_ListVT(tree_vt);
 	Read_FileVT(tree_vt);
 	Read_FileNV(list_nv);
 	Read_Bill(list_nv);
-	while(1)
+	
+	while(MENU())
 	{
-			
-		MENU();
 		XoaManHinh();
 	}
 	return 0;

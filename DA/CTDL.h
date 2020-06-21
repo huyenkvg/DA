@@ -10,7 +10,6 @@ typedef struct ngay
 	int month;
 	int year;
 } NGAY;
-
 // ================================= VAT TU =================================
 // Khai bao cau truc vat tu 
 typedef struct vattu
@@ -20,7 +19,6 @@ typedef struct vattu
 	string DVT;
 	int SLTON;		
 } VATTU;
-
 // Khai bao node vattu
 typedef struct node_vattu
 {
@@ -28,8 +26,7 @@ typedef struct node_vattu
 	node_vattu *pLeft, *pRight;
 } NODE_VATTU;
 
-typedef NODE_VATTU* TREE_VATTU;  
-
+typedef NODE_VATTU* TREE_VATTU; 
 // ============================ CHI TIET HOA DON ============================
 // Khai bao cau truc chi tiet hoa don 
 typedef struct detail_hoadon // vat tu trong hoa don
@@ -97,6 +94,7 @@ typedef struct list_nhanvien
 } LIST_NHANVIEN;
 //================================FUNTION of GET=================================
 //=============================== MAIN FUNCTION =================================
+int DateCmp(NGAY d1, NGAY d2);
 
 NODE_VATTU *Create_NodeVT(VATTU vt);
 NODE_HOADON *Create_NodeHD(HOADON hd);
@@ -119,7 +117,7 @@ void Modify_VT(TREE_VATTU &t, string mavt, VATTU vt);
 void Print_VT(TREE_VATTU &t);
 void Write_FileVT(VATTU VT[], int n);
 void Print_Top10_VT(TREE_VATTU &t);
-void Write_FileTopVT(TREE_VATTU &t, fstream &fileout);
+void Write_FileTopVT(VATTU VT[], float *k, NGAY Start, NGAY End);
 void Read_FileVT(TREE_VATTU &t);//fix
 
 void Input_NV(NHANVIEN &nv);
@@ -140,8 +138,7 @@ void Statistic_HD();
 void Write_FileHD(LIST_HOADON &l_hd, fstream &fileout);
 
 void Statistic_Revenue();
-void Write_FileRevenue();
-
+void Write_FileRevenue(LIST_NHANVIEN &l_nv, int nam);
 
 void Sort_NV(LIST_NHANVIEN &l_nv);
 void erase_DHD(TREE_VATTU &t, LIST_DETAIL_HOADON &l_dhd, int id, bool nhap);
@@ -158,6 +155,8 @@ void Arr_VT(TREE_VATTU &t, VATTU VT[], int &n);
 void Read_Bill(HOADON &hd, string &manv);
 void Write_Bill(LIST_NHANVIEN l_nv);
 void Read_Bill(LIST_NHANVIEN &l_nv);
+
+void Write_HD(LIST_NHANVIEN &l_nv, NGAY Start, NGAY End);
 //==================Ham Mo DanhSach ra man hinh===================================
 
 int XemVatTu(VATTU VT[], int n);
@@ -166,6 +165,5 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp);
 void XemHD(LIST_DETAIL_HOADON list_dt, string sohd);
 void TaoBangThongKe(LIST_NHANVIEN list_nv, ngay date1, ngay date2);
 void TaoBangThongKeTop10(LIST_NHANVIEN list_nv, TREE_VATTU tree_vt, ngay date1, ngay date2);
-
 void TopDoanhThu(LIST_NHANVIEN list_nv, int year);
 void TraLaiSoLuong(LIST_DETAIL_HOADON ls, TREE_VATTU &t, char NhapHayXuat);
