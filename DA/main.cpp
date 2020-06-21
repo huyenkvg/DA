@@ -23,6 +23,7 @@ BUTTON *NutCTHD[10][10];
 BUTTON *NutCTHD_ID[10][10];
 BUTTON *NutXemHD[10][10];
 BUTTON *NutTK[10][10];
+BUTTON *NAM[10][10];
 TREE_VATTU tree_vt;
 LIST_NHANVIEN list_nv;
 //=================================================================================================================================
@@ -65,7 +66,7 @@ void XoaVatTu()
 		while(true)
 		{
 			tmp = Get_ID("Xem danh sach Vat tu", "OK");
-			if (tmp == "---" || tmp == "")	break;
+			if (tmp == "---" || tmp == ""|| tmp == "+++")	break;
 			if( Search_VT(tree_vt, tmp) == NULL)
 			{
 				ThongBao(2);
@@ -111,7 +112,7 @@ void SuaVatTu()
 		while(true)
 		{
 			tmp = Get_ID("Xem danh sach Vat tu", "OK");
-			if (tmp == "---" || tmp == "")	break;
+			if (tmp == "---" || tmp == ""|| tmp == "+++")	break;
 			p =  Search_VT(tree_vt, tmp) ;
 			if(p == NULL)
 			{
@@ -192,7 +193,7 @@ void XoaNhanVien()
 		while(true)
 		{
 			tmp = Get_ID("Xem danh sach Nhan vien", "OK");
-			if (tmp == "---" || tmp == "")	break;
+			if (tmp == "---" || tmp == "" || tmp == "+++")	break;
 			if( Search_NV(list_nv, tmp) == NULL)
 			{
 				ThongBao(2);
@@ -205,13 +206,18 @@ void XoaNhanVien()
 		if (tmp == "---")
 		{
 			int ins = 0;
-			
+			Sort_NV(list_nv);
 			while(ins != -1)
 			{
-				Sort_NV(list_nv);
+				XoaManHinh();
 				ins = XemNhanVien(list_nv);
 				if (ins!= -1)
 				{
+					if (list_nv.NV[ins]->DS_HOADON.pHead != NULL)
+					{
+						ThongBao(9);
+						continue;
+					}
 					Erase_NV(list_nv,list_nv.NV[ins]->MANV);
 				}
 			}
@@ -226,7 +232,7 @@ void ChinhSuaNhanVien()
 		while(true)
 		{
 			tmp = Get_ID("Xem danh sach Nhan vien", "OK");
-			if (tmp == "---" || tmp == "")	break;
+			if (tmp == "---" || tmp == ""|| tmp == "+++")	break;
 			if(Search_NV(list_nv, tmp) == NULL)
 			{
 				ThongBao(2);
@@ -452,6 +458,7 @@ void XemHoaDon()
 			VeBang(NutXemHD);
 		}
 		else{
+			XoaManHinh();
 			XemHD(p->data.DS_DETAIL_HOADON, p->data.SOHD);
 			break;
 		}
@@ -499,7 +506,13 @@ void Top10()
 
 void ThongKeDoanhThuTheoNam()
 {
-	;
+	VeBang(NAM);
+	if (boxMove(NAM))
+	{
+		XoaManHinh();
+		TopDoanhThu(list_nv, getNumber(NAM[0][0]->text_tp));
+	}
+	XoaBang(NAM);
 }
 void MENU()
 {
@@ -624,6 +637,7 @@ int main()
 	TaoBangSuaNV(NutSuaNV);
 	TaoBangLapHD(NutLapHD);
 	TaoBangTK(NutTK);
+	TaoBangNAM(NAM);
 	
 	TaoBangCTHD(NutCTHD);
 	TaoBangCTHD_ID(NutCTHD_ID);
@@ -631,7 +645,7 @@ int main()
 	Create_ListVT(tree_vt);
 	Read_FileVT(tree_vt);
 	Read_FileNV(list_nv);
-//	Read_Bill(list_nv);
+	Read_Bill(list_nv);
 	while(1)
 	{
 			

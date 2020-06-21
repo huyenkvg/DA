@@ -342,6 +342,8 @@ DETAIL_HOADON getDetail(BUTTON *Table[10][10])
 	dhd.VAT = getNumber(Table[3][0]->text_tp);
 	return dhd;
 }
+
+
 //===========================================================================================================================
 //===========================================================================================================================
 //==========================================[HAM IN DANH SACH RA MAN HINH]===================================================
@@ -769,11 +771,7 @@ void TaoBangThongKeTop10(LIST_NHANVIEN list_nv, TREE_VATTU tree_vt, ngay date1, 
 							{
 								VT[id].SLTON += sum;	
 								es = 0;
-							}
-							
-							
-																												
-//																													logs << "id---> " << id << " " << num << endl;
+							}																												
 					}
 				}
 			}
@@ -827,6 +825,90 @@ void TaoBangThongKeTop10(LIST_NHANVIEN list_nv, TREE_VATTU tree_vt, ngay date1, 
 	if (ins  == -1)
 	{
 		goto trangketiep223;
+	}
+}
+
+
+void TopDoanhThu(LIST_NHANVIEN list_nv, int year){
+	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 70, 130, 180);
+	setcolor(TRANG);
+	setbkcolor(DOTHAM);
+	setusercharsize(1, 2, 1, 2);
+	BUTTON *Table[Max][Max];
+	char  giatri[15][MAXTEXT];
+	for (int i = 0; i <= 12;i++)
+	{
+		giatri[i][0] = '0';
+	}
+	int vae = 0, id = 0, num = 0, es = 1;
+	float sum=0;
+	
+	for(int i=0;i<list_nv.n;i++)
+	{
+		for(NODE_HOADON *p=list_nv.NV[i]->DS_HOADON.pHead;p!=NULL;p=p->pNext)
+		{
+			if(p->data.NGAYLAP.year == year)
+			{
+				if(p->data.LOAI=='X')
+				{
+					id=p->data.NGAYLAP.month;
+					sum = 0;
+					for(NODE_DETAIL_HOADON *k=p->data.DS_DETAIL_HOADON.pHead;k!=NULL;k=k->pNext)
+					{
+							sum = k->data.DONGIA*k->data.SL*(k->data.VAT+1);																	
+					}
+						strcpy(giatri[id],to_string(sum).c_str());
+					
+				}
+			}
+		}
+	}
+	tieude ->solidDraw();
+	tieude->emptyDraw(TRANG);
+	outtextxy(30, 89, "THONG KE");
+	outtextxy(30, 120, "DOANH THU");
+	outtextxy(30, 147, "NAM: ");
+	outtextxy(30+40, 147, to_string(year).c_str());
+	delete tieude;
+	int x[] = {140,  310,   990};
+	setcolor(CAM);
+	setbkcolor(DENTHUI);
+	setusercharsize(1, 2, 1, 2);
+	outtextxy(x[1]+10, 50, "DOANH THU");
+	outtextxy(x[0]+5, 50, "THANG");
+	int  ins = 0;
+	int y = 70;
+	for(int i = 0; i < 20; i++)
+	{
+		string res;
+		if (i>11)
+		{
+			Table[i][0] = new BUTTON(TRANG, DENTHUI, VIENBOX, "", x[0], y + (i%20)*27, x[1], y+(i%20+1)*27 -2);
+			Table[i][1] = new BUTTON(TRANG, DENTHUI, VIENBOX, "", x[1], y + (i%20)*27, x[2], y+(i%20+1)*27 -2);			
+		}else{
+		
+			Table[i][0] = new BUTTON(TRANG,XANHCAY, VIENBOX, "", x[0], y + (i%20)*27, x[1], y+(i%20+1)*27 -2);
+			Table[i][1] = new BUTTON(TRANG,  XANHCAY, VIENBOX, "", x[1], y + (i%20)*27, x[2], y+(i%20+1)*27 -2);				
+		}
+		res = "thang ";
+		res += to_string(i+1);
+		if (i > 11)
+			res = "---";
+		strcpy(Table[i][0]->text, res.c_str());
+		if (i >= 0 && i < 12)
+		{
+			strcpy(Table[i][1]->text, giatri[i+1]);
+		}
+	
+	}
+	int page = 1;
+	ins = InRaMH(Table, page, 2, false);
+	for(int i = 0; i < 20; i++)
+	{
+		for (int j= 0; j < 2; j++)
+		{
+			delete Table[i][j];
+		}
 	}
 }
 void TraLaiSoLuong(LIST_DETAIL_HOADON ls, TREE_VATTU &t, char NhapHayXuat)
@@ -946,7 +1028,10 @@ void erase_DHD(LIST_DETAIL_HOADON &l_dhd, int id)
 {
 	if (l_dhd.pHead == l_dhd.pTail)
 	{
-		l_dhd.pHead=l_dhd.pTail = NULL;
+		NODE_DETAIL_HOADON *q = l_dhd.pTail;
+		l_dhd.pHead= l_dhd.pTail=NULL;
+		delete q;
+		return;
 	}
 	for(NODE_DETAIL_HOADON *p=l_dhd.pHead; p!= NULL; p=p->pNext)
 	{
@@ -1091,6 +1176,11 @@ void Erase_NV(LIST_NHANVIEN &l_nv, string manv)
 	{
 		if(l_nv.NV[i]->MANV==manv)
 		{
+			if (l_nv.NV[i]->DS_HOADON.pHead != NULL)
+			{
+				ThongBao(9);
+				return;
+			}
 			delete l_nv.NV[i];
 			for(int j=i; j < l_nv.n-1; j++)
 			{
@@ -1401,10 +1491,13 @@ void Write_Bill(LIST_NHANVIEN l_nv)
 	Fileout.close();
 }
 
+
+
 void Read_Bill(LIST_NHANVIEN &l_nv)
 {
 	fstream Filein, Fileout;
 	Filein.open("HOADON.txt",ios_base::in);
+	Fileout.open("HD.txt",ios_base::out);
 	if(Filein.fail())
 	{
 		return;
@@ -1414,7 +1507,7 @@ void Read_Bill(LIST_NHANVIEN &l_nv)
 		string manv,tmp;
 		char flag='\0'; 
 		getline(Filein,manv,'\n');
-//		chuanhoa(manv);
+				Fileout<<manv<<"\n";
 		NHANVIEN *p=Search_NV(l_nv,manv);
 		if(p==NULL)
 		{
@@ -1425,40 +1518,48 @@ void Read_Bill(LIST_NHANVIEN &l_nv)
 		{
 			HOADON hd;
 			getline(Filein,hd.SOHD,',');
-//			chuanhoa(hd.SOHD);
-			Filein>>hd.NGAYLAP.date;	
-			Filein.seekg(1,ios_base::cur);
+			if(flag!='\0') hd.SOHD=flag+hd.SOHD;
+					Fileout<<hd.SOHD<<",";
+			Filein>>hd.NGAYLAP.date;
+					Fileout<<hd.NGAYLAP.date<<"/";
+			Filein.ignore();
 			Filein>>hd.NGAYLAP.month;
-			Filein.seekg(1,ios_base::cur);
+					Fileout<<hd.NGAYLAP.month<<"/";
+			Filein.ignore();
 			Filein>>hd.NGAYLAP.year;
-			Filein.seekg(1,ios_base::cur);
+					Fileout<<hd.NGAYLAP.year<<",";
+			Filein.ignore();
 			Filein>>hd.LOAI;
-			hd.LOAI=toupper(hd.LOAI);					
+					Fileout<<hd.LOAI<<"\n";
 			Filein.ignore();
 			Create_ListDHD(hd.DS_DETAIL_HOADON);
+			flag='\0';
 			while(flag!='-')
 			{
 				DETAIL_HOADON dhd;
 				getline(Filein,dhd.MAVT,',');
-//				chuanhoa(dhd.MAVT);
+				if(flag!='\0') dhd.MAVT=flag+dhd.MAVT;
+						Fileout<<dhd.MAVT<<",";
 				Filein>>dhd.SL;
-				Filein.seekg(1,ios_base::cur);
+						Fileout<<dhd.SL<<",";
+				Filein.ignore();
 				Filein>>dhd.DONGIA;
-				Filein.seekg(1,ios_base::cur);
+						Fileout<<dhd.DONGIA<<",";
+				Filein.ignore();				
 				Filein>>dhd.VAT;
+						Fileout<<dhd.VAT<<"\n";
 				Filein.ignore();
 				Add_DHD(hd.DS_DETAIL_HOADON,Create_NodeDHD(dhd));
 				Filein>>flag;
-				Filein.seekg(-1,ios_base::cur);
 			}
 			Add_HD(p->DS_HOADON,Create_NodeHD(hd));
 			getline(Filein,tmp);
 			Filein>>flag;
-			Filein.seekg(-1,ios_base::cur);
 		}
 		getline(Filein,tmp);
 	}
 	Fileout.close();
 	Filein.close();
 }
+
 

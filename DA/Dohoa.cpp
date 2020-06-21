@@ -13,7 +13,7 @@ typedef double db;
 char MenuTable[MAX_SE][MAX_MENU][MAXTEXT] = 	{ 	"Materials", 		"Employees", 		"Bills", 		"Statistics", 		"Guide",
 													"Add Material", 	"Add Employee",		"Create Bill",	"Satistic Bills",	"_",
 													"Delete Material", 	"Show Employee",	"Show Bills",	"Top 10 revenue",	"_",
-													"Adjust Material",	"Adjust Employee",	"_",			"_",				"_",
+													"Adjust Material",	"Adjust Employee",	"_",			"Year's revenue",				"_",
 													"View Material's",	"Remove Employee",	"_",			"_",				"_"};
 //==========================
 char BangThemVT[][MAXTEXT] = {	"ID:", "Ten Vat Tu:", "Don Vi Tinh:", "So Luong Ton:", "Tro ve", "Them", "THEM VAT TU"}; // tieu de textbox
@@ -74,10 +74,14 @@ int MatranTK[10][10] =  		{ 	{DAYCONST, DAYCONST, DAYCONST ,0},
 									{DAYCONST, DAYCONST, DAYCONST ,0},
 									{		0,		0,		0, 0}
 								};	
-char BangXemHD[][MAXTEXT] = 	{	"So Hoa Don: ", "HUY", "THONG KE"}; // tieu de textbox
+char BangXemHD[][MAXTEXT] = 	{	"So Hoa Don:", "HUY", "THONG KE"}; // tieu de textbox
 int MatranXemHD[10][10] =  		{ 	{TEXBOXCONST,			0, 0, 0},
 									{0,						0, 0, 0}
-								};		
+								};	
+char BANGNAM[][MAXTEXT] = 			{	"Nam:", "HUY", "THONG KE"}; // tieu de textbox
+int MatranNAM[10][10] =  		{ 	{TEXBOXCONST,			0, 0, 0},
+									{0,						0, 0, 0}
+								};	
 //=======================================================CAC HAM VE HINH CHU NHAT===============================================================
 REC::REC()
 {
@@ -498,7 +502,6 @@ void VeBang(BUTTON *Table[10][10])
 			}
 		}
 	}
-	
 	int j = 0;
 	while(Table[soLuongTextBox][j]->value > 0)
 	{	
@@ -515,7 +518,6 @@ void VeBang(BUTTON *Table[10][10])
 //==================================[DI CHUYEN]=================================================================================================================================
 int boxMove(BUTTON *Bar[10][10])
 {
-
 	ll inow = 0, jnow = 0, ipas = 0, jpas = 0, id = 0;
 	int arr[10] = {1};
 	int x = 0, y = 0;
@@ -530,7 +532,6 @@ int boxMove(BUTTON *Bar[10][10])
 			arr[n] = j;
 			n++;
 	}
-	
 	if (Bar[inow][jnow]->value == XXXX)
 	{
 		;
@@ -556,74 +557,81 @@ int boxMove(BUTTON *Bar[10][10])
 							}
 							continue;
 						}
-						if (n > 1 && Bar[2][0]->value == DAYCONST && Bar[inow][0]->value == NUTCONST && jnow == 1)
+						if (n > 1 /*&& Bar[2][0]->value == DAYCONST*/ && Bar[inow][0]->value == NUTCONST && jnow == 1)
 						{
-							id = 0;
-							Bar[inow][jnow]->emptyDraw(VIENBOX);
-							while (CheckDay(Bar[2][0]->text_tp, Bar[2][1]->text_tp, Bar[2][2]->text_tp) == false) // Ngay bi sai
+							bool codivoday = 0;
+							for (int index = 0; index < min(n, 3); index++)
 							{
-								tieptuccheck:;
-								
-								setfillstyle(1, DOTUOI);
-								setusercharsize(1, 3, 1, 3);
-								settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
-								setcolor(DOTUOI);
-								setbkcolor (DENXAM);
-								outtextxy(Bar[2][0]-> x1, Bar[2][0]->y2 + MENU_DY*3/4- textheight("-> NGAY / THANG / NAM  SAI!"), "-> NGAY / THANG / NAM  SAI!" );
-								setusercharsize(1, 2, 1, 2);
-								Bar[2][0]->emptyDraw(DO);
-								Bar[2][1]->emptyDraw(DO);
-								Bar[2][2]->emptyDraw(DO);
-									Bar[2][id] -> emptyDraw(DOTUOI);
-								if (kbhit)
-								{
-//									Bar[inow][id]->RecDraw();
-									Bar[2][id] -> emptyDraw(DOTUOI);
-									key = getch();
-									if(key == 0)
-									{
-										key= getch();
-										if (key == KEY_LEFT)
-										{
-											id = (id+arr[2]-1)%arr[2];
-										}
-										else if (key == KEY_RIGHT)
-										{
-											id = (id+arr[2]+1)%arr[2];
-										}
-										if (key == KEY_DOWN || key == KEY_UP)
-										{
-											;
-										}
+									if (Bar[index][0]->value != DAYCONST)
 										continue;
-									}
-									else if (key == '\r')
+									id = 0;
+									Bar[inow][jnow]->emptyDraw(VIENBOX);
+									while (CheckDay(Bar[index][0]->text_tp, Bar[index][1]->text_tp, Bar[index][2]->text_tp) == false) // Ngay bi sai
 									{
-										continue;
+										tieptuccheck:;
+										codivoday = 1;
+										setfillstyle(1, DOTUOI);
+										setusercharsize(1, 3, 1, 3);
+										settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
+										setcolor(DOTUOI);
+										setbkcolor (DENXAM);
+										outtextxy(Bar[index][0]-> x1, Bar[index][0]->y2 + MENU_DY*3/4- textheight("-> NGAY / THANG / NAM  SAI!"), "-> NGAY / THANG / NAM  SAI!" );
+										setusercharsize(1, 2, 1, 2);
+										Bar[index][0]->emptyDraw(DO);
+										Bar[index][1]->emptyDraw(DO);
+										Bar[index][2]->emptyDraw(DO);
+											Bar[index][id] -> emptyDraw(DOTUOI);
+										if (kbhit)
+										{
+		//									Bar[inow][id]->RecDraw();
+											Bar[index][id] -> emptyDraw(DOTUOI);
+											key = getch();
+											if(key == 0)
+											{
+												key= getch();
+												if (key == KEY_LEFT)
+												{
+													id = (id+arr[index]-1)%arr[index];
+												}
+												else if (key == KEY_RIGHT)
+												{
+													id = (id+arr[index]+1)%arr[index];
+												}
+												if (key == KEY_DOWN || key == KEY_UP)
+												{
+													;
+												}
+												continue;
+											}
+											else if (key == '\r')
+											{
+												continue;
+											}
+											else if (isText(key) || isNumber(key) )
+												id = (id+Bar[index][id]->beingTyped(key)+arr[index])%arr[index];
+											Bar[index][0]-> emptyDraw(Bar[index][0]->lineColor);
+											Bar[index][1]-> emptyDraw(Bar[index][1]->lineColor);
+											Bar[index][2]-> emptyDraw(Bar[index][2]->lineColor);
+											
+											
+										}
+										
 									}
-									else if (isText(key) || isNumber(key) )
-										id = (id+Bar[2][id]->beingTyped(key)+arr[2])%arr[2];
-									Bar[2][0]-> emptyDraw(Bar[2][0]->lineColor);
-									Bar[2][1]-> emptyDraw(Bar[2][1]->lineColor);
-									Bar[2][2]-> emptyDraw(Bar[2][2]->lineColor);
-									
-									
-								}
-								
+										
+									setbkcolor (DENXAM);
+									setusercharsize(1, 3, 1, 3);
+									outtextxy(Bar[index][0]-> x1, Bar[index][2]->y2 + MENU_DY*3/4- textheight("H"), "                             " );
+									setusercharsize(1, 2, 1, 2);
+									Bar[index][0]-> emptyDraw(Bar[index][0]->lineColor);
+									Bar[index][1]-> emptyDraw(Bar[index][1]->lineColor);
+									Bar[index][2]-> emptyDraw(Bar[index][2]->lineColor);
+											
+		//							inow = (2+1)%n;
+		//							jnow = 0;
+//									continue;
 							}
-							
-							setbkcolor (DENXAM);
-							setusercharsize(1, 3, 1, 3);
-							outtextxy(Bar[2][0]-> x1, Bar[2][2]->y2 + MENU_DY*3/4- textheight("H"), "                             " );
-							setusercharsize(1, 2, 1, 2);
-							Bar[2][0]-> emptyDraw(Bar[2][0]->lineColor);
-							Bar[2][1]-> emptyDraw(Bar[2][1]->lineColor);
-							Bar[2][2]-> emptyDraw(Bar[2][2]->lineColor);
-									
-//							inow = (2+1)%n;
-//							jnow = 0;
 							Bar[inow][jnow] -> emptyDraw(XANHLA);
-//							continue;
+							if (codivoday) continue;
 						}
 						
 						if ( CheckAllTextBox(Bar) == false)
@@ -639,7 +647,7 @@ int boxMove(BUTTON *Bar[10][10])
 						{
 							return jnow;
 						}
-						return 1;
+						continue;
 				} 
 				else if (key == 0)
 				{	
@@ -678,7 +686,6 @@ int boxMove(BUTTON *Bar[10][10])
 						inow = (inow + 1)%n;
 						jnow = (jnow +1)%arr[inow];
 					}
-	
 					if (jpas >= 0  && ipas >=0 )
 					{
 						if (Bar[ipas][jpas]->value != NUTCONST)
@@ -688,7 +695,6 @@ int boxMove(BUTTON *Bar[10][10])
 							{
 								Bar[ipas][jpas]->beTicked();
 							}
-							
 							else 
 							{
 								setbkcolor (Bar[ipas][jpas]->bkColor);
@@ -696,16 +702,11 @@ int boxMove(BUTTON *Bar[10][10])
 								setcolor (Bar[ipas][jpas]->textColor);
 								outtextxy (Bar[ipas][jpas]->x1+10, Bar[ipas][jpas]->y1 + (Bar[ipas][jpas]->y2-Bar[ipas][jpas]->y1-textheight(Bar[ipas][jpas]->text_tp))/2 , Bar[ipas][jpas]->text_tp);
 							}
-							
 						}
 						else
 							Bar[ipas][jpas]->solidDraw();
 					}
-	
 					Bar[inow][jnow]->emptyDraw(XANHLA);
-					
-					
-	
 				}
 				else if (inow < n && inow >= 0 && jnow < arr[inow] && jnow >=0)
 				{
@@ -746,21 +747,17 @@ void XoaBang(BUTTON *Table[10][10])
 		j = 0;
 		i++;
 	}
-	
 	setfillstyle(1, 0);
 	setbkcolor (0);
 	setcolor(0);
 	bar(Table[i][0]->x1, Table[i][0]->y1, Table[i-1][1]->x2, Table[i-1][1]-> y2);
 }
 //===================================================================================================================================================================
-
-
 void TaoBangThemVattu(BUTTON *NutThemVT[10][10])
 {
 	GetButton(BangThemVT, MatranThemVT, NutThemVT);
 	return;
 }
-
 void TaoBangSuaVattu(BUTTON *NutSuaVT[10][10])
 {
 	GetButton(BangSuaVT, MatranSuaVT, NutSuaVT);
@@ -804,14 +801,16 @@ void TaoBangTK(BUTTON *Nut[10][10])
 	GetButton(BangTK, MatranTK, Nut);
 	return;
 }
-
-
-
+void TaoBangNAM(BUTTON *Nut[10][10])
+{
+	GetButton(BANGNAM, MatranNAM, Nut);
+	return;
+}
 //================================================================== [NOTIFICATION]========================================
 void ThongBao(int mode)
 {
-	setfillstyle (1, DENTHUI);
-	int x1 = 340, x2 = 680, y1 = 270, y2 = 320;  
+	setfillstyle (1, CAM);
+	int x1 = 340, x2 = 640, y1 = 270, y2 = 320;  
 	bar (x1, y1, x2, y2);
 	bar (x1, y2, x2, y2+25);
 	setcolor(DOTUOI);
@@ -819,8 +818,8 @@ void ThongBao(int mode)
 	rectangle(x1, y2, x2, y2+25);
 	setusercharsize(1, 2, 1, 2);
 	settextstyle(COMPLEX_FONT, 0, USER_CHAR_SIZE);
-	setbkcolor (DENTHUI);
-	setcolor (DO);
+	setbkcolor (CAM);
+	setcolor (DENTHUI);
 	switch (mode)
 	{
 		case TRUNGID:
@@ -830,7 +829,7 @@ void ThongBao(int mode)
 		case DAHET:
 		{
 				
-				outtextxy (x1+(x2-x1-textwidth("KHONG TON TAI!"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "KHONG TON TAI!");
+				outtextxy (x1+(x2-x1-textwidth("ID KHONG TON TAI"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "ID KHONG TON TAI");
 		}break;
 		case 4:
 		{

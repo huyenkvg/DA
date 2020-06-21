@@ -166,4 +166,6 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp);
 void XemHD(LIST_DETAIL_HOADON list_dt, string sohd);
 void TaoBangThongKe(LIST_NHANVIEN list_nv, ngay date1, ngay date2);
 void TaoBangThongKeTop10(LIST_NHANVIEN list_nv, TREE_VATTU tree_vt, ngay date1, ngay date2);
+
+void TopDoanhThu(LIST_NHANVIEN list_nv, int year);
 void TraLaiSoLuong(LIST_DETAIL_HOADON ls, TREE_VATTU &t, char NhapHayXuat);

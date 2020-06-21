@@ -84,6 +84,7 @@ void TaoBangCTHD(BUTTON *NutCTHD[10][10]);
 void TaoBangCTHD_ID(BUTTON *NutCTHD_ID[10][10]);
 void TaoBangXemHD(BUTTON *Nut[10][10]);
 void TaoBangTK(BUTTON *Nut[10][10]);
+void TaoBangNAM(BUTTON *Nut[10][10]);
 bool CheckAllTextBox(BUTTON *Table[10][10]);
 void ThongBao(int mode);
 int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot, bool chophepxoa);
