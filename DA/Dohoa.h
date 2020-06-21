@@ -6,32 +6,6 @@
 using namespace std; 
 typedef long long ll;
 typedef double db;
-#define MAX_SE 5 // max selection in menu Oy
-#define MAX_MENU 5
-#define MAXTEXT 22
-#define TAB_WID 1200
-#define TAB_HEI 700
-#define MENU_DX 150
-#define MENU_DY 22
-#define LE_GIUA 450
-#define BOX_LEN 400
-#define NUTCONST 5
-#define TICKCONST 1
-#define TEXBOXCONST 11
-#define DAYCONST  3
-#define XXXX 987
-#define XACNHAN -12
-#define CANCEL -19
-#define XEMDS -30
-#define TROVE -100
-#define ADDID -122
-#define INF 9999999999;
-
-#define Max 500
-//==============
-#define TRUNGID 1
-#define DAHET 2
-#define KHONGDU 3
 
 
 //========================================================HinhChuNhat=========================================================================
@@ -43,9 +17,9 @@ class REC{
 		ll x1, x2, y1, y2;
 		int value;	
 		bool CoBiChonKhong;
-		char text[MAXTEXT];
+		char text[MAXTEXT*2];
 		mau textColor;
-		char text_tp[MAXTEXT];
+		char text_tp[MAXTEXT*2];
 		REC();
 		REC (mau bkC, mau lineC, ll a1, ll b1, ll a2, ll b2);
 		void RecDraw();
@@ -68,23 +42,23 @@ class BUTTON : public REC
 		void beChoose();
 };
 void VeMenu(int &row, int &col);
-void GetButton(char bangNoiDung[][MAXTEXT], int bangBoTri[10][10], BUTTON *Table[10][10]);
-void VeBang(BUTTON *Table[10][10]);
-int boxMove(BUTTON *Bar[10][10]);
-void XoaBang(BUTTON *Table[10][10]);
+void GetButton(char bangNoiDung[][MAXTEXT*2], int bangBoTri[maxbutton][maxbutton], BUTTON *Table[maxbutton][maxbutton]);
+void VeBang(BUTTON *Table[maxbutton][maxbutton]);
+int boxMove(BUTTON *Bar[maxbutton][maxbutton]);
+void XoaBang(BUTTON *Table[maxbutton][maxbutton]);
 void XoaManHinh();
-void TaoBangThemVattu(BUTTON *NutThemVT[10][10]);
-void TaoBangXoaVattu(BUTTON *NutXoaVT[10][10]);
-void TaoBangSuaVattu(BUTTON *NutXoaVT[10][10]);
-void TaoBangThemNV(BUTTON *NutThemNV[10][10]);
-void TaoBangXoaNV(BUTTON *NutXoaNV[10][10]);
-void TaoBangSuaNV(BUTTON *NutSuaNV[10][10]);
-void TaoBangLapHD(BUTTON *NutLapHD[10][10]);
-void TaoBangCTHD(BUTTON *NutCTHD[10][10]);
-void TaoBangCTHD_ID(BUTTON *NutCTHD_ID[10][10]);
-void TaoBangXemHD(BUTTON *Nut[10][10]);
-void TaoBangTK(BUTTON *Nut[10][10]);
-void TaoBangNAM(BUTTON *Nut[10][10]);
-bool CheckAllTextBox(BUTTON *Table[10][10]);
+void TaoBangThemVattu(BUTTON *NutThemVT[maxbutton][maxbutton]);
+void TaoBangXoaVattu(BUTTON *NutXoaVT[maxbutton][maxbutton]);
+void TaoBangSuaVattu(BUTTON *NutXoaVT[maxbutton][maxbutton]);
+void TaoBangThemNV(BUTTON *NutThemNV[maxbutton][maxbutton]);
+void TaoBangXoaNV(BUTTON *NutXoaNV[maxbutton][maxbutton]);
+void TaoBangSuaNV(BUTTON *NutSuaNV[maxbutton][maxbutton]);
+void TaoBangLapHD(BUTTON *NutLapHD[maxbutton][maxbutton]);
+void TaoBangCTHD(BUTTON *NutCTHD[maxbutton][maxbutton]);
+void TaoBangCTHD_ID(BUTTON *NutCTHD_ID[maxbutton][maxbutton]);
+void TaoBangXemHD(BUTTON *Nut[maxbutton][maxbutton]);
+void TaoBangTK(BUTTON *Nut[maxbutton][maxbutton]);
+void TaoBangNAM(BUTTON *Nut[maxbutton][maxbutton]);
+bool CheckAllTextBox(BUTTON *Table[maxbutton][maxbutton]);
 void ThongBao(int mode);
 int InRaMH(BUTTON *Table[Max][Max], int &page, int soluongcot, bool chophepxoa);

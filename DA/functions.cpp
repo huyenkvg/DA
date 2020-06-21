@@ -1,5 +1,5 @@
 #include "functions.h"
-bool wrongText(char a[200])
+bool wrongText(char a[MAXTEXT*2])
 {
 	bool k = true;
 	int n = sizeof(a);
@@ -16,7 +16,7 @@ bool isNumber(char c)
 {
 	return c >= '0' && c <= '9';
 }
-int getNumber(char c[100])
+int getNumber(char c[MAXTEXT*2])
 {
 	int id = 0, num = 0;
 	while (c[id] != '\0')

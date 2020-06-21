@@ -184,10 +184,10 @@ void Sort_RevenueVT(VATTU VT[], int n)
 //================================================CAC HAM LAY INFO TU NUT===========================================================================
 
 // lay id
-string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
+string Get_ID(char text1[MAXTEXT*2], char text2[MAXTEXT*2])
 {
 	BUTTON *Table[3][3];
-	int x1 = 210, x2 = 790, y1 = 250, y2 = 350; 
+	int x1 = 200, x2 = 830, y1 = 250, y2 = 350; 
 	setcolor(DENXAM);
 	setfillstyle (1, 0);
 	bar (x1, y1, x2, y2);
@@ -197,6 +197,8 @@ string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 	Table[0][1] = new BUTTON(TRANG, XANHCAY, VIENBOX, text1, (x1+x2)/2+MENU_DY/4, y1+MENU_DY/2, x2 - MENU_DY/2, y1+4*MENU_DY/2);
 	Table[1][0] = new BUTTON(TRANG, MAUBOX, VIENBOX, text2, x1, y1+4*MENU_DY/2+20, (x2+x1)/2,y2);
 	Table[1][1] = new BUTTON(TRANG, MAUBOX, VIENBOX, "Exit", (x2+x1)/2, y1+4*MENU_DY/2+20, x2, y2);
+	Table[1][1]->value = -1;
+	Table[1][0]->value = -1;
 	Table[0][0]->RecDraw();
 	Table[0][0]->emptyDraw(XANHLA);
 	Table[0][1]->solidDraw();
@@ -293,14 +295,14 @@ string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT])
 	}
 }
 // Lay thong tin bang them VT
-void GetInfo_AdjustMatTab(VATTU &vt, BUTTON *Table[10][10])
+void GetInfo_AdjustMatTab(VATTU &vt, BUTTON *Table[maxbutton][maxbutton])
 {
 		vt.MAVT		= Table[0][0]->text_tp;
 		vt.TENVT 	= Table[1][0]->text_tp;	
 		vt.DVT 		= Table[2][0]->text_tp;	
 }
 // lay thong tin tu table add vat tu
-void GetInfo_AddMatTab(VATTU &vt, BUTTON *Table[10][10])
+void GetInfo_AddMatTab(VATTU &vt, BUTTON *Table[maxbutton][maxbutton])
 {
 		vt.MAVT 	= Table[0][0]->text_tp;
 		vt.TENVT 	= Table[1][0]->text_tp;	
@@ -308,7 +310,7 @@ void GetInfo_AddMatTab(VATTU &vt, BUTTON *Table[10][10])
 		vt.SLTON 	= getNumber(Table[3][0]->text_tp);
 }
 
-void GetInfo_EmTab(NHANVIEN &nv, BUTTON *Table[10][10])
+void GetInfo_EmTab(NHANVIEN &nv, BUTTON *Table[maxbutton][maxbutton])
 {
 	nv.MANV = Table[0][0]->text_tp;
 	nv.TEN = Table[1][0]->text_tp;
@@ -319,7 +321,7 @@ void GetInfo_EmTab(NHANVIEN &nv, BUTTON *Table[10][10])
 		nv.PHAI = "NU";
 }
 
-void GetInfo_BillTab(HOADON &hd, BUTTON *Table[10][10],string &manv)
+void GetInfo_BillTab(HOADON &hd, BUTTON *Table[maxbutton][maxbutton],string &manv)
 {
 																		
 	hd.NGAYLAP.date = getNumber(Table[2][0]->text_tp);
@@ -333,7 +335,7 @@ void GetInfo_BillTab(HOADON &hd, BUTTON *Table[10][10],string &manv)
 		hd.LOAI = 'X';
 	
 }
-DETAIL_HOADON getDetail(BUTTON *Table[10][10])
+DETAIL_HOADON getDetail(BUTTON *Table[maxbutton][maxbutton])
 {
 	DETAIL_HOADON dhd;
 	dhd.MAVT = Table[0][0]->text_tp;
@@ -362,7 +364,7 @@ int XemVatTu(VATTU VT[], int n)
 		return -1;
 	}
 	int page = 1, ins = 0;
-	int x[] = {160, 190, 360, 700, 830, 960};
+	int x[] = {158, 220, 370, 700, 830, 990};
 	
 	setcolor(VANG);
 	setbkcolor(DENTHUI);
@@ -424,7 +426,7 @@ int XemNhanVien(LIST_NHANVIEN l)
 	outtextxy(30, 135, "NHAN VIEN");
 	BUTTON *Table[Max][Max];
 	int page = 1, ins = 0;
-	int x[] = {140, 200, 310, 690, 860, 960};
+	int x[] = {138, 220, 370, 690, 860, 990};
 	setcolor(CAM);
 	setbkcolor(DENTHUI);
 	setusercharsize(1, 2, 1, 2);
@@ -491,7 +493,7 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 		VT[id] = p->data;
 		id++;
 	}
-	int x[] = {140, 180, 380, 700, 820, 960};
+	int x[] = {138, 190, 386, 709, 820, 970};
 	setcolor(TRANG);
 	setbkcolor(DENTHUI);
 	setusercharsize(1, 2, 1, 2);
@@ -509,6 +511,7 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 	But[0][3] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THEM", 140, 630, 400, 660);
 	But[1][0] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THEM", 140, 630, 400, 660);
 	But[1][1] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THEM", 140, 630, 400, 660);
+	But[1][1]->value = -1;
 	VeBang(But);
 	int page = 1, ins = 0;
 	int y = 90;
@@ -583,7 +586,7 @@ void XemHD(LIST_DETAIL_HOADON list_dt, string sohd)
 		VT[id] = p->data;
 		id++;
 	}
-	int x[] = {140, 180, 380, 700, 820, 960};
+	int x[] = {138, 188, 388, 700, 820, 960};
 	setcolor(TRANG);
 	setbkcolor(DENTHUI);
 	setusercharsize(1, 2, 1, 2);
@@ -639,9 +642,9 @@ void TaoBangThongKe(LIST_NHANVIEN list_nv, ngay date1, ngay date2)
 	outtextxy(30, 95, "DANH SACH");
 	outtextxy(30, 140, "HOA DON:");
 	BUTTON *Table[Max][Max];
-	BUTTON *But[10][10];
+	BUTTON *But[maxbutton][maxbutton];
 	HOADON HD[Max];
-	char tennv[Max][MAXTEXT], giatri[Max][Max];
+	char tennv[Max][MAXTEXT*2], giatri[Max][Max];
 	int id = 0;
 	for(int i=0;i<list_nv.n;i++)
 	{
@@ -653,7 +656,7 @@ void TaoBangThongKe(LIST_NHANVIEN list_nv, ngay date1, ngay date2)
 				int vae = 0;
 				for(NODE_DETAIL_HOADON *k=p->data.DS_DETAIL_HOADON.pHead;k!=NULL;k=k->pNext)
 				{
-					vae += k->data.DONGIA * k->data.SL - (k->data.DONGIA * k->data.SL *  k->data.VAT)/100;
+					vae += k->data.DONGIA * k->data.SL + (k->data.DONGIA * k->data.SL *  k->data.VAT)/100;
 				}
 				strcpy(giatri[id], to_string(vae).c_str());
 				strcpy(tennv[id], list_nv.NV[i]->HO.c_str());
@@ -663,7 +666,7 @@ void TaoBangThongKe(LIST_NHANVIEN list_nv, ngay date1, ngay date2)
 			}
 		}
 	}
-	int x[] = {140, 180, 300, 370, 490, 860,  990};
+	int x[] = {138, 188, 307, 370, 490, 860,  990};
 	setcolor(CAM);
 	setbkcolor(DENTHUI);
 	setusercharsize(1, 2, 1, 2);
@@ -739,14 +742,12 @@ void TaoBangThongKeTop10(LIST_NHANVIEN list_nv, TREE_VATTU tree_vt, ngay date1, 
 {
 	XoaManHinh();
 	
-//																													ofstream logs;
-//																													logs.open ("logs.txt", ios :: out);
 	BUTTON *tieude = new BUTTON(XANHNHAT, DOTHAM, TRANG, "", 20, 70, 130, 180);
 	setcolor(TRANG);
 	setbkcolor(DOTHAM);
 	setusercharsize(1, 2, 1, 2);
 	BUTTON *Table[Max][Max];
-	char tenvt[Max][MAXTEXT], giatri[Max][Max];
+	char tenvt[Max][MAXTEXT*2], giatri[Max][Max];
 	VATTU VT[Max];
 	int vae = 0, id = 0, num = 0, es = 1;
 	Arr_VT(tree_vt, VT, num);
@@ -788,7 +789,7 @@ void TaoBangThongKeTop10(LIST_NHANVIEN list_nv, TREE_VATTU tree_vt, ngay date1, 
 	outtextxy(30, 140, "TOP 10:");
 	delete tieude;
 	Sort_RevenueVT(VT, num);
-	int x[] = {140, 180, 300, 690,  990};
+	int x[] = {138, 200, 315, 695,  990};
 	setcolor(CAM);
 	setbkcolor(DENTHUI);
 	setusercharsize(1, 2, 1, 2);
@@ -835,10 +836,11 @@ void TopDoanhThu(LIST_NHANVIEN list_nv, int year){
 	setbkcolor(DOTHAM);
 	setusercharsize(1, 2, 1, 2);
 	BUTTON *Table[Max][Max];
-	char  giatri[15][MAXTEXT];
+	char  giatri[15][MAXTEXT*2];
 	for (int i = 0; i <= 12;i++)
 	{
 		giatri[i][0] = '0';
+		giatri[i][1] = '\0';
 	}
 	int vae = 0, id = 0, num = 0, es = 1;
 	float sum=0;
@@ -852,12 +854,12 @@ void TopDoanhThu(LIST_NHANVIEN list_nv, int year){
 				if(p->data.LOAI=='X')
 				{
 					id=p->data.NGAYLAP.month;
-					sum = 0;
+					sum = getNumber(giatri[id]);
 					for(NODE_DETAIL_HOADON *k=p->data.DS_DETAIL_HOADON.pHead;k!=NULL;k=k->pNext)
 					{
-							sum = k->data.DONGIA*k->data.SL*(k->data.VAT+1);																	
+							sum += k->data.DONGIA*k->data.SL*(k->data.VAT+1);																	
 					}
-						strcpy(giatri[id],to_string(sum).c_str());
+					strcpy(giatri[id],to_string(sum).c_str());
 					
 				}
 			}
@@ -870,7 +872,7 @@ void TopDoanhThu(LIST_NHANVIEN list_nv, int year){
 	outtextxy(30, 147, "NAM: ");
 	outtextxy(30+40, 147, to_string(year).c_str());
 	delete tieude;
-	int x[] = {140,  310,   990};
+	int x[] = {138,  330,   990};
 	setcolor(CAM);
 	setbkcolor(DENTHUI);
 	setusercharsize(1, 2, 1, 2);
@@ -890,7 +892,7 @@ void TopDoanhThu(LIST_NHANVIEN list_nv, int year){
 			Table[i][0] = new BUTTON(TRANG,XANHCAY, VIENBOX, "", x[0], y + (i%20)*27, x[1], y+(i%20+1)*27 -2);
 			Table[i][1] = new BUTTON(TRANG,  XANHCAY, VIENBOX, "", x[1], y + (i%20)*27, x[2], y+(i%20+1)*27 -2);				
 		}
-		res = "thang ";
+		res = "Thang ";
 		res += to_string(i+1);
 		if (i > 11)
 			res = "---";
@@ -1023,24 +1025,48 @@ void Add_DHD(LIST_DETAIL_HOADON &l_dhd, NODE_DETAIL_HOADON *p)
 	l_dhd.pTail->pNext = p;
 	l_dhd.pTail = p;
 }
-
-void erase_DHD(LIST_DETAIL_HOADON &l_dhd, int id)
+void erase_DHD(TREE_VATTU &t, LIST_DETAIL_HOADON &l_dhd, int id, bool nhap)
 {
-	if (l_dhd.pHead == l_dhd.pTail)
+	NODE_VATTU *vt;
+	if (id==0)
 	{
-		NODE_DETAIL_HOADON *q = l_dhd.pTail;
-		l_dhd.pHead= l_dhd.pTail=NULL;
-		delete q;
+		NODE_DETAIL_HOADON *p=l_dhd.pHead;
+		l_dhd.pHead=l_dhd.pHead->pNext;
+		vt = Search_VT(t, p->data.MAVT);
+		if(nhap)
+			vt->data.SLTON -= p->data.SL;
+		else
+			vt->data.SLTON += p->data.SL;
+		delete p;
 		return;
-	}
+	} 
 	for(NODE_DETAIL_HOADON *p=l_dhd.pHead; p!= NULL; p=p->pNext)
 	{
 		id--;
 		if(id == 0)
 		{
+			if(p->pNext==l_dhd.pTail)
+			{
+				vt = Search_VT(t, l_dhd.pTail->data.MAVT);
+				if(nhap)
+					vt->data.SLTON -= l_dhd.pTail->data.SL;
+				else
+					vt->data.SLTON += l_dhd.pTail->data.SL;
+				delete l_dhd.pTail;
+				p->pNext=NULL;
+				l_dhd.pTail=p;
+				
+				return;
+			}
 			NODE_DETAIL_HOADON *q;
 			q = p->pNext;
 			p->pNext =  q->pNext;
+			
+			vt = Search_VT(t, q->data.MAVT);
+			if(nhap)
+				vt->data.SLTON -= q->data.SL;
+			else
+				vt->data.SLTON += q->data.SL;
 			delete q;
 			return;
 		}
@@ -1495,9 +1521,8 @@ void Write_Bill(LIST_NHANVIEN l_nv)
 
 void Read_Bill(LIST_NHANVIEN &l_nv)
 {
-	fstream Filein, Fileout;
+	fstream Filein;
 	Filein.open("HOADON.txt",ios_base::in);
-	Fileout.open("HD.txt",ios_base::out);
 	if(Filein.fail())
 	{
 		return;
@@ -1507,10 +1532,11 @@ void Read_Bill(LIST_NHANVIEN &l_nv)
 		string manv,tmp;
 		char flag='\0'; 
 		getline(Filein,manv,'\n');
-				Fileout<<manv<<"\n";
 		NHANVIEN *p=Search_NV(l_nv,manv);
 		if(p==NULL)
 		{
+			
+			Filein.close();
 			return;
 		}
 		Create_ListHD(p->DS_HOADON);
@@ -1519,18 +1545,13 @@ void Read_Bill(LIST_NHANVIEN &l_nv)
 			HOADON hd;
 			getline(Filein,hd.SOHD,',');
 			if(flag!='\0') hd.SOHD=flag+hd.SOHD;
-					Fileout<<hd.SOHD<<",";
 			Filein>>hd.NGAYLAP.date;
-					Fileout<<hd.NGAYLAP.date<<"/";
 			Filein.ignore();
 			Filein>>hd.NGAYLAP.month;
-					Fileout<<hd.NGAYLAP.month<<"/";
 			Filein.ignore();
 			Filein>>hd.NGAYLAP.year;
-					Fileout<<hd.NGAYLAP.year<<",";
 			Filein.ignore();
 			Filein>>hd.LOAI;
-					Fileout<<hd.LOAI<<"\n";
 			Filein.ignore();
 			Create_ListDHD(hd.DS_DETAIL_HOADON);
 			flag='\0';
@@ -1539,15 +1560,11 @@ void Read_Bill(LIST_NHANVIEN &l_nv)
 				DETAIL_HOADON dhd;
 				getline(Filein,dhd.MAVT,',');
 				if(flag!='\0') dhd.MAVT=flag+dhd.MAVT;
-						Fileout<<dhd.MAVT<<",";
 				Filein>>dhd.SL;
-						Fileout<<dhd.SL<<",";
 				Filein.ignore();
 				Filein>>dhd.DONGIA;
-						Fileout<<dhd.DONGIA<<",";
 				Filein.ignore();				
 				Filein>>dhd.VAT;
-						Fileout<<dhd.VAT<<"\n";
 				Filein.ignore();
 				Add_DHD(hd.DS_DETAIL_HOADON,Create_NodeDHD(dhd));
 				Filein>>flag;
@@ -1558,7 +1575,6 @@ void Read_Bill(LIST_NHANVIEN &l_nv)
 		}
 		getline(Filein,tmp);
 	}
-	Fileout.close();
 	Filein.close();
 }
 

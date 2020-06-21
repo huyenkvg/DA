@@ -144,15 +144,15 @@ void Write_FileRevenue();
 
 
 void Sort_NV(LIST_NHANVIEN &l_nv);
-void erase_DHD(LIST_DETAIL_HOADON &l_dhd, int id);
+void erase_DHD(TREE_VATTU &t, LIST_DETAIL_HOADON &l_dhd, int id, bool nhap);
 
-void GetInfo_AddMatTab(VATTU &vt, BUTTON *Table[10][10]);
-void GetInfo_AdjustMatTab(VATTU &vt, BUTTON *Table[10][10]);
-void GetInfo_EmTab(NHANVIEN &nv, BUTTON *Table[10][10]);
+void GetInfo_AddMatTab(VATTU &vt, BUTTON *Table[maxbutton][maxbutton]);
+void GetInfo_AdjustMatTab(VATTU &vt, BUTTON *Table[maxbutton][maxbutton]);
+void GetInfo_EmTab(NHANVIEN &nv, BUTTON *Table[maxbutton][maxbutton]);
 string Get_ID(char text1[MAXTEXT], char text2[MAXTEXT]); // lay id cua o can tim kiem
-DETAIL_HOADON getDetail(BUTTON *Table[10][10]);
+DETAIL_HOADON getDetail(BUTTON *Table[maxbutton][maxbutton]);
 
-void GetInfo_BillTab(HOADON &hd, BUTTON *Table[10][10],string &manv);
+void GetInfo_BillTab(HOADON &hd, BUTTON *Table[maxbutton][maxbutton],string &manv);
 
 void Arr_VT(TREE_VATTU &t, VATTU VT[], int &n);
 void Read_Bill(HOADON &hd, string &manv);

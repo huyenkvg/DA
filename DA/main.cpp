@@ -10,20 +10,20 @@ typedef long long ll;
 typedef double db;
 
 
-BUTTON *NutThemVT[10][10];
-BUTTON *NutXoaVT[10][10];
-BUTTON *NutSuaVT[10][10];
-BUTTON *NutThemNV[10][10];
+BUTTON *NutThemVT[maxbutton][maxbutton];
+BUTTON *NutXoaVT[maxbutton][maxbutton];
+BUTTON *NutSuaVT[maxbutton][maxbutton];
+BUTTON *NutThemNV[maxbutton][maxbutton];
 
-BUTTON *NutXoaNV[10][10];
-BUTTON *NutSuaNV[10][10];
-BUTTON *NutLapHD[10][10];
-BUTTON *NutNhapID[10][10];
-BUTTON *NutCTHD[10][10];
-BUTTON *NutCTHD_ID[10][10];
-BUTTON *NutXemHD[10][10];
-BUTTON *NutTK[10][10];
-BUTTON *NAM[10][10];
+BUTTON *NutXoaNV[maxbutton][maxbutton];
+BUTTON *NutSuaNV[maxbutton][maxbutton];
+BUTTON *NutLapHD[maxbutton][maxbutton];
+BUTTON *NutNhapID[maxbutton][maxbutton];
+BUTTON *NutCTHD[maxbutton][maxbutton];
+BUTTON *NutCTHD_ID[maxbutton][maxbutton];
+BUTTON *NutXemHD[maxbutton][maxbutton];
+BUTTON *NutTK[maxbutton][maxbutton];
+BUTTON *NAM[maxbutton][maxbutton];
 TREE_VATTU tree_vt;
 LIST_NHANVIEN list_nv;
 //=================================================================================================================================
@@ -65,7 +65,7 @@ void XoaVatTu()
 		string tmp;
 		while(true)
 		{
-			tmp = Get_ID("Xem danh sach Vat tu", "OK");
+			tmp = Get_ID("Xem danh sach Vat tu", "Check ID");
 			if (tmp == "---" || tmp == ""|| tmp == "+++")	break;
 			if( Search_VT(tree_vt, tmp) == NULL)
 			{
@@ -111,7 +111,7 @@ void SuaVatTu()
 		NODE_VATTU *p;
 		while(true)
 		{
-			tmp = Get_ID("Xem danh sach Vat tu", "OK");
+			tmp = Get_ID("Xem danh sach Vat tu", "Check ID");
 			if (tmp == "---" || tmp == ""|| tmp == "+++")	break;
 			p =  Search_VT(tree_vt, tmp) ;
 			if(p == NULL)
@@ -192,7 +192,7 @@ void XoaNhanVien()
 		string tmp;
 		while(true)
 		{
-			tmp = Get_ID("Xem danh sach Nhan vien", "OK");
+			tmp = Get_ID("Xem danh sach Nhan vien", "Check ID");
 			if (tmp == "---" || tmp == "" || tmp == "+++")	break;
 			if( Search_NV(list_nv, tmp) == NULL)
 			{
@@ -231,7 +231,7 @@ void ChinhSuaNhanVien()
 		NHANVIEN nv;
 		while(true)
 		{
-			tmp = Get_ID("Xem danh sach Nhan vien", "OK");
+			tmp = Get_ID("Xem danh sach Nhan vien", "Check ID");
 			if (tmp == "---" || tmp == ""|| tmp == "+++")	break;
 			if(Search_NV(list_nv, tmp) == NULL)
 			{
@@ -330,6 +330,10 @@ void LapHoaDon()
 					else 
 					{
 						strcpy(NutCTHD_ID[0][0]->text_tp, tmp.c_str());
+						
+																					ofstream logs;
+																					logs.open ("logs.txt", ios :: out);
+																					logs << tmp;				
 						VeBang(NutCTHD_ID);
 						while (true)
 						{
@@ -372,6 +376,7 @@ void LapHoaDon()
 							if (chth!= -1)
 							{
 										strcpy(NutCTHD_ID[0][0]->text_tp, VT[chth].MAVT.c_str());
+										
 										VeBang(NutCTHD_ID);
 										while (true)
 										{
@@ -391,7 +396,10 @@ void LapHoaDon()
 												goto break2while;
 											}
 											else if(hd.LOAI == 'N')
+											{
 												k->data.SLTON+=dhd.SL;
+												goto break2while;
+											}
 											else
 												ThongBao(5);
 											VeBang(NutCTHD_ID);
@@ -428,7 +436,10 @@ void LapHoaDon()
 			}
 			if (ins >= 0) // xoa bot vat tu ins trong list
 			{
-				erase_DHD(list_dt, ins);
+				bool nx = 1;
+				if (hd.LOAI == 'X')
+					nx = 0;
+				erase_DHD(tree_vt, list_dt, ins, nx);
 			}
 			if(ins == TROVE) // boi vi khong xac nhan lap hoa don nen tra lai so luong cho so luong ton;
 			{
