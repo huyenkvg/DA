@@ -478,19 +478,13 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 	But[0][0]->value = NUTCONST;
 	But[0][1] = new BUTTON(XANHNHAT, DOTHAM,VIENBOX,"XAC NHAN", 402, 630, 750, 660);
 	But[0][1]->value = NUTCONST;
-	But[0][2] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THOAT", 752, 630, 960, 660);
+	But[0][2] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THOAT", 752, 630, 970, 660);
 	But[0][2]->value = NUTCONST;
 	But[0][3] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THEM", 140, 630, 400, 660);
 	But[1][0] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THEM", 140, 630, 400, 660);
 	But[1][1] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THEM", 140, 630, 400, 660);
 	But[0][3]->value = -1;
 	VeBang(But);
-	delete But[0][0];
-	delete But[0][1];
-	delete But[1][0];
-	delete But[1][1];
-	delete But[0][2];
-	delete But[0][3];
 	int page = 1, ins = 0;
 	int y = 90;
 	trangketiep2:;
@@ -536,11 +530,38 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 	{
 		int p = boxMove(But);
 		if (p==1)
+		{
+			
+			delete But[0][0];
+			delete But[0][1];
+			delete But[1][0];
+			delete But[1][1];
+			delete But[0][2];
+			delete But[0][3];
 			return XACNHAN;
+		}
 		if (p==0)
+		{
+			
+			delete But[0][0];
+			delete But[0][1];
+			delete But[1][0];
+			delete But[1][1];
+			delete But[0][2];
+			delete But[0][3];
 			return ADDID;
+		}
 		if(p==2)
+		{
+			
+			delete But[0][0];
+			delete But[0][1];
+			delete But[1][0];
+			delete But[1][1];
+			delete But[0][2];
+			delete But[0][3];
 			return TROVE;
+		}
 	}
 	else if (ins >= 0)
 	{
