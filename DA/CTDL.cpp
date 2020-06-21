@@ -484,12 +484,16 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 	But[1][0] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THEM", 140, 630, 400, 660);
 	But[1][1] = new BUTTON(XANHNHAT, DOTHAM, VIENBOX,"THEM", 140, 630, 400, 660);
 	But[0][3]->value = -1;
+	But[1][0]->value = -1;
+	But[1][1]->value = -1;
 	VeBang(But);
 	int page = 1, ins = 0;
 	int y = 90;
 	trangketiep2:;
+	
+	VeBang(But);
 	page = max(page, 1);
-	page = min(page, 25);
+	page = min(page, 1);
 	for(int i = (page-1)*20; i < page*20; i++)
 	{
 		string res;
@@ -542,7 +546,11 @@ int XemDanhsachHD(LIST_DETAIL_HOADON list_dt, string tmp)
 		}
 		if (p==0)
 		{
-			
+			if (id > 19)
+			{
+					ThongBao(11);
+					goto trangketiep2;
+			}
 			delete But[0][0];
 			delete But[0][1];
 			delete But[1][0];
@@ -606,7 +614,7 @@ void XemHD(LIST_DETAIL_HOADON list_dt, string sohd)
 	int y = 90;
 	trangketiep2:;
 	page = max(page, 1);
-	page = min(page, 25);
+	page = min(page, 1);
 	for(int i = (page-1)*20; i < page*20; i++)
 	{
 		string res;
@@ -629,8 +637,8 @@ void XemHD(LIST_DETAIL_HOADON list_dt, string sohd)
 		}
 	
 	}
-	int kp;
-	ins = InRaMH(Table, page, 5, true);
+	int kp = page;
+	ins = InRaMH(Table, page, 5, false);
 	for(int i = (kp-1)*20; i < kp*20; i++)
 	{
 		delete Table[i][0];
@@ -694,7 +702,7 @@ void TaoBangThongKe(LIST_NHANVIEN list_nv, ngay date1, ngay date2)
 	outtextxy(x[0], 50, "STT");
 	int page = 1, ins = 0;
 	int y = 70;
-	trangketiep22:;
+	trangketiep212:;
 	page = max(page, 1);
 	page = min(page, 25);
 	for(int i = (page-1)*20; i < page*20; i++)
@@ -740,7 +748,7 @@ void TaoBangThongKe(LIST_NHANVIEN list_nv, ngay date1, ngay date2)
 	}
 	if (ins  == -1)
 	{
-		goto trangketiep22;
+		goto trangketiep212;
 	}
 }
 
@@ -1400,7 +1408,7 @@ void Write_FileRevenue(LIST_NHANVIEN &l_nv, int nam)
 void Write_HD(LIST_NHANVIEN &l_nv, NGAY Start, NGAY End)
 {
 	fstream Fileout;
-	Fileout.open("HOADON.txt",ios_base::out);
+	Fileout.open("HOADONNN.txt",ios_base::out);
 	Fileout<<Start.date<<'/'<<Start.month<<'/'<<Start.year;
 	Fileout<<"->";
 	Fileout<<End.date<<'/'<<End.month<<'/'<<End.year;

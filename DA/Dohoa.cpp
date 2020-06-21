@@ -137,7 +137,7 @@ int REC:: beingTyped(char c)
 		emptyDraw(XANHLA);
 		memset(text_tp, '\0', sizeof(text_tp));
 	}
-	if (c != VK_BACK && c!= ' ')
+	if (isText(c) && c!=' ')
 	{
 		if (CheckCharKey(text, c))
 			text_tp[0] = c;
@@ -858,6 +858,14 @@ void ThongBao(int mode)
 		case 9:
 			{
 				outtextxy (x1+(x2-x1-textwidth("KHONG DUOC PHEP XOA!"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "KHONG DUOC PHEP XOA!");
+			}break;
+		case 10:
+			{
+				outtextxy (x1+(x2-x1-textwidth("SO LUONG TOI THIEU LA 1"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "SO LUONG TOI THIEU LA 1");
+			}break;
+		case 11:
+			{
+				outtextxy (x1+(x2-x1-textwidth("DANH SACH TOI DA LA 20"))/2, y1 + (y2-y1-textheight("KHONG TON TAI!"))/2 , "DANH SACH TOI DA LA 20");
 			}break;
 	}
 	setcolor (TRANG);

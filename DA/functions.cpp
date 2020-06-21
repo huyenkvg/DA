@@ -88,6 +88,8 @@ bool isText(char c)
 bool CheckCharKey(string text, char &c)
 {
 	
+	if (c == 27)
+		return false;
 	if (c == ' ' && (text == "Ho:" || text == "Ten Vat Tu:"))
 		return true;
 	if (text == "Ngay" || text == "Thang" || text == "Nam:" || text == "So Luong Ton:" || text == "So Luong:"|| text == "Don Gia:" || text == "%VAT:")

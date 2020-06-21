@@ -340,7 +340,11 @@ void LapHoaDon()
 							k = Search_VT(tree_vt, tmp);
 							DETAIL_HOADON  dhd;
 							dhd = getDetail(NutCTHD_ID);
-							if(dhd.SL <= k->data.SLTON)
+							if (dhd.SL <= 0)
+							{
+								ThongBao(10);
+							}
+							else if(dhd.SL <= k->data.SLTON)
 							{
 								Add_DHD(list_dt, Create_NodeDHD(dhd));
 								if (hd.LOAI == 'X')
@@ -387,7 +391,11 @@ void LapHoaDon()
 											DETAIL_HOADON  dhd;
 											dhd = getDetail(NutCTHD_ID);
 											k = Search_VT(tree_vt, dhd.MAVT);
-											if(dhd.SL <= k->data.SLTON)
+											if (dhd.SL <= 0)
+											{
+												ThongBao(10);
+											}
+											else if(dhd.SL <= k->data.SLTON)
 											{
 												Add_DHD(list_dt, Create_NodeDHD(dhd));
 												if (hd.LOAI == 'X')
@@ -499,7 +507,6 @@ void ThongKeHoaDon()
 		date2.year = getNumber(NutTK[1][2]->text_tp);
 		XoaManHinh();
 		TaoBangThongKe(list_nv, date1, date2);
-		Write_HD(list_nv, date1, date2);
 	}
 	XoaManHinh();
 	XoaBang(NutTK);
